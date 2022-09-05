@@ -1,0 +1,224 @@
+{
+    "title": "Edifeeds",
+    "baseUrl": "/",
+    "backURL": "http://localhost:2000/api/v1",
+    "logo": "../logo.png",
+    "email": {
+      "address": "contact@edifeeds.com",
+      "name": "Edifeeds"
+    },
+
+    "socials": [
+        {
+            "id": "Google",
+            "icon": "google"
+        },
+
+        {
+            "id": "Facebook",
+            "icon": "facebook"
+        },
+
+        {
+            "id": "Twitter",
+            "icon": "twitter"
+        }
+    ],
+
+    "contacts": [
+        {
+        "name":"facebook",
+        "icon": "facebook",
+        "color": "blue",
+        "id": "/wonderayanfe"
+        },
+        {
+        "name": "pinterest",
+        "icon": "pinterest",
+        "color": "red"
+        },
+        {
+        "name": "twitter",
+        "icon": "twitter",
+        "color": "cornflowerblue",
+        "id": "@wonderayanfe0"
+        },
+        {
+        "name": "linkedIn",
+        "icon": "fi-social-linkedin",
+        "color": "blue"
+        },
+        {
+        "name": "email",
+        "icon": "fi-mail",
+        "color":"#DCBDBC",
+        "id": "contact@edifeeds.com"
+        },
+        {
+        "name": "phone",
+        "icon": "fi-telephone",
+        "color":"blue",
+        "id": "+2348071397909"
+        }
+    ],
+    "menuItems": [
+        {
+            "name": "Contact",
+            "path": "/contact",
+            "component": "Contact",
+            "title": "Contact"
+        },
+        {
+            "name": "About",
+            "path": "/about",
+            "component": "About"
+        },
+        {
+            "name": "Sign Up",
+            "path": "signup",
+            "component": "SignUp"
+        },
+        {
+            "name":"Sign In",
+            "path": "signin",
+            "component": "SignIn"
+        }
+    ],
+    "tosUrl": "/term-of-use",
+    "privacyPolicyUrl": "/privacy-policy",
+    "header": {
+        "description": "Edificient stories, music, great quotes, videos and books, it all starts with Edifeeds.",
+        "bgImg": "../header.png"
+    },
+    "apiClient": "axios",
+    "api": {
+      "Zeptomail": {
+        "token": "",
+        "url": ""
+      },
+      "Pexels": {
+
+        "baseUrl": "https://api.pexels.com/v1",
+        "attribution": {
+          "href": "https://www.pexels.com",
+          "src": "https://images.pexels.com/lib/api/pexels.png"
+        },
+        "config": {
+          "header": {
+            "Authorization": "563492ad6f91700001000001da2c276cc81440fd966c2ec19ba234c2"
+          }
+        }
+      },
+      "Unsplash": {
+        "baseUrl": "https://api.unsplash.com",
+        "client_id": "h2QN0xKvn2yEbGzLAzt__xrgVQI_AVu2Gwn3WdZn0gE"
+      },
+        "auth0": {
+            "name": "Edifeeds",
+            "clientId": "Sz3hqM05IKi5dEIYVoACKvIAXjd4azW5",
+            "domain": "dev-x-wx5tsn.auth0.com",
+            "clientSecret": "tRctqxf33O6MrHUwNj-DqFkTGfdlrZqKai3oF134_CiK1-Ya31EPS2L_Uc3x3sVy"
+    },
+
+        "GoogleBooks": {
+          "baseUrl": "https://books.googleapis.com/books/v1",
+          "config": {
+            "baseParams": {
+              "apikey": "AIzaSyAlbER-HPdipvFgKJc-PWWZYhBIBSPxBNQ"
+          }
+          }
+        },
+
+        "PaperQuotes": {
+          "baseUrl": "https://api.paperquotes.com/apiv1",
+            "id": "",
+            "key": ""
+        },
+
+        "SoundCloud": {
+          "baseUrl" : "api.soundcloud.com",
+          "baseParams": {
+            "id": "",
+            "key": ""}
+        },
+
+        "TheySaidSo": {
+          "baseUrl": "http://quotes.rest",
+            "id": "",
+            "key": ""
+        },
+
+        "ZenQuotes": {
+            "baseUrl": "https://zenquotes.io/api",
+              "id": "",
+              "key": "",
+              "baseParams": {
+                "headers": {
+                    "accept": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                }
+              }
+          },
+
+        "Youtube": {
+          "baseUrl": "https://googleapis.com/youtube/v3",
+          "config": {
+            "baseParams": {
+              "id": "",
+              "key": ""}
+          }
+        },
+
+        "InternetArchive": {
+          "baseUrl": "archive.org/services/search/v1/scrape",
+
+            "id": "",
+            "key": ""
+        },
+
+        "Gorse": {
+            "id": "http://127.0.0.1:8088",
+            "key": ""
+        },
+
+        "Algolia": {
+            "id": "B1G2GM9NG0",
+            "key": "aadef574be1f9252bb48d4ea09b5cfe5"
+        },
+        "Typesense": {
+          "config": {
+            "baseParams": {
+              "host": "rpqa2i8vyu4z57wdp-1.a1.typesense.net",
+              "apikey": "YUKVclEUeLRXKk9xPEQZ06xTAhuNsUpe"}
+          }
+        },
+
+        "Auth": {
+            "url": "http://localhost:8080/auth",
+            "realm": "edifeeds",
+            "clientId": "edifeeds-app",
+            "onLoad": "login-required"
+        },
+        "Supabase" : {
+            "url": "https://apqaaxxhxzihzszhpelk.supabase.co",
+            "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwcWFheHhoeHppaHpzemhwZWxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDQ1NzUyNjQsImV4cCI6MTk2MDE1MTI2NH0.tAPoGJ3nWeh5PQH51nWf4Ekdr9c5G-dhkljTmdAHVYg",
+            "options": {
+              "schema": "public",
+              "autoRefreshToken": true,
+              "persistSession": true,
+              "detectSessionInUrl": true
+            }},
+        "zenserp" : {
+            "url" : "https://app.zenserp.com/api/v2",
+            "apikey" : "83d52500-bbe4-11ec-97af-3769629ae33a"
+        },
+        "PouchDB": {
+          "url": ""
+        }
+    },
+    "genres": {},
+    "signInProps": {
+        "signInSucessUrl": "index.html"
+    }
+
+}

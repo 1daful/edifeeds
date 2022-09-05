@@ -1,0 +1,132 @@
+{
+    "site": {
+        "title": "Edifeeds",
+        "baseUrl": "https:edifeeds.com/",
+        "logo": "images/ed.png",
+        "contacts": [
+            {
+            "name":"facebook",
+            "icon": "fi-social-facebook",
+            "color": "blue",
+            "id": "/wonderayanfe"
+            },
+            {
+            "name": "pinterest",
+            "icon": "fi-social-pinterest",
+            "color": "red"
+            },
+            {
+            "name": "twitter",
+            "icon": "fi-social-twitter",
+            "color": "cornflowerblue",
+            "id": "@wonderayanfe0"
+            },
+            {
+            "name": "linkedIn",
+            "icon": "fi-social-linkedin",
+            "color": "blue"
+            },
+            {
+            "name": "email",
+            "icon": "fi-mail",
+            "color":"#DCBDBC",
+            "id": "contact@edifeeds.com"
+            },
+            {
+            "name": "phone",
+            "icon": "fi-telephone",
+            "color":"blue",
+            "id": "+2348071397909"
+            }
+        ],
+        "menuItems": [
+            {
+                "name": "Contact",
+                "path": "/contact",
+                "component": "Contact",
+                "title": "Contact"
+            },
+            {
+                "name": "About",
+                "path": "/about",
+                "component": "About"
+            },
+            {
+                "name": "Sign Up",
+                "path": "signup",
+                "component": "SignUp"
+            },
+            {
+                "name":"Sign In",
+                "path": "signin",
+                "component": "SignIn"
+            }
+        ],
+        "tosUrl": "/term-of-use",
+        "privacyPolicyUrl": "/privacy-policy",
+        "header": {
+            "description": "Edificient stories, music, great quotes, videos and books, it all starts with Edifeeds.",
+            "bgImg": ""
+        }
+    },
+    "apiClient": "axios",
+    "api": {
+        "auth0": {
+            "name": "Edifeeds",
+            "client-id": "Sz3hqM05IKi5dEIYVoACKvIAXjd4azW5",
+            "domain": "dev-x-wx5tsn.auth0.com",
+            "client-secret": "tRctqxf33O6MrHUwNj-DqFkTGfdlrZqKai3oF134_CiK1-Ya31EPS2L_Uc3x3sVy"
+    },
+
+        "GoogleBooks": {
+          "baseUrl": "https://googleapis.com/books/v1/",
+          "id": "",
+          "key": ""
+        },
+
+        "PaperQuotes": {
+          "baseUrl": "api.paperquotes.com/api/v1",
+            "id": "",
+            "key": ""
+        },
+
+        "SoundCloud": {
+          "baseUrl" : "api.soundcloud.com",
+            "id": "",
+            "key": ""
+        },
+
+        "TheySaidSo": {
+          "baseUrl": "https://quotes.rest",
+            "id": "",
+            "key": ""
+        },
+
+        "Youtube": {
+          "baseUrl": "https://googleapis.com/youtube/v3/",
+            "id": "",
+            "key": ""
+        },
+
+        "InternetArchive": {
+          "baseUrl": "archive.org/services/search/v1/scrape",
+            "id": "",
+            "key": ""
+        },
+
+        "Recommender": {
+            "id": "",
+            "key": ""
+        },
+
+        "Algolia": {
+            "id": "",
+            "key": ""
+        }
+    },
+    "genres": {},
+    "signInProps": {
+        "signInSucessUrl": "index.html"
+    }
+    
+}

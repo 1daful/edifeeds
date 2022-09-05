@@ -1,0 +1,14 @@
+{
+    "volumeInfo": {
+        "title": "Book of Life",
+        "publishedDate": "19-12-21",
+        "description": ""
+    },
+    "mainCategory": "",
+    "imageLinks": {
+        "large": "book_img.png",
+        "thumbnail": "book_img.jpg"
+    },
+    "authors": ["authors"],
+    "printType": "printType"
+}
