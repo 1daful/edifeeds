@@ -111,7 +111,11 @@
       },
       "Unsplash": {
         "baseUrl": "https://api.unsplash.com",
-        "client_id": "h2QN0xKvn2yEbGzLAzt__xrgVQI_AVu2Gwn3WdZn0gE"
+        "config": {
+          "baseParams": {
+            "client_id": "h2QN0xKvn2yEbGzLAzt__xrgVQI_AVu2Gwn3WdZn0gE"
+          }
+        }
       },
         "auth0": {
             "name": "Edifeeds",

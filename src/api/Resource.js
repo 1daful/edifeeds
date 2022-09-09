@@ -125,7 +125,7 @@ export class Resource {
         try {
             const apiBaseParams = this.api.getBaseParams().baseParams;
             Object.assign(obj.baseParams, apiBaseParams);
-            NetworkLocal.test("obj.params", apiBaseParams);
+            NetworkLocal.test("obj.params", this.api.getBaseParams(), this.api.constructor.name);
             Object.assign(obj.baseParams, this.getRequestParam(this.request.params));
             const baseURL = await this.getBaseURL() || "";
             obj.baseParams.baseUrl = baseURL;

@@ -1,7 +1,7 @@
-import config from "../../../public/config.json";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
 import { Axiosi } from "../Axiosi";
 import { Resource } from "../Resource";
+import config from "../../../public/config.json";
 export class Unsplash {
     client = new Axiosi();
     config;
@@ -17,15 +17,10 @@ export class Unsplash {
             count: this.apiFormat.length
         }
     }, 'imageResp');
-    async getBaseParams() {
-        try {
-            //const config = await this.client.load('../config.json')
-            const apiBaseParams = config?.api.Unsplash.client_id;
-            return apiBaseParams;
-        }
-        catch (err) {
-            console.log(err);
-        }
+    getBaseParams() {
+        //const config = await this.client.load('../config.json')
+        const apiBaseParams = config.api.Unsplash.config;
+        return apiBaseParams;
     }
     async getBaseUrl() {
         try {

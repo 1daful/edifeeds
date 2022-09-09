@@ -52,7 +52,7 @@ export class Media {
                             const item = items[index];
                             item.thumbnailSmall = images[index]?.thumbnailSmall || "";
                             item.thumbnailLarge = images[index]?.thumbnailLarge || "";
-                            NetworkLocal.test("item in media", item, "Media");
+                            NetworkLocal.test("item in media", item);
                         }
                     }
                     /*items.forEach(async item => {

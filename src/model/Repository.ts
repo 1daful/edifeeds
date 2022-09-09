@@ -1,13 +1,13 @@
 import { IRepository } from "./IRepository";
-//import { Pouchdb } from "./Pouchdb";
+import { Pouchdb } from "./Pouchdb";
 import { SupabaseRepo } from "./SupabaseRepo";
 
 export class Repository implements IRepository {
     collName: string;
     constructor(collName: string) {
       this.collName = collName
-       
-      this.db = new SupabaseRepo()
+       this.db = new Pouchdb(collName)
+      //this.db = new SupabaseRepo()
     }
     db:IRepository
 
