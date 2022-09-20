@@ -26,8 +26,8 @@ export class Repository implements IRepository {
       this.db = new SupabaseRepo()
     }
 
-    addItem(): Promise<Record<string, any>> {
-        throw new Error("Method not implemented.");
+    addItem(param: Record<string, any>) {
+      this.db.addItem(param)
     }
     addItems(param: Record<string, any>[]): void {
         this.db.addItems(param, this.collName)

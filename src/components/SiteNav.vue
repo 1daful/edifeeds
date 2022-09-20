@@ -21,13 +21,7 @@
       </q-list>
     </q-drawer>
 
-  <q-toolbar>
-    <router-link v-for="menu in menus" :key="menu.name" :to="menu.path">
-      <q-toolbar-title>{{menu.name}} </q-toolbar-title>
-    </router-link>
-  </q-toolbar>
-
-  <q-toolbar v-if="!$auth.isAuthenticated && !$auth.loading">
+  <!--<q-toolbar v-if="!$auth.isAuthenticated && !$auth.loading">
     <q-btn @click.prevent="login" label="Login"></q-btn>
     <q-btn @click.prevent="signup" label="Sign up"></q-btn>
     <q-item v-if="$auth.isAuthenticated">
@@ -42,7 +36,7 @@
         <q-item-label caption> See profile information </q-item-label>
       </q-item-section>
     </q-item>
-  </q-toolbar>
+  </q-toolbar>-->
 </template>
 
 <script>
@@ -60,14 +54,17 @@ export default {
       let menus = [];
       let routes = this.$router.options.routes
       for (let route of routes) {
-        if(route.navigational){
-          menus.push(route);
-        }
-      }
+                if(route.children){
+                  route.children.forEach(child => {
+                    if(child.meta?.navigational)
+                    menus.push(child);
+                  });
+                }
+            }
       return menus
     },
   },
-  methods: {
+  /*methods: {
     signup() {
       this.$auth.signup();
     },
@@ -78,6 +75,6 @@ export default {
       this.$auth.logout();
       this.$router.push({ path: "/" });
     }
-  }
+  }*/
 }
 </script>

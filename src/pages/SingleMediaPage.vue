@@ -69,12 +69,13 @@ import { IRepository } from "../model/IRepository";
 import Facebook from 'vue-share-buttons/src/components/FacebookButton.vue';
 import Twitter from 'vue-share-buttons/src/components/TwitterButton.vue';
 import Pinterest from 'vue-share-buttons/src/components/PinterestButton.vue';
+import { Recommender } from "../api/Recommender";
 
 let user: any
 let repository: IRepository
 let FB: any
 let media: any
-let quoteMedia = new QuoteMedia();
+//let quoteMedia = new QuoteMedia();
 
 export default defineComponent({
     name: 'SingleMediaPage',
@@ -88,6 +89,7 @@ export default defineComponent({
             isDisabled: false,
             FB,
             user,
+            recomm: new Recommender()
             //favIcon: 'hearth',
             //path: `${this.media.type}/${this.media.id}/comments`
         }
@@ -153,13 +155,16 @@ export default defineComponent({
         }*/
     },
     async mounted() {
-         let type = this.$route.query.mediaType as string
-            this.repository = new Repository(type)
-            const id =this.$route.params.id as string
-            const m = await this.repository.readItem(id)
-            this.media = m
-            console.log('media: ', this.media)
+        let type = this.$route.query.mediaType as string
+        this.repository = new Repository(type)
+        const id = this.$route.params.id as string
+        this.media = await this.repository.readItem(id)
+        console.log('media: ', this.media)
+        
+        if (this.user) {
+            this.recomm.insertFeedback(this.user.id, "positive", this.media.id, new Date())
             //this.facebook()
+        }
     }
 })
 </script>

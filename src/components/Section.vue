@@ -1,9 +1,9 @@
 <template>
     <div :section= "section">
         <div class="q-pa-md">
-                <h3 class="capitalize">
+                <h5 class="capitalize text-weight-bold">
                     {{section.name}}
-                </h3>
+                </h5>
                 <Media v-for="mediaType in mediaTypes" :key="mediaType" :mediaType="mediaType"></Media>
         </div>
     </div>

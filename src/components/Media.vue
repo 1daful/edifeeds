@@ -1,7 +1,7 @@
 <template>
     <div>
         <q-toolbar>
-            <q-toolbar-title class="uppercase">
+            <q-toolbar-title class="uppercase text-h6">
                 {{mediaType}}
             </q-toolbar-title>
         </q-toolbar>
@@ -51,7 +51,7 @@ import { NetworkLocal } from "../api/network";
 let recommender = new Recommender()
 let media: any
 let client = new Axiosi()
-let url = "https://api.unsplash.com/photos/random?client_id=h2QN0xKvn2yEbGzLAzt__xrgVQI_AVu2Gwn3WdZn0gE&query="
+//let url = "https://api.unsplash.com/photos/random?client_id=h2QN0xKvn2yEbGzLAzt__xrgVQI_AVu2Gwn3WdZn0gE&query="
 
 export default defineComponent({
     name: 'Media',
@@ -106,7 +106,7 @@ export default defineComponent({
           }
       }
   }*/
-    async mounted() {
+    async created() {
       await recommender.getMedia("Recommended")
       try {
       const p = await recommender.readMedia(this.mediaType, {limit: 1})

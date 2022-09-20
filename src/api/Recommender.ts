@@ -1,3 +1,4 @@
+import { Feedback, DateTime } from './../gorsejs/src/interfaces';
 import { NetworkLocal } from './network';
 import { Section } from './../Types';
 import { IMedia } from "../media/IMedia";
@@ -110,7 +111,7 @@ export class Recommender {
             return items
     }
 
-    getMedia(section: Section, id: string = "", category?: string) {
+    getMedia(section: Section, id: string = "general", category?: string) {
         //new VideoMedia().getMedia()
         //new MusicMedia().getMedia()
         new BookMedia("books").getMedia()
@@ -164,5 +165,16 @@ export class Recommender {
             category
         } 
         return await this.client.getItemNeighbors(params)
+    }
+
+    async insertFeedback(userId: string, feedbackType: string, itemId: string, timestamp: DateTime) {
+        const feedback: Feedback<string> = {
+            UserId: userId,
+            FeedbackType: feedbackType,
+            ItemId: itemId,
+            Timestamp: timestamp
+        }
+        const feedbacks: Feedback<string>[] = []
+        await this.client.insertFeedbacks(feedbacks)
     }
 }

@@ -2,6 +2,7 @@ import { SupabaseStore } from "./SupabaseStore";
 
 export class EdiStorage {
   storage = new SupabaseStore()
+  
   upload(collName: string, path: string, file: any) {
     this.storage.upload(collName, path, file)
   }

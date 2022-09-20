@@ -54,3 +54,42 @@ export type Params = {
 export type Section = "Recommended" | "Popular" | "Latest" | "Related"
 
 export type MediaRes = "quotes" | "videos" | "books" | "music" | "quote" | "video" | "book" | "track" | "collections" | "images"
+
+export type EmailAddress = {
+  address: string,
+  name: string,
+  contact_number: string,
+  company: string
+}
+
+type Base64Attachment = {
+  content: string, 
+  mime_type: string, 
+  name: string
+}
+
+type Base64InlineImage = {
+  content: string, 
+  mime_type: string, 
+  cid: string
+}
+
+type InlineImage = { 
+  file_cache_key: string, 
+  cid: string
+}
+
+type Attachment = { 
+  file_cache_key: string, 
+  name: string
+}
+
+export type EmailType = {
+  subject: string,
+  text: string,
+  html: string,
+  cc: EmailAddress[],
+  bcc: EmailAddress[],
+  attachments: Attachment[] | Base64Attachment[],
+  inline_images: Base64InlineImage[] | InlineImage[]
+}

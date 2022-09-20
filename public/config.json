@@ -1,9 +1,10 @@
 {
     "title": "Edifeeds",
     "baseUrl": "/",
-    "backURL": "http://localhost:2000/api/v1",
+    "backURL": "http://localhost:2000/api",
     "logo": "../logo.png",
     "email": {
+      "bounceAddress": "contact@edifeeds.com",
       "address": "contact@edifeeds.com",
       "name": "Edifeeds"
     },
@@ -181,7 +182,7 @@
         },
 
         "Gorse": {
-            "id": "http://127.0.0.1:8088",
+            "id": "http://localhost:2000",
             "key": ""
         },
 

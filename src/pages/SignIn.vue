@@ -1,22 +1,29 @@
 <template>
-    <div :bgImg="bgImg" class="q-pa-md margin justify-center item-center" :style="{backgroundImage: `url(${bgImg})`}">
+    <div class="q-pa-md margin justify-center item-center" :style="{backgroundImage: `url(${bgImg})`}">
         <!--<img :src="logo" />-->
+        <p class="text-weight-bold text-h5"> Sign In</p>
         <q-form @submit="onSubmit" class="q-gutter-md margin" ref="signUp">
           <!--Email---->
             <q-input v-model="user.email" type="email" label="Email" lazy-rules :rules="rules.email"/>
 
             <!--Password-->
-            <q-input color="none" v-model="user.password" type="password" label="Password" lazy-rules :rules="rules.password"/>
+            <q-input color="none" v-model="user.password" :type="isPwd ? 'password' : 'text'" label="Password" lazy-rules :rules="rules.password">
+              <template v-slot:append>
+                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" classs="cursor-pointer" @click="isPwd = !isPwd" />
+              </template>
+            </q-input>
 
             <router-link :to="{name: 'PasswordRecovery'}">Forget password?</router-link>
-            <q-btn label="Sign in" type="submit" color="primary"></q-btn>
+            <div><q-btn label="Sign in" type="submit" color="primary" class="full-width"></q-btn></div>
         </q-form>
 
-
+        <q-btn> or</q-btn>
+        <q-separator inset="item"/>
             <q-btn v-for="social in socials" :key="social.id" class="bl" rounded :icon="social.icon" color="primary" @click="socialSignIn(social.id)">{{social.id}}</q-btn>
 
         <div id="auth-ui">
         </div>
+        <social-login></social-login>
         <p>Don't have an account? <router-link to="/signup">Sign up</router-link></p>
     </div>
 </template>
@@ -26,11 +33,10 @@ import { defineComponent, ref } from "vue";
 import { auth } from "../api/auth/SupabaseAuth";
 //import { FirebaseAuth } from "../api/auth/FirebaseAuth";
 import {Axiosi} from "../api/Axiosi"
-
+import config from "../../public/config.json"
 let client = new Axiosi()
 
-let socials: Record<string, any>
-
+let socials = config.socials
 //let auth = new FirebaseAuth()
 
 export default defineComponent({
@@ -48,7 +54,7 @@ export default defineComponent({
 
         return {
           emailRef,
-
+          isPwd: true,
             client,
             auth,
             socials,
@@ -141,11 +147,11 @@ export default defineComponent({
       }
     },
     mounted() {
-        this.client.load("../config.json").then(resp => {
+        /*this.client.load("../config.json").then(resp => {
             if (resp) {
                 this.socials = resp.data.socials
             }
-        })
+        })*/
         this.onload()
         //this.auth.startUI()
         const sess = this.auth.startSession()

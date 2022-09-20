@@ -58,7 +58,7 @@ export default defineComponent ({
             return url
           }
       },*/
-      async mounted() {
+      async created() {
           await quoteMedia.getMedia()
           const f = await quoteMedia.readMedia([], {limit: 2})
           console.log("f: ", f)

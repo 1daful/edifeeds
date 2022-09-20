@@ -98,7 +98,7 @@ export class Recommender {
         }
         return items;
     }
-    getMedia(section, id = "", category) {
+    getMedia(section, id = "general", category) {
         //new VideoMedia().getMedia()
         //new MusicMedia().getMedia()
         new BookMedia("books").getMedia();

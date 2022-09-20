@@ -7,8 +7,11 @@ export function getPopular(
   { category = "", cursorOptions }: PopularOptions
 ) {
   return axios
-    .get<string[], AxiosResponse<string[]>>(`/popular/${category}`, {
-      params: cursorOptions,
+    .get<string[], AxiosResponse<string[]>>("", {
+      params: {
+        cursorOptions,
+        baseUrl: `http://127.0.0.1:8088/popular/${category}`,
+      },
     })
     .then(({ data }) => {
       return data;
@@ -24,8 +27,11 @@ export function getLatest(
   { category = "", cursorOptions }: PopularOptions
 ) {
   return axios
-    .get<LatestOutput[], AxiosResponse<LatestOutput[]>>(`/latest/${category}`, {
-      params: cursorOptions,
+    .get<LatestOutput[], AxiosResponse<LatestOutput[]>>("", {
+      params: {
+        cursorOptions,
+        baseUrl: `http://127.0.0.1:8088/latest/${category}`,
+      },
     })
     .then(({ data }) => {
       return data;
@@ -46,17 +52,19 @@ export function getRecommend(
     writeBackDelay,
   }: RecommendOptions
 ) {
+  let baseUrl = "http://127.0.0.1:8088/api/recommend"
+  if (userId) {
+    baseUrl = `http://127.0.0.1:8088/recommend/${userId}/${category}`
+  }
   return axios
-    .get<string[], AxiosResponse<string[]>>(
-      `/recommend/${userId}/${category}`,
-      {
-        params: {
-          ...(writeBackType ? { "write-back-type": writeBackType } : {}),
-          ...(writeBackDelay ? { "write-back-delay": writeBackDelay } : {}),
-          ...cursorOptions,
-        },
-      }
-    )
+    .get<string[], AxiosResponse<string[]>>("", {
+      params: {
+        ...(writeBackType ? { "write-back-type": writeBackType } : {}),
+        ...(writeBackDelay ? { "write-back-delay": writeBackDelay } : {}),
+        ...cursorOptions,
+        baseUrl: baseUrl,
+      },
+    })
     .then(({ data }) => {
       return data;
     })
