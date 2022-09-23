@@ -135,6 +135,11 @@ export class Media {
           return images
         //this.store.upload()
     }
+
+    async getThumbnail(name: string) {
+        let data = await this.repository.find(name, "author", [name])
+        return data.thumbnail
+    }
     /*readItem(collName: string) {
         let item
         try {
