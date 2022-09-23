@@ -9,21 +9,24 @@ export class Repository implements IRepository {
        this.db = new Pouchdb(collName)
       //this.db = new SupabaseRepo()
     }
+  find(filters?: Record<string, any>, collName?: string, params?: string[]): Promise<any> {
+    return this.db.find(filters, collName, params)
+  }
     db:IRepository
 
-    changeDB(db: database) {
+    changeDB(db: database, collName: string) {
       switch (db) {
         case 'pouchdb':
-          this.db = new SupabaseRepo()
+          return new Pouchdb(collName)
           break;
 
         case 'supabase':
-          this.db = new SupabaseRepo()
+          return new SupabaseRepo()
 
         default:
           break;
       }
-      this.db = new SupabaseRepo()
+      return new SupabaseRepo()
     }
 
     addItem(param: Record<string, any>) {
@@ -43,9 +46,6 @@ export class Repository implements IRepository {
     }
     deleteItem(docId: any): void {
         this.db.deleteItem(docId, this.collName)
-    }
-    find(): void {
-        throw new Error("Method not implemented.");
     }
 
 }

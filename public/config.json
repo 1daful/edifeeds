@@ -214,8 +214,12 @@
               "detectSessionInUrl": true
             }},
         "zenserp" : {
-            "url" : "https://app.zenserp.com/api/v2",
-            "apikey" : "83d52500-bbe4-11ec-97af-3769629ae33a"
+            "baseUrl" : "https://app.zenserp.com/api/v2",
+            "config": {
+              "baseParams": {
+                "apikey" : "83d52500-bbe4-11ec-97af-3769629ae33a"
+              }
+            }
         },
         "PouchDB": {
           "url": ""

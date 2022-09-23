@@ -2,11 +2,14 @@
     <div class="container">
     <div class="row">
         <div class="col-sm-8" v-if="media">
-            <q-img :src="media.thumbnailSmall"></q-img>
+            <q-img v-if="notPlayable" :src="media.thumbnailSmall"></q-img>
+            <iframe v-else :src="media.content"></iframe>
+            <q-skeleton height=200px square/>
             <h4>
                 {{media.title}}
                 {{media.description}}
             </h4>
+            <q-skeleton type="text" v-show="loading" />
             <div v-if="media.authors">
                 <div v-for="author of media.authors" :key="author.name">
                     <q-avatar>
@@ -35,9 +38,9 @@
 
             <!-- share -->
             <div>
-                <Facebook :url="media.url" :description="media.description"></Facebook>
-                <Twitter :url="media.url" :description="media.description"></Twitter>
-                <Pinterest :url="media.url" :description="media.description"></Pinterest>
+                <Facebook :url="url" :description="media.description"></Facebook>
+                <Twitter :url="url" :description="media.description"></Twitter>
+                <Pinterest :url="url" :description="media.description"></Pinterest>
             </div>
         </div>
         <!--<div class="col-sm-4">
@@ -60,7 +63,7 @@
 
 <script lang="ts">
 //import auth from "../api/auth/SupabaseAuth";
-import { QuoteMedia } from "../media/QuoteMedia";
+//import { QuoteMedia } from "../media/QuoteMedia";
 import { Repository } from "../model/Repository";
 import MediaComponent from "../components/MediaComponent.vue"
 import { defineComponent } from "vue";
@@ -81,15 +84,18 @@ export default defineComponent({
     name: 'SingleMediaPage',
     data() {
         return {
+            url: window.Location,
             media,
             //auth,
             pos: "sidebar",
             repository,
             collIcon: 'library_add',
             isDisabled: false,
-            FB,
+            //FB,
+            loading: true,
             user,
-            recomm: new Recommender()
+            recomm: new Recommender(),
+            notPlayable: true
             //favIcon: 'hearth',
             //path: `${this.media.type}/${this.media.id}/comments`
         }
@@ -122,7 +128,7 @@ export default defineComponent({
         Pinterest
     },
     methods: {
-        facebook() {
+        /*facebook() {
             this.FB.ui({
                 method: 'share',
                 href: this.$route.path
@@ -131,7 +137,7 @@ export default defineComponent({
                     alert('Post shared successfully!');
                 }
             })
-        },
+        },*/
         addToCollection() {
             if (this.user) {
                 this.repository.addItems([ this.media ]);
@@ -159,7 +165,12 @@ export default defineComponent({
         this.repository = new Repository(type)
         const id = this.$route.params.id as string
         this.media = await this.repository.readItem(id)
+        this.loading = false
         console.log('media: ', this.media)
+
+        if(this.media.type==="video" || this.media.type==="music") {
+            this.notPlayable = false
+        }
         
         if (this.user) {
             this.recomm.insertFeedback(this.user.id, "positive", this.media.id, new Date())

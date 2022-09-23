@@ -93,3 +93,5 @@ export type EmailType = {
   attachments: Attachment[] | Base64Attachment[],
   inline_images: Base64InlineImage[] | InlineImage[]
 }
+
+export type filterType = "eq" | "gt" | "gte" | "lt" | "lte" | "ne" | "in" | "nin" | "exists" | "all"

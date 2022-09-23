@@ -54,8 +54,16 @@ export class SupabaseRepo implements IRepository {
           .delete()
           .match(item)
     }
-    find(_params: string[], _op: Record<string, any>, _sort?: string, _limit?: number): void {
-        throw new Error("Method not implemented.");
+    async find(op: Record<string, any>, collName: string,_sort?: string, _limit?: number) {
+        Object.keys(op).forEach(async key => {
+            let i = 0
+            const { data, error } = await this.supabase
+            .from(collName)
+            .select()
+            .textSearch(key, `'${op[key]}'`)
+            return { data, error };
+        });
+        
     }
 }
 

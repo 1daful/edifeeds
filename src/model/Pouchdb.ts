@@ -153,7 +153,7 @@ export class Pouchdb implements IRepository {
     private async createIndex(...fields: string[]) {
         try{
             await this.db.createIndex({
-                index: {fields: [fields]}
+                index: {fields: fields}
             })
         }
         catch (err) {
@@ -168,10 +168,10 @@ export class Pouchdb implements IRepository {
      * @param op The op arg is used for knowing which comparison value to use.
      * @param params This array must follow the order of the op arg.
      */
-    async find(params: string[], op: Record<string, any>, sort?: string, limit?: number) {
-        this.createIndex(...params)
+    async find(filters: Record<string, object>, sort?: string, limit?: number) {
+        //this.createIndex(...params)
         try {
-            const selector = {}
+            let selector = {}
             /*let opObj
             Object.keys(op).forEach(key => {
                 switch (op[key]) {//<, > <=, >=, ==
@@ -183,17 +183,33 @@ export class Pouchdb implements IRepository {
                         break;
                 }
             })*/
-            Object.keys(op).forEach(key => {
+            /*Object.keys(op).forEach(key => {
                 let i = 0; //index has a base value of 0.
+                let fkey = "$" + key
                 const sel = {
-                    [params[i]]: {
-                        [op[key]]: key
+                    [key]: {
+                        [fkey]: op[key]
                     }
                 }
                 i++;
                 Object.assign(selector, sel)
-            });
-            this.db.find({
+            });*/
+
+            Object.keys(filters).forEach(filter => {
+                let op: Record<string, any> = filters[filter]
+                let select = {}
+                Object.keys(op).forEach(element => {
+                    let el = "$" + element
+                    const sel = {
+                        [el]: op[element]
+                    }
+                    Object.assign(select, sel)
+                });
+                Object.assign(selector, {[filter]: select})
+            })
+
+
+            return this.db.find({
                 //selector: params,
                 selector: selector,
                 sort: [sort],

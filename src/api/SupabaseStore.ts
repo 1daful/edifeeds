@@ -11,7 +11,7 @@ export class SupabaseStore implements IEdiStorage {
     return await this.supabase.storage.from(collName).getPublicUrl(path)
   }
 
-  async upload(collName: string, path: string, file: any): Promise<any> {
+  async upload(collName: string, path: string, file: File): Promise<any> {
   	const { data, error } = await this.supabase.storage
     .from(collName)
     .upload(path, file)
@@ -21,5 +21,16 @@ export class SupabaseStore implements IEdiStorage {
   async download(collName: string, path: string) {
   	const { data, error } = await this.supabase.storage.from(collName).download(path)
     return { data, error }
+  }
+    
+  async getThumbnail(bucket: string, name: string){
+    //const url = 'public/' + name + 'jpg'
+    return await this.supabase.storage .from(bucket).getPublicUrl(name).publicURL // path to the image in the bucket 
+  }
+    
+  async getFile(url: string) {
+    let response = await fetch(url)
+    let file = await response.blob
+    return file
   }
 }

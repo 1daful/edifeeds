@@ -1,8 +1,9 @@
 import { IMediaApi } from "../../api/IMediaApi";
-import { ApiClient } from "../../apiClient";
+//import { ApiClient } from "../../apiClient";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
 import { Axiosi } from "../Axiosi";
 import { Resource } from "../Resource";
+import config from "../../../public/config.json";
 
 export class ZerpSerp implements IMediaApi {
     constructor(apiFormat: ApiFormat) {
@@ -35,8 +36,8 @@ export class ZerpSerp implements IMediaApi {
 
     async getBaseParams() {
         try{
-            const config = await this.client.load('../config.json')
-            const apiBaseParams = config?.data.api.ZerpSerp.baseParams
+            //const config = await this.client.load('../config.json')
+            const apiBaseParams = config?.api.zenserp.config.baseParams
             return apiBaseParams
         }
         catch (err) {

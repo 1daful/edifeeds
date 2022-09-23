@@ -4,11 +4,12 @@
             <q-item-label class="absolute-full text-subtitle2 flex flex-center">{{quote.description}}</q-item-label>
             <q-icon name="format_quote"></q-icon>
         </q-img>
-        <q-avatar class="margin" size="200px">
+        <q-avatar size="200px">
             <p v-for="author in quote.authors" :key="author.name">{{author.name}}</p>
             <q-img :src="quote.thumbnailSmall" spinner-color="whitesmoke" class="col-6" />
         </q-avatar>
     </section>
+    <q-skeleton height="200px" square v-show="loading" class="margin" />
 </template>
 
 <script lang="ts">
@@ -27,6 +28,7 @@ export default defineComponent ({
     data() {
         return{
             quote,
+            loading: true
             //thumbnail,
             //client,
         }
@@ -71,6 +73,7 @@ export default defineComponent ({
           //const t = JSON.parse(JSON.stringify(p))
           this.quote = p?.doc;
           //this.thumbnail = await quoteMedia.getImage(this.quote.description)
+          this.loading = false
           console.log("In QOD: ", this.quote)
           //console.log("In thumbni: ", this.thumbnail)
       },
@@ -84,6 +87,7 @@ export default defineComponent ({
 </script>
 <style scoped>
 	.margin {
-    margin-left: 10%
+    margin-left: 10%;
+    margin-right: 10%
   }
 </style>

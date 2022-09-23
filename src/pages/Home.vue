@@ -15,11 +15,12 @@
 </template>
 
 <script lang="ts">
+  import config from "../../public/config.json"
 import { defineComponent } from 'vue';
-import Newsletter from "@/components/Newsletter.vue";
+import Newsletter from "../components/Newsletter.vue";
 //import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 import { Axiosi } from "../api/Axiosi";
-import SiteHero from "@/components/SiteHero.vue";
+import SiteHero from "../components/SiteHero.vue";
 import MediaComponent from "../components/MediaComponent.vue";
 import QOD from "../components/QOD.vue";
 //import Genres from "../components/Genres.vue";
@@ -35,7 +36,8 @@ export default defineComponent({
         return {
             site,
             pos,
-            auth
+            auth,
+            loading: true
         }
     },
     components: {

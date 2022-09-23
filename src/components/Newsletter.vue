@@ -1,6 +1,6 @@
 <template>
     <!--<div :bgImg="bgImg" class="q-pa-md" :style="{background: url(bgImg)}">-->
-    <div class="q-pa-md margin justify-center item-center news">
+    <div class="q-pa-md justify-center item-center news">
         <p class="text-h4 text-weight-bold">Stay In The Loop</p>
         <p class=" text-h6">We would love to send you updates and important information. Subscribe to our newsletter below.</p>
         <q-form @submit="onSubmit" class="q-gutter-md">
@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts">
-import { Repository } from '@/model/Repository';
+import { Repository } from '../model/Repository';
 import { defineComponent } from 'vue';
 
-const repo = new Repository("subscriber)
+const repo = new Repository("subscriber")
 export default defineComponent({
     name: 'Newsletter',
     data() {
@@ -50,7 +50,7 @@ export default defineComponent({
         },*/
         methods: {
             onSubmit() {
-              this.repo.addItem()
+              //this.repo.addItem()
         }
     }
 })
