@@ -7,21 +7,27 @@ export class Repository {
         this.db = new Pouchdb(collName);
         //this.db = new SupabaseRepo()
     }
+    search(field, query, collName) {
+        return this.db.search(field, query);
+    }
+    find(filters, collName, params) {
+        return this.db.find(filters, collName);
+    }
     db;
-    changeDB(db) {
+    changeDB(db, collName) {
         switch (db) {
             case 'pouchdb':
-                this.db = new SupabaseRepo();
+                return new Pouchdb(collName);
                 break;
             case 'supabase':
-                this.db = new SupabaseRepo();
+                return new SupabaseRepo();
             default:
                 break;
         }
-        this.db = new SupabaseRepo();
+        return new SupabaseRepo();
     }
-    addItem() {
-        throw new Error("Method not implemented.");
+    addItem(param) {
+        this.db.addItem(param);
     }
     addItems(param) {
         this.db.addItems(param, this.collName);
@@ -37,9 +43,6 @@ export class Repository {
     }
     deleteItem(docId) {
         this.db.deleteItem(docId, this.collName);
-    }
-    find() {
-        throw new Error("Method not implemented.");
     }
 }
 //# sourceMappingURL=Repository.js.map

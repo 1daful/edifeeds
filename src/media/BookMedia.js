@@ -1,5 +1,5 @@
-import { GoogleBooks } from "../api/book/GoogleBooks.js";
-import { Media } from "./Media.js";
+import { GoogleBooks } from "../api/book/GoogleBooks";
+import { Media } from "./Media";
 export class BookMedia {
     //publisher!: string;
     //subtitle!: string;

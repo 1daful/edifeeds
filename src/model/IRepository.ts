@@ -8,5 +8,5 @@ export interface IRepository {
     deleteItem(docId: any,  collName?: string): void;
     //setChild(subPath: string, item: Record<string, any>): void;
     find(filters?: Record<string, any>, collName?: string): Promise<any>
-    //textSearch(field: string, query: string, collName?: string): Promise<any>
+    search(field: string, query: string, collName?: string): Promise<any>
 }

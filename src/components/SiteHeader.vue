@@ -11,7 +11,7 @@
 
         </q-item>
         </a>
-        <div q-pa-md class="action-buttons ml-auto gt-xs header-link" >
+        <div q-pa-md class="action-buttons ml-auto gt-sm header-link" >
           <!--<q-btn flat >-->
           <router-link v-for="menu in menus" :key="menu.name" :to="menu.path" class="text-h6">
             <q-btn flat>
@@ -23,30 +23,32 @@
 
           <!--<div>Quasar v{{ $q.version }}</div>-->
 
-          <q-input class="q-ml-md ml-auto gt-xs" dark type="search" standout dense bg-color="white" v-show="showSearch" v-model="search">
+          <q-input class="q-ml-md ml-auto gt-sm" dark type="search" standout dense bg-color="white" v-show="showSearch" v-model="search">
             <template v-slot:append>
               <q-icon v-if="search" name="clear" class="cursor-pointer" @click="search=''"></q-icon>
             </template>
           </q-input>
-          <q-btn class="q-ml-md ml-auto gt-xs" flat icon="search" dense @click="toggleSearch"></q-btn>
-    <div class="row justify-end q-ml-md ml-auto gt-xs" v-if="!userInfo">
+          <q-btn class="q-ml-md ml-auto gt-sm" flat icon="search" dense @click="toggleSearch"></q-btn>
+    <div class="row justify-end q-ml-md ml-auto gt-sm" v-if="!userInfo">
       <q-btn flat size="lg"><router-link to="/signin">Sign in</router-link></q-btn>
       <q-btn flat size="lg"><router-link to="/signup">Sign up</router-link></q-btn>
     </div>
-    <q-item v-if="userInfo">
-      <q-item-section>
+    <div v-if="userInfo">
+      
         <q-avatar>
           <q-img v-if="user.picture" :src="user.picture" />
           <q-item-label v-else >{{user.name?.charAt(0).toUpperCase}}</q-item-label>
         </q-avatar>
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>{{user.name}}</q-item-label>
+      
+      
+        <q-item-labe>{{user.name}}</q-item-labe>
+      <q-btn flat size="lg" @click="signout">Sign out</q-btn>
+        
         <!--<q-item-label caption> See profile information </q-item-label>-->
-      </q-item-section>
-    </q-item>
+      
+    </div>
         <div class="row justify-end">
-          <div class="col-7 lt-sm q-ml-md">
+          <div class="col-7 lt-md q-ml-md">
             <q-btn
               flat
               dense
@@ -122,6 +124,7 @@
   //import { Typesense } from 'src/typesense';
   
   let userInfo = auth.startSession()
+  //const eauth = auth
   //import EssentialLink from 'components/EssentialLink.vue';
   
   /*const linksList = [
@@ -191,6 +194,7 @@
       const showSearch = ref(false)
       const search = ref('')
       const router = useRouter()
+      
       //const typesense = new Typesense()
       /*function searchQuery() {
         typesense.search(search.value)
@@ -198,6 +202,7 @@
   
       return {
         //typesense,
+        auth,
         userInfo,
         search,
         showSearch,
@@ -213,6 +218,11 @@
             path: "/search"
           })
         },
+      signout() {
+        this.auth.logout();
+        windows.location.reload()
+        this.$router.push({ path: "/" });
+      },
   
         toggleLeftDrawer () {
           leftDrawerOpen.value = !leftDrawerOpen.value
@@ -226,8 +236,8 @@
         site
       }
     },
-    /*methods: {
-      searchQuery() {
+    methods: {
+      /*searchQuery() {
       },
       signup() {
         this.$router.push({
@@ -239,12 +249,13 @@
         this.$router.push({
           name: "SignIn"
         });
-      },*/
-      /*logout() {
+      },
+      signout() {
         this.auth.logout();
+        windows.location.href = "/"
         this.$router.push({ path: "/" });
-      }
-    }*/
+      }*/
+    }
   });
   
   </script>

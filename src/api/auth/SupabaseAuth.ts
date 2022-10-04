@@ -1,12 +1,10 @@
 import config from "../../../public/config.json";
 import { createClient } from "@supabase/supabase-js";
-
-class SupabaseAuth implements Auth {
+import { IAuth } from "../auth/Auth";
+class SupabaseAuth implements IAuth {
   constructor() {
     //if(SupabaseAuth._instance)
   }
-
-
 
     private static _instance?: SupabaseAuth
 
@@ -23,7 +21,7 @@ class SupabaseAuth implements Auth {
 
     //jwt?: string
 
-    async signUp(userCred: Record<string, any>, data: Object) {
+    async signUp(userCred: Record<string, any>, data: Record<string, any>) {
       const { user, session, error } = await this.auth.signUp(
         {
           email: userCred.email,
@@ -90,15 +88,19 @@ class SupabaseAuth implements Auth {
       return user
     }
     async isAuthenticated() {
-      let sess
-      this.auth.onAuthStateChange((event, session) => {
+      //let sess
+      /*this.auth.onAuthStateChange((event, session) => {
         this.authenticated = true
         console.log("event and session")
         console.log(event, session)
         sess = session
       })
       console.log("session: ", sess)
-      return this.authenticated
+      return this.authenticated*/
+      if (this.startSession()) {
+        return true
+      }
+      else return false
     }
 
     isSignedIn() {
@@ -129,7 +131,7 @@ class SupabaseAuth implements Auth {
         return { user, error }
     }
 
-    async recoverPassword(email: string) {
+    async resetPassword(email: string) {
       const { data, error } = await this.auth.api.resetPasswordForEmail(email)
       return { data, error }
     }

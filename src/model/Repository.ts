@@ -9,8 +9,11 @@ export class Repository implements IRepository {
        this.db = new Pouchdb(collName)
       //this.db = new SupabaseRepo()
     }
+  search(field: string, query: string, collName?: string | undefined): Promise<any> {
+    return this.db.search(field, query);
+  }
   find(filters?: Record<string, any>, collName?: string, params?: string[]): Promise<any> {
-    return this.db.find(filters, collName, params)
+    return this.db.find(filters, collName)
   }
     db:IRepository
 

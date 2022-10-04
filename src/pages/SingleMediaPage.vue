@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-//import auth from "../api/auth/SupabaseAuth";
+import { auth } from "../api/auth/SupabaseAuth";
 //import { QuoteMedia } from "../media/QuoteMedia";
 import { Repository } from "../model/Repository";
 import MediaComponent from "../components/MediaComponent.vue"
@@ -74,9 +74,9 @@ import Twitter from 'vue-share-buttons/src/components/TwitterButton.vue';
 import Pinterest from 'vue-share-buttons/src/components/PinterestButton.vue';
 import { Recommender } from "../api/Recommender";
 
-let user: any
+let user = auth.startSession()
 let repository: IRepository
-let FB: any
+//let FB: any
 let media: any
 //let quoteMedia = new QuoteMedia();
 

@@ -5,12 +5,15 @@
 <script lang="ts">
 import { auth } from "../api/auth/SupabaseAuth";
 import { defineComponent } from "vue";
+import { useQuasar } from "quasar";
 
 export default defineComponent({
     name: 'Auth',
     data() {
         return {
-            auth
+            auth,
+            $q: useQuasar(),
+            url: this.$q.localStorage.getItem("url") || "/"
         }
     },
     props: {
@@ -28,9 +31,10 @@ export default defineComponent({
         if( this.myUrl){
             console.log(this.myUrl)
         	const sess = this.auth.startSession()
+          //this.$router.push(this.url?.toString())
         //console.log("sess: ", sess)
-        /*if(sess)
-          this.$router.push(this.myUrl))*/
+        if(sess)
+          this.$router.push(this.url?.toString())
         }
     }
 })

@@ -23,6 +23,9 @@ export class Pouchdb implements IRepository {
 
 
     }
+    search(field: string, query: string, collName?: string | undefined): Promise<any> {
+        return this.db.search(field, query)
+    }
     //repository: IRepository;
     //name: string;
     //message!: string;

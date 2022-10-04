@@ -1,6 +1,8 @@
+//import { ApiClient } from "../../apiClient";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
 import { Axiosi } from "../Axiosi";
 import { Resource } from "../Resource";
+import config from "../../../public/config.json";
 export class ZerpSerp {
     constructor(apiFormat) {
         this.apiFormat = apiFormat;
@@ -31,8 +33,8 @@ export class ZerpSerp {
     }
     async getBaseParams() {
         try {
-            const config = await this.client.load('../config.json');
-            const apiBaseParams = config?.data.api.ZerpSerp.baseParams;
+            //const config = await this.client.load('../config.json')
+            const apiBaseParams = config?.api.zenserp.config.baseParams;
             return apiBaseParams;
         }
         catch (err) {

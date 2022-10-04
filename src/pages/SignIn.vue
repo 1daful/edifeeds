@@ -14,7 +14,7 @@
             </q-input>
 
             <router-link :to="{name: 'PasswordRecovery'}">Forget password?</router-link>
-            <div><q-btn label="Sign in" type="submit" color="primary" class="full-width"></q-btn></div>
+            <div><q-btn label="Sign in" type="submit" color="primary" class="full-width" @click="onSubmit"></q-btn></div>
         </q-form>
 
         <q-btn> or</q-btn>
@@ -26,6 +26,9 @@
         <social-login></social-login>
         <p>Don't have an account? <router-link to="/signup">Sign up</router-link></p>
     </div>
+    <div>
+      <!--<signup-form tool-id="nkmbbm"/>-->
+    </div>
 </template>
 
 <script lang="ts">
@@ -34,14 +37,19 @@ import { auth } from "../api/auth/SupabaseAuth";
 //import { FirebaseAuth } from "../api/auth/FirebaseAuth";
 import {Axiosi} from "../api/Axiosi"
 import config from "../../public/config.json"
+//import Userfront, {SignupForm} from "@userfront/vue"
+
 let client = new Axiosi()
 
 let socials = config.socials
 //let auth = new FirebaseAuth()
+//Userfront.init("demo1234")
 
 export default defineComponent({
     name: 'SignIn',
-
+    components: {
+      //SignupForm
+    },
     data() {
       const user = ref({
         email: "",

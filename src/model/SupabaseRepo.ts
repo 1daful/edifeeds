@@ -3,6 +3,14 @@ import config from "../../public/config.json";
 import { createClient } from "@supabase/supabase-js";
 
 export class SupabaseRepo implements IRepository {
+    async search(field: string, query: string, collName: string): Promise<any> {
+        let i = 0
+            const { data, error } = await this.supabase
+            .from(collName)
+            .select()
+            .textSearch(field, `'${query}'`)
+            return { data, error };
+    }
     options = {
         schema: 'public',
         autoRefreshToken: true,

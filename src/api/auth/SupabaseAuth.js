@@ -72,7 +72,7 @@ class SupabaseAuth {
         const user = await this.auth.user();
         return user;
     }
-    async isAuthenticated() {
+    isAuthenticated() {
         let sess;
         this.auth.onAuthStateChange((event, session) => {
             this.authenticated = true;

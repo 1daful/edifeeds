@@ -81,6 +81,11 @@ const routes: RouteRecordRaw[] = [
         ]
       },
       {
+        //props: (route: { params: { myUrl: any } }) => ({myUrl: route.params.myUrl}),
+        path: '/auth*',
+        component: () => import(/* webpackChunkName: "about" */ '../pages/Authview.vue'),
+      },
+      {
         props: (route: { params: { myUrl: any } }) => ({myUrl: route.params.myUrl}),
         path: '/access_token=:myUrl',
         component: () => import(/* webpackChunkName: "about" */ '../pages/Auth.vue'),

@@ -19,7 +19,7 @@ import { defineComponent } from "vue";
 let user = {}
 let token: URL
 export default defineComponent({
-    name: 'Auth',
+    name: 'Reset',
     data() {
         return {
             auth,

@@ -1,8 +1,8 @@
-import { IMedia } from "./IMedia.js";
-import { GoogleBooks } from "../api/book/GoogleBooks.js";
-import { IMediaApi } from "../api/IMediaApi.js";
-import { Media } from "./Media.js";
-import { MediaRes } from "@/Types.js";
+import { IMedia } from "./IMedia";
+import { GoogleBooks } from "../api/book/GoogleBooks";
+import { IMediaApi } from "../api/IMediaApi";
+import { Media } from "./Media";
+import { MediaRes } from "@/Types";
 
 export class BookMedia implements IMedia{
     //publisher!: string;

@@ -13,13 +13,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import SiteHeader from '../components/SiteHeader.vue';
-import SiteNav from '../components/SiteNav.vue'
+//import SiteNav from '../components/SiteNav.vue'
 
   export default defineComponent({
     name: 'MainLayout',
     components: {
       SiteHeader,
-      SiteNav
+      //SiteNav
     }
   })
 </script>

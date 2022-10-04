@@ -13,14 +13,21 @@
 <script lang="ts">
 import { Repository } from '../model/Repository';
 import { defineComponent } from 'vue';
+import { Axiosi } from "../api/Axiosi";
+import { ListMonk } from '../api/Email/Listmonk';
 
-const repo = new Repository("subscriber")
+const repo = new Repository("subscribers")
+const emailProvider = new ListMonk()
+const resource = emailProvider.subscriber
+const client = new Axiosi(resource)
+
 export default defineComponent({
     name: 'Newsletter',
     data() {
         return {
             email: '',
-            repo
+            repo,
+            client
         }
     },
     /*computed: {
@@ -49,9 +56,18 @@ export default defineComponent({
             }
         },*/
         methods: {
-            onSubmit() {
-              //this.repo.addItem()
-        }
+            async onSubmit() {
+                const data = await this.client.post({
+                    email: this.email,
+                    status: "enabled",
+                    list: [0]
+                });
+                this.repo.addItem({
+                    email: this.email,
+                    id: data[0].id
+
+                })
+            }
     }
 })
 </script>

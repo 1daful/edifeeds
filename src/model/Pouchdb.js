@@ -19,6 +19,9 @@ export class Pouchdb {
                // totally unhandled error (shouldn't happen)
               });*/
     }
+    search(field, query, collName) {
+        return this.db.search(field, query);
+    }
     //repository: IRepository;
     //name: string;
     //message!: string;
@@ -136,7 +139,7 @@ export class Pouchdb {
     async createIndex(...fields) {
         try {
             await this.db.createIndex({
-                index: { fields: [fields] }
+                index: { fields: fields }
             });
         }
         catch (err) {
@@ -150,10 +153,10 @@ export class Pouchdb {
      * @param op The op arg is used for knowing which comparison value to use.
      * @param params This array must follow the order of the op arg.
      */
-    async find(params, op, sort, limit) {
-        this.createIndex(...params);
+    async find(filters, sort, limit) {
+        //this.createIndex(...params)
         try {
-            const selector = {};
+            let selector = {};
             /*let opObj
             Object.keys(op).forEach(key => {
                 switch (op[key]) {//<, > <=, >=, ==
@@ -165,17 +168,30 @@ export class Pouchdb {
                         break;
                 }
             })*/
-            Object.keys(op).forEach(key => {
+            /*Object.keys(op).forEach(key => {
                 let i = 0; //index has a base value of 0.
+                let fkey = "$" + key
                 const sel = {
-                    [params[i]]: {
-                        [op[key]]: key
+                    [key]: {
+                        [fkey]: op[key]
                     }
-                };
+                }
                 i++;
-                Object.assign(selector, sel);
+                Object.assign(selector, sel)
+            });*/
+            Object.keys(filters).forEach(filter => {
+                let op = filters[filter];
+                let select = {};
+                Object.keys(op).forEach(element => {
+                    let el = "$" + element;
+                    const sel = {
+                        [el]: op[element]
+                    };
+                    Object.assign(select, sel);
+                });
+                Object.assign(selector, { [filter]: select });
             });
-            this.db.find({
+            return this.db.find({
                 //selector: params,
                 selector: selector,
                 sort: [sort],

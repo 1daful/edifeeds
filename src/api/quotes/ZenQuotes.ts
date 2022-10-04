@@ -84,7 +84,7 @@ export class ZenQuotes implements IMediaApi{
                 privacy: '',
                 tags: [],
                 description: data.q,
-                genre: '',
+                genre: "General",
                 created: '',
                 license: '',
                 title: '',

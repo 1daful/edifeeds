@@ -32,7 +32,7 @@ export function getLatest(axios, { category = "", cursorOptions }) {
     });
 }
 export function getRecommend(axios, { userId, category = "", cursorOptions, writeBackType, writeBackDelay, }) {
-    let baseUrl = "http://127.0.0.1:8088/recommend";
+    let baseUrl = "http://127.0.0.1:8088/api/recommend";
     if (userId) {
         baseUrl = `http://127.0.0.1:8088/recommend/${userId}/${category}`;
     }

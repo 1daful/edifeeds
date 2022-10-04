@@ -1,7 +1,7 @@
 <template>
     <div :bgImg="bgImg" class="q-pa-md margin" :style="{backgroundImage: `url(${bgImg})`}">
         <!--<img :src="logo" />-->
-        <q-form @submit="onSubmit" class="q-gutter-md margin">
+        <q-form ref="signUpForm" @submit="onSubmit" class="q-gutter-md margin">
         <!-- Name ---->
             <q-input v-model="user.name" type="text" label="Name" lazy-rules :rules="rules.name"/>
 
@@ -10,14 +10,17 @@
 
             <!--Password-->
             <q-input v-model="user.password" type="password" label="Password" lazy-rules :rules="rules.password"/>
+
             <q-linear-progress :value="passwordStrength.value"  v-if="passwordStrength.show" :buffer="passwordStrength.value"></q-linear-progress>
             <router-link :to="{name: 'PasswordRecovery'}">Forget password?</router-link>
+
             <!--Newsletter-->
             <div><q-checkbox v-model='user.newsletter'></q-checkbox> <span>Send updates to my email address.</span></div>
+
             <!--TOS-->
             <p>By clicking sign up you have read and agreed to our <a :href="site.tosUrl">term of use</a> and <a :href="site.privacyPolicyUrl">privacy policy</a>.</p>
 
-            <q-btn label="Sign in" type="submit" color="primary"></q-btn>
+            <q-btn type="submit" color="primary" @click="onSubmit">Sign Up</q-btn>
 
         </q-form>
 
@@ -73,7 +76,7 @@ export default defineComponent({
         return {
           site,
             auth,
-            signUpForm: ref(),
+            signUpForm: ref({}),
             bgImg: "",
             socials: config.socials,
             rules: {
@@ -107,8 +110,7 @@ export default defineComponent({
                 email: '',
                 password: '',
                 newsletter: false,
-                isRobot: false,
-                id: ''
+                isRobot: false
             },
             passwordStrength: {
                 show: true,
@@ -168,13 +170,13 @@ export default defineComponent({
         },
       async validate(): Promise<boolean> {
 
-        if (this.signUpForm) {
-          const success = await this.signUpForm.value.validate()
+        //if (this.signUpForm) {
+          const success = await this.$refs.signUpForm.validate()
           if (success) {
             this.validated = true
           }
           return this.validated
-        }
+        //}
         for(const error in this.errors) {
           if (error) {
             this.errorList.push()

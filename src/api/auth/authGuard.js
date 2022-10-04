@@ -1,3 +1,4 @@
+import { LocalStorage } from "quasar";
 import { auth } from "./SupabaseAuth";
 export const authGuard = async (to, from, next) => {
     //const auth = new Auth();
@@ -5,13 +6,12 @@ export const authGuard = async (to, from, next) => {
     if (await auth.startSession()) {
         next();
     }
-    else
-        (next({
+    else {
+        LocalStorage.set("url", to.path);
+        next({
             name: "SignIn",
             path: "signin",
-            query: {
-                myUrl: to.path
-            }
-        }));
+        });
+    }
 };
 //# sourceMappingURL=authGuard.js.map

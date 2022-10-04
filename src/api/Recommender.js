@@ -146,5 +146,15 @@ export class Recommender {
         };
         return await this.client.getItemNeighbors(params);
     }
+    async insertFeedback(userId, feedbackType, itemId, timestamp) {
+        const feedback = {
+            UserId: userId,
+            FeedbackType: feedbackType,
+            ItemId: itemId,
+            Timestamp: timestamp
+        };
+        const feedbacks = [];
+        await this.client.insertFeedbacks(feedbacks);
+    }
 }
 //# sourceMappingURL=Recommender.js.map

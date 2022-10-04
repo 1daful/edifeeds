@@ -109,7 +109,7 @@ export default defineComponent({
     async created() {
       await recommender.getMedia("Recommended")
       try {
-      const p = await recommender.readMedia(this.mediaType, {limit: 1})
+      const p = await recommender.readMedia(this.mediaType, {limit: 10})
       if (p) {
           const q = JSON.parse(JSON.stringify(p))
           const f = q.rows

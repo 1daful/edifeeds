@@ -1,6 +1,14 @@
 import config from "../../public/config.json";
 import { createClient } from "@supabase/supabase-js";
 export class SupabaseRepo {
+    async search(field, query, collName) {
+        let i = 0;
+        const { data, error } = await this.supabase
+            .from(collName)
+            .select()
+            .textSearch(field, `'${query}'`);
+        return { data, error };
+    }
     options = {
         schema: 'public',
         autoRefreshToken: true,
@@ -42,8 +50,15 @@ export class SupabaseRepo {
             .delete()
             .match(item);
     }
-    find(_params, _op, _sort, _limit) {
-        throw new Error("Method not implemented.");
+    async find(op, collName, _sort, _limit) {
+        Object.keys(op).forEach(async (key) => {
+            let i = 0;
+            const { data, error } = await this.supabase
+                .from(collName)
+                .select()
+                .textSearch(key, `'${op[key]}'`);
+            return { data, error };
+        });
     }
 }
 //# sourceMappingURL=SupabaseRepo.js.map

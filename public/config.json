@@ -223,6 +223,18 @@
         },
         "PouchDB": {
           "url": ""
+        },
+        "Supertokens": {
+          "appName": "Edifeeds",
+          "apiDomain": "http://localhost:2000/api"
+        },
+        "ListMonk": {
+          "baseUrl": "http://localhost:2000",
+          "config": {
+            "baseParams": {
+              "apikey": "AIzaSyAlbER-HPdipvFgKJc-PWWZYhBIBSPxBNQ"
+            }
+          }
         }
     },
     "genres": {},

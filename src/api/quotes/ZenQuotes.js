@@ -71,7 +71,7 @@ export class ZenQuotes {
                 privacy: '',
                 tags: [],
                 description: data.q,
-                genre: '',
+                genre: "General",
                 created: '',
                 license: '',
                 title: '',

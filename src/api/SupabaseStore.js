@@ -19,5 +19,14 @@ export class SupabaseStore {
         const { data, error } = await this.supabase.storage.from(collName).download(path);
         return { data, error };
     }
+    async getThumbnail(bucket, name) {
+        //const url = 'public/' + name + 'jpg'
+        return await this.supabase.storage.from(bucket).getPublicUrl(name).publicURL; // path to the image in the bucket 
+    }
+    async getFile(url) {
+        let response = await fetch(url);
+        let file = await response.blob;
+        return file;
+    }
 }
 //# sourceMappingURL=SupabaseStore.js.map

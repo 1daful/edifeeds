@@ -13,10 +13,14 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "@supabase/supabase-js": "^1.28.5",
+    "@supabase/ui": "^0.36.5",
     "@types/pouchdb": "^6.4.0",
+    "@userfront/vue": "^0.1.18",
     "@vueauth/supabase": "^1.0.0-alpha.20",
     "algoliasearch": "^4.13.1",
     "axios": "^0.27.2",
+    "casdoor-js-sdk": "^0.5.0",
+    "casdoor-vue-sdk": "^1.0.5",
     "events": "^3.3.0",
     "instantsearch.css": "^7.4.5",
     "is-loopback-addr": "^2.0.1",
@@ -25,6 +29,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "supertokens-auth-react": "^0.25.0",
+    "supertokens-web-js": "^0.2.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",
     "vue-share-buttons": "^1.1.1",
@@ -42,6 +47,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-vue": "^8.5.0",
     "prettier": "^2.5.1",
+    "quasar-app-extension-http-authentication": "^3.0.0",
     "typescript": "^4.5.4"
   },
   "engines": {

@@ -70,9 +70,10 @@ export class Media {
                       item.thumbnailLarge = image.urls.regular
                     });*/
                     NetworkLocal.test("this is item from Media load: ", items)
-                    await this.addItems(items);
+                    
                     //this.search.import()
                 }
+                await this.addItems(items);
             }
 
         }
@@ -136,8 +137,8 @@ export class Media {
         //this.store.upload()
     }
 
-    async getThumbnail(name: string) {
-        let data = await this.repository.find(name, "author", [name])
+    async getThumbnail(name: any) {
+        let data = await this.repository.search("name", name)
         return data.thumbnail
     }
     /*readItem(collName: string) {

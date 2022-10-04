@@ -2,7 +2,7 @@
   <div>
     <q-page class="home container">
           <SiteHero v-if="site" :site="site"></SiteHero>
-          <!--<Genres></Genres>-->
+          <Genres></Genres>
           <h4>
             Quote  of the day
           </h4>
