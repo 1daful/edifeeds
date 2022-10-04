@@ -75,7 +75,7 @@ export class GoogleBooks implements IMediaApi{
         }
     }
 
-    getData(resData: Record<string, any>) {
+    getData(resData: any) {
         let respData: Record<string, any>[] = [];
         let mData: Record<string, any>
         for (const data of resData.items) {

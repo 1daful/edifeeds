@@ -169,9 +169,35 @@ export class Resource {
         this.response.dataSource = data.items;
     }*/
 
-    getResponse(data: Record<string, any>[]) {
+    getResponse(data: any) {
         //this.setDataSource(data);
         return this.api.getData(data);
+    }
+
+    getData(resData: Record<string, any>[]) {
+        let respData: Record<string, any>[] = [];
+        let mData: Record<string, any>
+        for (const data of resData) {
+            mData = {
+                type: "books",
+                id: data.id,
+                status: '',
+                privacy: '',
+                tags: [],
+                description: data.volumeInfo.description,
+                genre: data.mainCategory,
+                thumbnailSmall: data.volumeInfo.imageLinks.smallThumbnail,
+                thumbnailLarge: data.volumeInfo.imageLinks.thumbnail,
+                created: data.volumeInfo.publishedDate,
+                license: '',
+                title: data.volumeInfo.title,
+                authors: data.authors,
+                printType: data.printType //book or magazine
+            }
+            //this.volumeRes.response.dataList.push(mData);
+            respData.push(mData);
+        }
+        return respData
     }
     /*addResource(api: IMediaApi){
         api.resources.push(this);

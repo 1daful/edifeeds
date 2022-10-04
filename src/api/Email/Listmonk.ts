@@ -23,11 +23,11 @@ export class ListMonk implements IMediaApi {
         const apiBaseParams = config.api.ListMonk.config
         return apiBaseParams
     }
-    getData(/*resData: Record<string, any>*/, ) {
+    getData(resData: Record<string, any>) {
         
-        let respData: Record<string, any>[] = [];
-        let mData: Record<string, any>
-        //for (const data of resData.items) {
+        
+        //let mData: Record<string, any>
+        /*for (const data of resData.items) {
             mData = {
                 type: "books",
                 id: data.id,
@@ -46,8 +46,8 @@ export class ListMonk implements IMediaApi {
             }
             //this.volumeRes.response.dataList.push(mData);
             //respData.push(mData);
-        //}
-        this.subscriber.getData(respData)
+        }*/
+        let respData: Record<string, any>[] = this.subscriber.getData(resData.items);
         return respData
     }
 

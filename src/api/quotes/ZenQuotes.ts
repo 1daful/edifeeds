@@ -72,7 +72,7 @@ export class ZenQuotes implements IMediaApi{
         }
     }
 
-    getData(resp: Record<string, any>[]) {
+    getData(resp: any) {
         const respData: Record<string, any>[] = [];
         let mData: Record<string, any>
         //if (resp.name === 'quoteResp')
