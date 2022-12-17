@@ -10,16 +10,22 @@ export class Metadata{
     repository: IRepository = new Repository("metadata");
     //message!: string;
 
-    saveGenres(items: Record<string, any>[]) {
+    async saveGenres(items: Record<string, any>[]) {
+        let mediaItems = [] 
         for (const item of items) {
             if (item.genre) {
-                this.repository.addItems([{id: item.genre}]);
+                await this.repository.addItems([{id: item.genre}]);
+            }
+            if (item.tags.length > 0){
+                for (const tag of item.tags)
+                mediaItems.push({id: tag})
             }
         }
+        await this.repository.addItems(mediaItems)
     }
 
-    loadGenres() {
-        return this.repository.readItems();
+    async loadGenres() {
+        return await this.repository.readItems();
     }
 
 }

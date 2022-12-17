@@ -6,25 +6,47 @@
             </q-toolbar-title>
         </q-toolbar>
         <div class="q-pa-md row media item-start q-gutter-md">
+
             <q-card class="col-2 myCard" v-for="mediaItem in media" :key="mediaItem.id">
-                    <q-item v-if="mediaItem">
-                    <router-link :to="{name: 'Media',
-                    params: {id: mediaItem.id},
-                    query: {mediaType: mediaType}
-                    }">
-                        <q-item-section>
-                        <q-img :src="mediaItem.doc.thumbnailLarge" spinner-color="white" class="med-img" style="height: 140px; max-width: 150px">
+                        <q-img :src="mediaItem.doc.thumbnailLarge" spinner-color="white" style="height: 12em;">
                             <template v-slot:error>
-                                <div class="absolute-full flex flex-cnter bg-negative text-white">
+                                <div class="absolute-full flex flex-center bg-negative text-white">
                                 <q-icon name="error" /> Cannot load image
                                 </div>
                             </template>
                         </q-img>
+                    <q-card-section v-if="mediaItem">
+                        <q-icon
+                            v-if="mediaItem.icon==='library_add_checked'" class="absolute float z-top"
+                            color="white"
+                            :name="mediaItem.icon"
+                            size="25px">
+                        </q-icon>
+                        <q-btn fab-mini color="primary"
+                            v-if="mediaItem.icon==='library_add_checked'" class="absolute innerfloat"></q-btn>
+                        <q-btn
+                        v-else
+                        fab-mini
+                        color="red"
+                        :icon-right="mediaItem.icon"
+                        class="absolute text-white"
+                        ref="mediaItems"
+                        style="top: 0; right: 10px; transform: translateY(-50%);"
+                        @click="addToCollection(mediaItem)"
+                        />
 
-                        <q-item-label class="text-h5">{{mediaItem.doc.title}}</q-item-label>
-                        <q-item-label class="caption text-subtitle1">{{mediaItem.doc.description?.slice(0, 180)}} <span v-if="mediaItem.doc.description?.length > 180">...</span></q-item-label>
-                            <q-icon name="schedule" />{{mediaItem.doc.created}}
-                        </q-item-section>
+                        <router-link :to="{name: 'Media',
+                        params: {id: mediaItem.id},
+                        query: {mediaType: mediaType}
+                        }">
+                            <p class="text-weight-bold" style="font-size: 16px">{{mediaItem.doc.title}}</p>
+                            <q-item-label class="caption text-subtitle1 truncate">{{mediaItem.doc.description}} </q-item-label>
+                            <!--<span v-if="mediaItem.doc.description?.length > 180">...</span>-->
+                                
+                        </router-link>
+                    <!--<q-card-actions>
+                        <q-icon name="schedule_filled" class="text-weight-bold" size="19px" left/> <span> {{mediaItem.doc.created}}</span>
+                    </q-card-actions>-->
                         <!--<b-button @click="addToCollection">
                             <b-icon :icon="collIcon">
                             </b-icon>
@@ -33,9 +55,13 @@
                             <b-icon :icon="favIcon">
                             </b-icon>
                         </b-button>-->
-                    </router-link>
-                    </q-item>
-                </q-card>
+                    </q-card-section>
+                    <q-card-actions>
+
+                        <q-icon left name="schedule" class="text-weight-bold" size="19px" v-if="mediaItem.doc.created"/> 
+                        <span> {{mediaItem.doc.created}}</span>
+                    </q-card-actions>
+            </q-card>
             </div>
         </div>
   <!--<router-link :to="{name: MediaList, params: {type: mediaItem.type}}"><p>See more</p></router-link>-->
@@ -47,10 +73,16 @@ import { Recommender } from "../api/Recommender";
 import { defineComponent } from "vue";
 import { Axiosi } from "../api/Axiosi";
 import { NetworkLocal } from "../api/network";
+import { auth } from "../api/auth/SupabaseAuth";
+import { Repository } from "../model/Repository";
+import { MediaType } from "../Types";
+import { Meilisearch } from "../api/meilisearch";
 
 let recommender = new Recommender()
 let media: any
 let client = new Axiosi()
+//const repository = new Repository("collections")
+const user = auth.startSession()
 //let url = "https://api.unsplash.com/photos/random?client_id=h2QN0xKvn2yEbGzLAzt__xrgVQI_AVu2Gwn3WdZn0gE&query="
 
 export default defineComponent({
@@ -58,7 +90,14 @@ export default defineComponent({
     data() {
         return{
             media,
-            client
+            client,
+            auth,
+            //repository,
+            user,
+            //icon: "library_add"
+            //icon: "category"
+            icon: "",
+            coll: {}
         }
     },
     props: {
@@ -76,26 +115,40 @@ export default defineComponent({
           required: true
       }*/
   },
-  /*methods: {
-    async getImage(url: string, query: string) {
+  methods: {
+    /*async getImage(url: string, query: string) {
         //mediaApi = new MediaApi(new Pexels(new ApiFormat(format)))
           //const images = await mediaApi.getItems('images')
          // const pexels = new Pexels({})
           //const images = await pexels.getPhotos('e')
          const image = await this.client.load(url + query)
           return image?.data.urls.regular
-        //this.store.upload()
-      addToCollection() {
-          if (this.firAuth.currentUser) {
-              this.repository.setItem(this.media.type, this.media);
-              this.icon = 'plus-square-fill'
+        //this.store.upload()*/
+      async addToCollection(item: any) {
+        
+          if (this.user) {
+            let collectedItem = {
+                user_id: this.user.id,
+                collected: false
+            }
+            Object.assign(collectedItem, item)
+            const coll = item.type + "Collection"
+              const repository = new Repository(coll)
+              await repository.addItem(collectedItem);
+              item.icon = 'library_add_checked'
+              let re = this.$refs.mediaItems
+              //this.$refs.mediaItems[0] = 'schedule'
+              //re.icon = 'library_add'
+              //this.$refs[item.id].icon = 'schedule'
+              //console.log("refs ", re)
           }
           else {
-              this.$router.push({path: '/sign-in', params: {msg: 'You must login first'}});
+              //this.$router.push({path: '/sign-in', params: {msg: 'You must login first'}});
+
           }
       },
-      addToFavourites() {
-          if (this.firAuth.currentUser) {
+      /*addToFavourites() {
+          if (this.auth.startSession()) {
               let subPath = `${this.media.type}/${this.media.id}/favourites`;
               let item = {id: this.firAuth.currentUser};
               this.repository.setChild(subPath, item);
@@ -104,22 +157,26 @@ export default defineComponent({
           else {
               this.$router.push({path: '/sign-in', params: {msg: 'You must login first'}});
           }
-      }
-  }*/
-    async created() {
-      await recommender.getMedia("Recommended")
+      }*/
+  },
+    async mounted() {
+      await recommender.getMedia()
       try {
-      const p = await recommender.readMedia(this.mediaType, {limit: 10})
+      const p = await recommender.readMedia("recommended", this.mediaType, "", "", {limit: 10})
+      let meili = new Meilisearch("http://localhost:7700")
       if (p) {
           const q = JSON.parse(JSON.stringify(p))
           const f = q.rows
           NetworkLocal.test("section.mediaList: ", q)
           NetworkLocal.test("this.section: ", f)
+          //Object.assign(this.media, f)
           this.media = f
-      /*this.media.forEach(async (element: any) => {
-        console.log("media description", element.description)
-        element.thumbnailSmall = await this.getImage(url, element.description)
-      });*/
+      recommender.indexItems(f, this.mediaType)
+      this.media.forEach(async (element: any) => {
+        element.icon = "library_add"
+        //console.log("media description", element.description)
+        //element.thumbnailSmall = await this.getImage(url, element.description)
+      });
       }
       }
       catch(error) {
@@ -130,10 +187,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.my-card{
+  width: 100%;
+  max-width: 300px
+}
 	.myCard {
     width: 100%;
     max-width:250px;
     min-width: 200px;
+    max-height: 400px;
     }
     a {
     	color: black;
@@ -141,5 +203,23 @@ export default defineComponent({
     }
     .uppercase {
       text-transform: uppercase;
+    }
+    .float {
+        top: 0; 
+        left: 230px; 
+        right: 2px; 
+        transform: translateY(-50%);
+    }
+    .innerfloat{
+        
+        top: 0; 
+        left: 200px; 
+        right: 5px; 
+        transform: translateY(-50%);
+    }
+    .truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 100px
     }
 </style>

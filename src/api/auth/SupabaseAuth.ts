@@ -34,7 +34,7 @@ class SupabaseAuth implements IAuth {
       return { user, session, error }
     }
 
-    async updateUser(jwt: string, user: UserAttributes/*Record<string, any>)*/) {
+    async updateUser(user: UserAttributes/*Record<string, any>)*/) {
       const { data, error } = await this.auth.update(user)
       return { data, error }
     }
@@ -126,13 +126,15 @@ class SupabaseAuth implements IAuth {
       })
     }
 
-    async updateCred(dat: string) {
-      const { data, user, error } = await this.auth.update({[dat]: dat})
+    async updateCred(key: string, val: string) {
+      const { data, user, error } = await this.auth.update({[key]: val})
       return { data, user, error }
     }
 
     async resetPassword(email: string) {
-      return this.auth.api.resetPasswordForEmail(email)
+      return this.auth.api.resetPasswordForEmail(email, {
+        redirectTo: "/profile"
+      })
 
       //const { user, session, error } = await this.auth.signIn({ email }, {shouldCreateUser: false})
     }

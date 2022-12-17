@@ -7,7 +7,7 @@ export interface IAuth {
     getUser(): void
     isAuthenticated(): Promise<boolean>
     resetPassword(email: string): Promise<any>
-    updateUser(jwt: string, user: any): Promise<any>
+    updateUser(user: any): Promise<any>
 }
 
 export class EAuth implements IAuth {

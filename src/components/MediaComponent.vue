@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md media">
-    <Section v-for="sectionItem in sections" :key="sectionItem.pos" :sect="sectionItem" :pos="pos">
+    <Section v-for="sectionItem in sections" :key="sectionItem.name" :sect="sectionItem" :pos="pos">
     </Section>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <script lang="ts">
 import Section from "../components/Section.vue";
 //import { Recommender } from '../api/Recommender';
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 
 //let recommender = new Recommender();
 //let section: any[]
@@ -17,9 +17,16 @@ export default defineComponent({
   name: 'MediaComponent',
   data() {
     return {
-      sections: [
+      sect: {
+        main: [
           {
-              name: 'recommended',
+              name: 'latest',
+              mediaList: [{}],
+              pos: 'main',
+              id: ""
+          },
+          /*{
+              name: 'popular',
               mediaList: [{}],
               pos: 'main',
               id: ""
@@ -35,7 +42,9 @@ export default defineComponent({
               mediaList: [{}],
               pos: 'main',
               id: ""
-          },
+          }*/
+        ],
+        sidebar: [
           {
             name: 'related',
             mediaList: [{}],
@@ -53,9 +62,9 @@ export default defineComponent({
             mediaList: [{}],
             pos: 'sidebar',
             id: ""
-          },
-        ],
-
+          }
+        ]
+      }
     }
   },
   props: {
@@ -64,6 +73,17 @@ export default defineComponent({
       required: true
     }
   },
+  computed: {
+    sections() {
+      if (this.pos === "main") {
+        return this.sect.main
+      }
+      else {
+        return this.sect.sidebar
+      }
+    }
+  }
+  ,
 
     /*methods: {
       async section() {

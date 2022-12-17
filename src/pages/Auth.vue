@@ -30,11 +30,11 @@ export default defineComponent({
         console.log
         if( this.myUrl){
             console.log(this.myUrl)
-        	const sess = this.auth.startSession()
+        	//const sess = this.auth.startSession()
           //this.$router.push(this.url?.toString())
         //console.log("sess: ", sess)
-        if(sess)
-          this.$router.push(this.url.toString())
+        /*if(sess)
+          this.$router.push(this.url.toString())*/
         }
     }
 })

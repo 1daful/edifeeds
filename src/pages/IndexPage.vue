@@ -1,26 +1,23 @@
 <template>
-    <q-page class="home container">
+    <!--<q-page class="home container">-->
           <SiteHero v-if="site" :site="site"></SiteHero>
-          <!--<Genres></Genres>-->
-          <h4>
-            Quote  of the day
-          </h4>
+          <Genres></Genres>
           <QOD></QOD>
           <MediaComponent v-if="pos" :pos="pos"></MediaComponent>
           <!--<Newsletter v-if="site" :bgImg="site.newsletter.bgImg"></Newsletter>-->
           <Newsletter></Newsletter>
-    </q-page>
+    <!--</q-page>-->
 </template>
 
 <script lang="ts">
-import { Meta } from 'components/models';
+import { Meta } from '../components/models';
 import { defineComponent, ref } from 'vue';
 import Newsletter from "../components/Newsletter.vue";
 //import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 import SiteHero from "../components/SiteHero.vue";
 import MediaComponent from "../components/MediaComponent.vue";
 import QOD from "../components/QOD.vue";
-//import Genres from "../components/Genres.vue";
+import Genres from "../components/Genres.vue";
 import site from '../../public/config.json';
 import { auth } from "../api/auth/SupabaseAuth";
 
@@ -32,7 +29,8 @@ export default defineComponent({
     SiteHero,
     MediaComponent,
     QOD,
-    Newsletter
+    Newsletter,
+    Genres
   },
   setup () {
     /*const todos = ref<Todo[]>([

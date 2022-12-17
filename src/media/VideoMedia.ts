@@ -1,21 +1,19 @@
-import { IMedia } from "./IMedia.js";
-import { IMediaApi } from "../api/IMediaApi.js";
-import { Media } from "./Media.js";
-import { Youtube } from "../api/video/Youtube.js";
-import { MediaRes } from "@/Types.js";
+import { IMedia } from "./IMedia";
+import { IMediaApi } from "../api/IMediaApi";
+import { Youtube } from "../api/video/Youtube";
 export class VideoMedia implements IMedia {
     apis: IMediaApi[] = [];
     private mediaItems: Record<string, any>[] = [];
-    media: Media;
+    //media: Media;
     youtube: Youtube;
 
-    constructor(type: MediaRes) {
-        this.youtube = new Youtube();
-        this.media = new Media(type);
+    constructor(format?: {}) {
+        this.youtube = new Youtube(format);
+        //this.media = new Media(type);
         this.apis.push(this.youtube)
     }
 
-    async getMedia(params?: Record<string, any>) {
+   /* async getMedia(params?: Record<string, any>) {
         //const res = {}
         try {
             await this.media.load('videos', this, params);
@@ -32,5 +30,5 @@ export class VideoMedia implements IMedia {
         catch (err) {
             console.log(err)
         }
-    }
+    }*/
 }

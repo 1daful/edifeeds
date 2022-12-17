@@ -16,9 +16,12 @@ export function getFeedback<T extends string>(
 ) {
   return axios
     .get<Feedback<T>, AxiosResponse<Feedback<T>>>(
-      `/feedback/${type}/${userId}/${itemId}`,
+      ``,
       {
-        params: cursorOptions,
+        params: {
+          baseUrl: `http://127.0.0.1:8088/api/feedback/${type}/${userId}/${itemId}`,
+          cursorOptions,
+        }
       }
     )
     .then(({ data }) => {
@@ -36,7 +39,12 @@ export function deleteFeedback<T extends string>(
 ) {
   return axios
     .delete<Feedback<T>, AxiosResponse<Feedback<T>>>(
-      `/feedback/${type}/${userId}/${itemId}`
+      ``,
+      {
+        params: {
+          baseUrl: `http://127.0.0.1:8088/api/feedback/${type}/${userId}/${itemId}`,
+        }
+      }
     )
     .then(({ data }) => {
       return data;
@@ -53,9 +61,12 @@ export function getFeedbacksByType<T extends string>(
 ) {
   return axios
     .get<FeedbackCursor<T>, AxiosResponse<FeedbackCursor<T>>>(
-      `/feedback/${type}`,
+      ``,
       {
-        params: cursorOptions,
+        params: {
+          baseUrl: `http://127.0.0.1:8088/api/feedback/${type}`,
+          cursorOptions,
+        }
       }
     )
     .then(({ data }) => {
@@ -72,8 +83,11 @@ export function getFeedbacks<T extends string>(
   options?: CursorOptions
 ) {
   return axios
-    .get<FeedbackCursor<T>, AxiosResponse<FeedbackCursor<T>>>(`/feedback`, {
-      params: options,
+    .get<FeedbackCursor<T>, AxiosResponse<FeedbackCursor<T>>>(``, {
+      params: {
+        baseUrl: `http://127.0.0.1:8088/api/feedback`,
+        options,
+      }
     })
     .then(({ data }) => {
       return data;
@@ -89,7 +103,11 @@ export function insertFeedbacks<T extends string>(
   feedbacksList: Feedback<T>[]
 ) {
   return axios
-    .post<Success, AxiosResponse<Success>>(`/feedback`, feedbacksList)
+    .post<Success, AxiosResponse<Success>>("", feedbacksList, {
+      params: {
+        baseUrl: `http://127.0.0.1:8088/api/feedback`,
+      }
+    })
     .then(({ data }) => {
       return data.RowAffected;
     })
@@ -104,7 +122,11 @@ export function upsertFeedbacks<T extends string>(
   feedbacksList: Feedback<T>[]
 ) {
   return axios
-    .put<Success, AxiosResponse<Success>>(`/feedback`, feedbacksList)
+    .put<Success, AxiosResponse<Success>>("", feedbacksList, {
+      params: {
+        baseUrl: `http://127.0.0.1:8088/api/feedback`,
+      }
+    })
     .then(({ data }) => {
       return data.RowAffected;
     })

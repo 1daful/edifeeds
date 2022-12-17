@@ -1,8 +1,6 @@
 import { IMedia } from "./IMedia";
 import { GoogleBooks } from "../api/book/GoogleBooks";
 import { IMediaApi } from "../api/IMediaApi";
-import { Media } from "./Media";
-import { MediaRes } from "@/Types";
 
 export class BookMedia implements IMedia{
     //publisher!: string;
@@ -10,15 +8,15 @@ export class BookMedia implements IMedia{
     //pageCount!: number;
 
     apis: IMediaApi[] = [];
-    media: Media;
+    //media: Media;
     googleBooks: IMediaApi;
-    constructor(type: MediaRes){
-        this.googleBooks = new GoogleBooks();
-        this.media = new Media(type);
+    constructor(format?: {}){
+        this.googleBooks = new GoogleBooks(format);
+        //this.media = new Media(type);
         this.apis.push(this.googleBooks);
     }
 
-    async readMedia(params?: string[], op?: Record<string, any>) {
+    /*async readMedia(params?: string[], op?: Record<string, any>) {
         try {
             return await this.media.readItems("books", params, op);
         }
@@ -36,5 +34,5 @@ export class BookMedia implements IMedia{
             console.log(err)
         }
         //return res
-    }
+    }*/
 }

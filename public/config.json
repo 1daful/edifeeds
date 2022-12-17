@@ -4,8 +4,8 @@
     "backURL": "http://localhost:2000/api",
     "logo": "../logo.png",
     "email": {
-      "bounceAddress": "contact@edifeeds.com",
-      "address": "contact@edifeeds.com",
+      "bounceAddress": "admin@bounce.edifeeds.com",
+      "address": "support@edifeeds.com",
       "name": "Edifeeds"
     },
 
@@ -89,13 +89,19 @@
     "privacyPolicyUrl": "/privacy-policy",
     "header": {
         "description": "Edificient stories, music, great quotes, videos and books, it all starts with Edifeeds.",
-        "bgImg": "../header.png"
+        "bgImg": "../hero.jpg"
     },
     "apiClient": "axios",
     "api": {
       "Zeptomail": {
-        "token": "",
-        "url": ""
+        "baseUrl": "https://api.zeptomail.com/v1.1",
+        "config": {
+          "header": {
+            "Authorization": "Zoho-enczapikey wSsVR612qBX1CvoomjepILs7nQxXBVqkFE0ojlfyuCD0H/HD9sc/kkLMUQSjHfJMRWNsEjUS8u4hnhoIhjRchtR7mwpVDiiF9mqRe1U4J3x17qnvhDzNX2xVmhSKL4MNxgVommRnG8En+g=="
+          },
+          "baseParams": {
+          }
+        }
       },
       "Pexels": {
 
@@ -130,7 +136,7 @@
           "config": {
             "baseParams": {
               "apikey": "AIzaSyAlbER-HPdipvFgKJc-PWWZYhBIBSPxBNQ"
-          }
+            }
           }
         },
 
@@ -186,9 +192,13 @@
             "key": ""
         },
 
+        "Regommend": {
+          "baseUrl": "http://localhost:2000/api"
+        },
+
         "Algolia": {
-            "id": "B1G2GM9NG0",
-            "key": "aadef574be1f9252bb48d4ea09b5cfe5"
+            "id": "JFUHLV2WO0",
+            "key": "f97b7d76b80539c4d02d0e4316220e87"
         },
         "Typesense": {
           "config": {
@@ -229,10 +239,19 @@
           "apiDomain": "http://localhost:2000/api"
         },
         "ListMonk": {
-          "baseUrl": "http://localhost:2000",
+          "baseUrl": "http://localhost:8000/api",
           "config": {
             "baseParams": {
               "apikey": "AIzaSyAlbER-HPdipvFgKJc-PWWZYhBIBSPxBNQ"
+            }
+          }
+        },
+        "ZincSearch": {
+          "baseUrl": "http://localhost:4080/api",
+          "config": {
+            "auth": {
+              "username": "admin",
+              "password": "Complexpass#123"
             }
           }
         }

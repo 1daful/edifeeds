@@ -1,13 +1,15 @@
 import { NetworkLocal } from '../api/network.js';
 import { IRepository } from "./IRepository";
 import PouchDB from 'pouchdb';
+import { MediaRes } from '@/Types.js';
 //import config from 'pouchdb';
 //import { Utility } from "../Utility";
 //import { FIRepository } from "./FIRepository";
 
 export class Pouchdb implements IRepository {
     constructor(collName: string) {
-        this.db = new PouchDB(collName, {skip_setup: true})
+        this.db = new PouchDB(collName /*{skip_setup: true}*/)
+        //this.createIndex(['id'])
         /*const remoteDB = new PouchDB(config.api.PouchDB.url)
         this.db.sync(remoteDB, {
           live: true, retry: true
@@ -58,7 +60,7 @@ export class Pouchdb implements IRepository {
     async addItem(item: Record<string, any>): Promise<Record<string, any>> {
         let response
         if (item) {
-            item._id = new Date().toISOString();
+            item._id = new Date().toJSON();
 
             try {
                 response = await this.db.put(item);
@@ -73,24 +75,24 @@ export class Pouchdb implements IRepository {
         return response
     }
 
-    async addItems(items: Record<string, any>[], collName?: string) {
+    async addItems(items: Record<string, any>[], collName?: MediaRes) {
         let newItems = []
         try {
             for (const item of items) {
-                item._id = new Date().toISOString();
+                item._id = new Date().toJSON();
                 //item._id = item.id
                 newItems.push(item)
             }
             await this.db.bulkDocs(newItems)
             //await this.db.bulkDocs(items)
-            NetworkLocal.test("Addig items to repository")
+            NetworkLocal.test("Adding items to repository")
         }
         catch(err) {
             console.log(err)
         }
     }
 
-    async readItems(collName?: string, params?: string[], op?: Record<string, any>): Promise<Record<string, any>[]> {
+    async readItems(collName?: MediaRes, params?: string[], op?: Record<string, any>): Promise<Record<string, any>[]> {
         let items;
         //const params = new Utility().getDefault({include_doc: true}, filters)
         if (op) {
@@ -117,7 +119,7 @@ export class Pouchdb implements IRepository {
         return items
     }
 
-    async readItem(collName: string): Promise<any> {
+    async readItem(collName: MediaRes): Promise<any> {
         let item;
         try {
             item = await this.db.get(collName).then();
@@ -153,15 +155,15 @@ export class Pouchdb implements IRepository {
         }
     }
 
-    private async createIndex(...fields: string[]) {
-        try{
+    private async createIndex(fields: string[]) {
+        /*try{
             await this.db.createIndex({
                 index: {fields: fields}
             })
         }
         catch (err) {
             console.log(err)
-        }
+        }*/
     }
 
     /**

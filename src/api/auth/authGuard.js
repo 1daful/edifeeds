@@ -14,4 +14,6 @@ export const authGuard = async (to, from, next) => {
         });
     }
 };
+export const navGuard = async (t, from, next) => {
+};
 //# sourceMappingURL=authGuard.js.map

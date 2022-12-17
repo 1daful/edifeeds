@@ -2,18 +2,12 @@ import { IMediaApi } from "../IMediaApi";
 import { Resource } from "../Resource";
 import {Axiosi} from "../Axiosi";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
+import config from "../../../public/config.json";
 export class Youtube implements IMediaApi{
-    constructor() {
-        this.client.load('../config.json').then(resp => {
-            if (resp) {
-                this.config = resp.data;
-                this.BASE_URL = this.config.api.Youtube.baseUrl;
-                this.BASE_PARAMS = {
-                    ID: this.config.api.Youtube.id,
-                    KEY: this.config.api.Youtube.key
-                }
-            }
-        })
+    constructor(format?: {}) {
+        const apiFormat = new ApiFormat(format)
+        this.videoRes(apiFormat);
+        this.searchRes(apiFormat)
     }
     client = new Axiosi()
     config!: any
@@ -25,41 +19,45 @@ export class Youtube implements IMediaApi{
     videoData: Record<string, any> = {};
     searchData: Record<string, any> = {};
 
-    videoRes = new Resource(this, 'video',
-    {
-        name: 'videos',
-        baseUrl: '/videoRes',
-        params: {
-            q: '',
-            part: {
-                snippet: 'data'
-            },
-            filters: {
-                chart: 'chart', //required, mostPopular
-                region: 'regionCode',
-                ids: 'id'
-            },
-        }
-    }, 'videoResp');
+    videoRes = (format: ApiFormat) => {
+        new Resource(this, 'video',
+        {
+            name: 'videos',
+            baseUrl: '/videoRes',
+            params: {
+                q: format.keyword,
+                part: {
+                    snippet: 'data'
+                },
+                filters: {
+                    chart: 'chart', //required, mostPopular
+                    region: 'regionCode',
+                    ids: ''
+                },
+            }
+        }, 'videoResp');
+    }
 
-    searchRes = new Resource(this, 'video', {
-        name: 'searchReq',
-        baseUrl: '/search',
-        params: {
-            related: 'relatedToId',
-            author: 'channelId',
-            televised: 'channelType', //any, show
-            broadcast: 'eventType', //completed, live, upcoming
-            sort: 'order', //date, rating, relevance, title, videoCount, viewCount
-            q: 'q',
-            category: 'videoCategoryId',
-            region: 'regionCode',
-        }
-    }, 'searchResp')
+    searchRes = (format: ApiFormat) => {
+        new Resource(this, 'video', {
+            name: 'searchReq',
+            baseUrl: '/search',
+            params: {
+                related: 'relatedToId',
+                author: format.author,
+                televised: 'channelType', //any, show
+                broadcast: 'eventType', //completed, live, upcoming
+                sort: 'order', //date, rating, relevance, title, videoCount, viewCount
+                q: format.keyword,
+                category: format.genre,
+                region: 'regionCode',
+            }
+        }, 'searchResp')
+    }
     async getBaseParams() {
         try{
-            const config = await this.client.load('../config.json')
-            const apiBaseParams = config?.data.api.Youtube.baseParams
+            //const config = await this.client.load('../config.json')
+            const apiBaseParams = config.api.Youtube.config.baseParams
             return apiBaseParams
         }
         catch (err) {
@@ -68,8 +66,8 @@ export class Youtube implements IMediaApi{
     }
     async getBaseUrl() {
         try{
-            const config = await this.client.load('../config.json')
-            const apiBaseUrl = config?.data.api.Youtube.baseUrl
+            //const config = await this.client.load('../config.json')
+            const apiBaseUrl = config.api.Youtube.baseUrl
             return apiBaseUrl
         }
         catch (err) {

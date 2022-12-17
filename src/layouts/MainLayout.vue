@@ -4,9 +4,7 @@
         <site-header></site-header>
         <!-- End Header -->
 
-    <q-page-container>
       <router-view />
-    </q-page-container>
   </q-layout>
 </template>
 
@@ -37,8 +35,8 @@ import SiteHeader from '../components/SiteHeader.vue';
     display: inline;
   }
   .router-link-active div {
-    /*background:#195a926c;*/
-    background: #4b98db94;
-    color: rgb(189, 187, 187)
+    background:#e96711e5;
+    /*background: #4b98db94;*/
+    /*color: rgb(189, 187, 187)*/
   }
 </style>

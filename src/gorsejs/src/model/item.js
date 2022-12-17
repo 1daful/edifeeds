@@ -1,7 +1,11 @@
 import { GorseException } from "../error";
 export function upsertItem(axios, itemData) {
     return axios
-        .post(`/item`, itemData)
+        .post("", itemData, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/item`,
+        }
+    })
         .then(({ data }) => {
         return data.RowAffected;
     })
@@ -12,7 +16,11 @@ export function upsertItem(axios, itemData) {
 }
 export function getItem(axios, itemId) {
     return axios
-        .get(`/item/${itemId}`)
+        .get(``, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/item/${itemId}`
+        }
+    })
         .then(({ data }) => {
         return data;
     })
@@ -23,7 +31,11 @@ export function getItem(axios, itemId) {
 }
 export function deleteItem(axios, itemId) {
     return axios
-        .delete(`/item/${itemId}`)
+        .delete(``, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/item/${itemId}`
+        }
+    })
         .then(({ data }) => {
         return data.RowAffected;
     })
@@ -34,7 +46,11 @@ export function deleteItem(axios, itemId) {
 }
 export function updateItem(axios, itemId, itemData) {
     return axios
-        .patch(`/item/${itemId}`, itemData)
+        .patch(``, itemData, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/item/${itemId}`
+        }
+    })
         .then(({ data }) => {
         return data.RowAffected;
     })
@@ -45,7 +61,11 @@ export function updateItem(axios, itemId, itemData) {
 }
 export function insertItemCategory(axios, itemId, category) {
     return axios
-        .put(`/item/${itemId}/category/${category}`)
+        .put(``, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/item/${itemId}/category/${category}`
+        }
+    })
         .then(({ data }) => {
         return data.RowAffected;
     })
@@ -56,7 +76,11 @@ export function insertItemCategory(axios, itemId, category) {
 }
 export function deleteItemCategory(axios, itemId, category) {
     return axios
-        .delete(`/item/${itemId}/category/${category}`)
+        .delete(``, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/item/${itemId}/category/${category}`
+        }
+    })
         .then(({ data }) => {
         return data.RowAffected;
     })
@@ -67,8 +91,11 @@ export function deleteItemCategory(axios, itemId, category) {
 }
 export function getItems(axios, options) {
     return axios
-        .get(`/items`, {
-        params: options,
+        .get(``, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/items`,
+            options
+        }
     })
         .then(({ data }) => {
         return data;
@@ -80,7 +107,11 @@ export function getItems(axios, options) {
 }
 export function upsertItems(axios, items) {
     return axios
-        .post(`/items`, items)
+        .post(``, items, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/items`
+        }
+    })
         .then(({ data }) => {
         return data.RowAffected;
     })
@@ -91,8 +122,11 @@ export function upsertItems(axios, items) {
 }
 export function getItemNeighbors(axios, { itemId, category = "", cursorOptions }) {
     return axios
-        .get(`/item/${itemId}/neighbors/${category}`, {
-        params: cursorOptions,
+        .get(``, {
+        params: {
+            baseUrl: `http://127.0.0.1:8088/item/${itemId}/neighbors/${category}`,
+            cursorOptions
+        }
     })
         .then(({ data }) => {
         return data;

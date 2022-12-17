@@ -7,5 +7,6 @@ export class Request {
     name;
     baseUrl;
     params;
+    data;
 }
 //# sourceMappingURL=Request.js.map

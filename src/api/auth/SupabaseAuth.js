@@ -21,7 +21,7 @@ class SupabaseAuth {
         });
         return { user, session, error };
     }
-    async updateUser(jwt, user /*Record<string, any>)*/) {
+    async updateUser(user /*Record<string, any>)*/) {
         const { data, error } = await this.auth.update(user);
         return { data, error };
     }
@@ -110,12 +110,14 @@ class SupabaseAuth {
                 console.log('USER_DELETED', session);
         });
     }
-    async updateCred(dat) {
-        const { data, user, error } = await this.auth.update({ [dat]: dat });
+    async updateCred(key, val) {
+        const { data, user, error } = await this.auth.update({ [key]: val });
         return { data, user, error };
     }
     async resetPassword(email) {
-        return this.auth.api.resetPasswordForEmail(email);
+        return this.auth.api.resetPasswordForEmail(email, {
+            redirectTo: "/profile"
+        });
         //const { user, session, error } = await this.auth.signIn({ email }, {shouldCreateUser: false})
     }
     startSession() {

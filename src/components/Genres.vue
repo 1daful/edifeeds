@@ -1,6 +1,6 @@
 <template>
-    <button class="btn" v-for="genre in genres" :key="genre.id" variant="primary" @click="loadMedia(genre.id)">
-        {{genre.id}}
+    <button class="btn" v-for="genre in genres.rows" :key="genre.id" variant="primary" @click="loadMedia(genre.id)">
+        {{genre.doc.id}}
     </button>
 </template>
 
@@ -16,7 +16,8 @@ export default defineComponent({
     data() {
         return {
             //params: {},
-            genres
+            genres,
+            metadata
         }
     },
     methods: {
@@ -25,7 +26,8 @@ export default defineComponent({
         }
     },
     async mounted() {
-        this.genres = await metadata.loadGenres()
+        this.genres = await this.metadata.loadGenres()
+        console.log("Genres: ", this.genres)
     }
 })
 </script>

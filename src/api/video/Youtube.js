@@ -1,18 +1,12 @@
 import { Resource } from "../Resource";
 import { Axiosi } from "../Axiosi";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
+import config from "../../../public/config.json";
 export class Youtube {
-    constructor() {
-        this.client.load('../config.json').then(resp => {
-            if (resp) {
-                this.config = resp.data;
-                this.BASE_URL = this.config.api.Youtube.baseUrl;
-                this.BASE_PARAMS = {
-                    ID: this.config.api.Youtube.id,
-                    KEY: this.config.api.Youtube.key
-                };
-            }
-        });
+    constructor(format) {
+        const apiFormat = new ApiFormat(format);
+        this.videoRes(apiFormat);
+        this.searchRes(apiFormat);
     }
     client = new Axiosi();
     config;
@@ -22,39 +16,43 @@ export class Youtube {
     resources = [];
     videoData = {};
     searchData = {};
-    videoRes = new Resource(this, 'video', {
-        name: 'videos',
-        baseUrl: '/videoRes',
-        params: {
-            q: '',
-            part: {
-                snippet: 'data'
-            },
-            filters: {
-                chart: 'chart',
+    videoRes = (format) => {
+        new Resource(this, 'video', {
+            name: 'videos',
+            baseUrl: '/videoRes',
+            params: {
+                q: format.keyword,
+                part: {
+                    snippet: 'data'
+                },
+                filters: {
+                    chart: 'chart',
+                    region: 'regionCode',
+                    ids: ''
+                },
+            }
+        }, 'videoResp');
+    };
+    searchRes = (format) => {
+        new Resource(this, 'video', {
+            name: 'searchReq',
+            baseUrl: '/search',
+            params: {
+                related: 'relatedToId',
+                author: format.author,
+                televised: 'channelType',
+                broadcast: 'eventType',
+                sort: 'order',
+                q: format.keyword,
+                category: format.genre,
                 region: 'regionCode',
-                ids: 'id'
-            },
-        }
-    }, 'videoResp');
-    searchRes = new Resource(this, 'video', {
-        name: 'searchReq',
-        baseUrl: '/search',
-        params: {
-            related: 'relatedToId',
-            author: 'channelId',
-            televised: 'channelType',
-            broadcast: 'eventType',
-            sort: 'order',
-            q: 'q',
-            category: 'videoCategoryId',
-            region: 'regionCode',
-        }
-    }, 'searchResp');
+            }
+        }, 'searchResp');
+    };
     async getBaseParams() {
         try {
-            const config = await this.client.load('../config.json');
-            const apiBaseParams = config?.data.api.Youtube.baseParams;
+            //const config = await this.client.load('../config.json')
+            const apiBaseParams = config.api.Youtube.config.baseParams;
             return apiBaseParams;
         }
         catch (err) {
@@ -63,8 +61,8 @@ export class Youtube {
     }
     async getBaseUrl() {
         try {
-            const config = await this.client.load('../config.json');
-            const apiBaseUrl = config?.data.api.Youtube.baseUrl;
+            //const config = await this.client.load('../config.json')
+            const apiBaseUrl = config.api.Youtube.baseUrl;
             return apiBaseUrl;
         }
         catch (err) {

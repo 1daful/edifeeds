@@ -5,21 +5,8 @@ import config from "../../../public/config.json";
 export class ZenQuotes {
     constructor(format) {
         const apiFormat = new ApiFormat(format);
-        this.quoteRes = this.getResource(apiFormat);
-    }
-    getResource(format) {
-        return new Resource(this, 'quotes', {
-            name: 'quoteReq',
-            baseUrl: '/quotes',
-            params: {
-                categories: '',
-                images: '',
-                authors: '',
-                random: '',
-                tags: '',
-                quotes: format.keyword
-            }
-        }, 'quoteResp');
+        this.quoteRes(apiFormat);
+        this.qod(apiFormat);
     }
     client = new Axiosi();
     config;
@@ -27,18 +14,33 @@ export class ZenQuotes {
     BASE_PARAMS;
     resources = [];
     apiFormat = new ApiFormat();
-    quoteRes;
-    qod = new Resource(this, 'quote', {
-        name: 'qodReq',
-        baseUrl: '/random',
-        params: {}
-    }, 'qodResp');
-    data = {
+    quoteRes = (format) => {
+        new Resource(this, 'quotes', {
+            name: 'quoteReq',
+            baseUrl: '/quotes',
+            params: {
+                categories: '',
+                images: '',
+                authors: '',
+                random: '',
+                tags: format.tags,
+                quotes: format.keyword
+            }
+        }, 'quoteResp');
+    };
+    qod = (format) => {
+        new Resource(this, 'quote', {
+            name: 'qodReq',
+            baseUrl: '/random',
+            params: format
+        }, 'qodResp');
+    };
+    /*data = {
         quote: 'quote',
         author: 'author',
         tags: [],
         image: 'image'
-    };
+    }*/
     async getBaseParams() {
         try {
             //const config = await this.client.load('../config.json')
@@ -66,7 +68,8 @@ export class ZenQuotes {
         for (const data of resp) {
             mData = {
                 type: "quotes",
-                id: data.id,
+                id: new Date().toJSON(),
+                _id: new Date().toJSON(),
                 status: '',
                 privacy: '',
                 tags: [],
@@ -82,10 +85,9 @@ export class ZenQuotes {
                 format: "",
                 printType: '',
                 thumbnailSmall: '',
-                authors: [{
-                        name: data.a,
-                        pic: ''
-                    }],
+                authors: [
+                    data.a
+                ],
                 thumbnailLarge: '',
                 //authors: data.a,
                 //tags: []

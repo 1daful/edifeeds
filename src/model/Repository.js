@@ -26,11 +26,11 @@ export class Repository {
         }
         return new SupabaseRepo();
     }
-    addItem(param) {
-        this.db.addItem(param);
+    async addItem(param) {
+        await this.db.addItem(param);
     }
-    addItems(param) {
-        this.db.addItems(param, this.collName);
+    async addItems(param) {
+        await this.db.addItems(param, this.collName);
     }
     async readItem(id) {
         return await this.db.readItem(id);

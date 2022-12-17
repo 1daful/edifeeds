@@ -35,5 +35,14 @@ export class Utility {
         });
         return obj;
     }
+    getUrl(url) {
+        const ret = url.split("&").reduce(function (res, param) {
+            let [key, val] = param.split("=");
+            res[key] = val;
+            return res;
+        }, {});
+        return ret;
+        //let params = token.searchParams
+    }
 }
 //# sourceMappingURL=Utility.js.map

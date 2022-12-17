@@ -7,4 +7,5 @@ export class Request {
     name: string;
     baseUrl: string;
     params: Record<string , any>;
+    data?: Record<string , any>;
 }

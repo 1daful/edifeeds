@@ -1,9 +1,10 @@
+import { Repository } from '../model/Repository';
+import { QuoteMedia } from './QuoteMedia';
 import { NetworkLocal } from './../api/network';
 import { MediaApi } from "../api/MediaApi.js";
 import { IMedia } from "./IMedia.js";
 //import { IRepository } from "../model/IRepository.js";
 //import { SupabaseRepo } from "../model/SupabaseRepo";
-import { Repository } from "../model/Repository.js";
 import { EdiStorage } from "src/api/storage.js";
 //import { Pexels } from "src/api/pic/Pexels.js";
 //import { IMediaApi } from "src/api/IMediaApi.js";
@@ -11,6 +12,10 @@ import { ApiFormat } from "src/apiReqFormat/ApiFormat.js";
 import { MediaRes, MediaType } from "src/Types.js";
 import { Axiosi } from "../api/Axiosi";
 import { Unsplash } from "../api/pic/ImageGen";
+import { BookMedia } from './BookMedia';
+import { VideoMedia } from './VideoMedia';
+import { MusicMedia } from './MusicMedia';
+import { Metadata } from '../model/metadata';
 
 //import { Typesense } from "src/typesense.js";
 //import { NetworkLocal } from "@/api/network.js";
@@ -25,11 +30,12 @@ export class Media {
         this.repository = new Repository(type)
     }
     repository
+    metadata = new Metadata()
     store = new EdiStorage()
-    imageGen: Unsplash = new Unsplash()
+    imageGen: Unsplash = new Unsplash({keyword: "christian and gospel", length: "10"})
     //search = new Typesense()
     //genre: string = '';
-    client = new Axiosi(this.imageGen.imageRes)
+    client = new Axiosi()
 
     /**
      * Used to delegate a media class method to get mediaItems from its registered media APIs, and the save them in the repository for peristence.
@@ -37,28 +43,68 @@ export class Media {
      * @param media
      * @param params
      */
-    async load(type: string, media: IMedia, params?: Record<string, any>) {
+    async fetch(type?: MediaRes, params?: {}) {
+        let media: IMedia
+        //this.load(new QuoteMedia(params), "quotes")
+        if(type) {
+            switch (type) {
+                case "quotes":
+                    media = new QuoteMedia(params)
+                    return await this.load(media, type)
+                case "books":
+                    media = new BookMedia(params)
+                    return await this.load(media, type)
+                case "videos":
+                    media = new VideoMedia(params)
+                    return await this.load(media, type)
+                case "music":
+                    media = new MusicMedia(params)
+                    return await this.load(media, type)
+            
+                default:
+                    break;
+            }
+        }
+        else {
+            await this.load(new QuoteMedia(params), "quotes")
+            await this.load(new BookMedia(params), "books")
+            /*let mediaList = []
+            mediaList.push(this.load(new QuoteMedia(params), "quotes"))
+            mediaList.push(this.load(new BookMedia(params), "books")) 
+            mediaList.push(this.load(new VideoMedia(params), "videos"))
+            mediaList.push(this.load(new MusicMedia(params), "music"))
+            return mediaList*/
+            
+            /*this.load(new QuoteMedia(params), "quotes")
+            this.load(new BookMedia(params), "books")
+            this.load(new VideoMedia(params), "videos")
+            this.load(new MusicMedia(params), "music")*/
+        }
+    }
+
+    async load(media: IMedia, type: MediaRes) {
         //const mediaItems: Record<string, any>[] = [];
         //const result: Record<string, any> = {}
-
+       
         try {
             for (const api of media.apis) {
                 let mediaApi: MediaApi = new MediaApi(api);
                 //mediaItems.push(mediaApi.getItems(type, params));
                 //const name = mediaApi.api.constructor.name
                 //NetworkLocal.test(`${name} good!`)
-                const items = await mediaApi.getItems(type, params) as unknown as MediaType[]
+                const items = await mediaApi.getItems(type) as unknown as MediaType[]
                 //const images = await this.getImage(mediaApi, "christians")
                 if (items && type=="quotes") {
                     //NetworkLocal.test(`This is item from Media load. ${items}`)
                     //this.repository.changeDB('supabase')
                     const images = await this.getImage()
                     if(Array.isArray(images)) {
-                        for (let index = 0; index < 2; index++) {
+                        for (let index = 0; index < 10; index++) {
                             const item = items[index];
-                          item.thumbnailSmall = images[index]?.thumbnailSmall || ""
-                          item.thumbnailLarge = images[index]?.thumbnailLarge || ""
-                          NetworkLocal.test("item in media", item)
+                          item.thumbnailSmall = images[index]?.thumbnailSmall
+                          item.thumbnailLarge = images[index]?.thumbnailLarge
+                          //NetworkLocal.test("item in media", images, "images")
+                          //NetworkLocal.test("item in media", item, "images")
                         }               
                     }
                     /*items.forEach(async item => {
@@ -69,11 +115,12 @@ export class Media {
                       item.thumbnailSmall = image.urls.regular
                       item.thumbnailLarge = image.urls.regular
                     });*/
-                    NetworkLocal.test("this is item from Media load: ", items)
                     
                     //this.search.import()
                 }
-                await this.addItems(items);
+
+                await this.addItems(items, type);
+                await this.metadata.saveGenres(items)
             }
 
         }
@@ -91,8 +138,13 @@ export class Media {
         media.apis.push(...api);
     }*/
 
-    private async addItems(items: Record<string, any>[]): Promise<Record<string, any>> {
+    private async addItems(items: Record<string, any>[], collName?: string): Promise<Record<string, any>> {
         const result = {}
+        if(collName) {
+            const repository = new Repository(collName)
+            await repository.addItems(items);
+            return result
+        }
         try {
             //NetworkLocal.test("Adding items from Media")
             await this.repository.addItems(items);
@@ -106,6 +158,12 @@ export class Media {
 
     async readItems(collName?: string, params?: string[], op?: Record<string, any>) {
         let results: Record<string, any>[]
+        if(collName) {
+            const repository = new Repository(collName)
+            results = await this.repository.readItems(collName, params, op)
+            NetworkLocal.test("result: ", results)
+            return results
+        }
         try {
             results = await this.repository.readItems(collName, params, op)
             /*for (const result of results) {
@@ -132,13 +190,14 @@ export class Media {
          // const pexels = new Pexels({})
           //const images = await pexels.getPhotos('e')
           
-         const images = await this.client.get()
+         const images = await this.client.get(this.imageGen.imageRes)
           return images
         //this.store.upload()
     }
 
-    async getThumbnail(name: any) {
-        let data = await this.repository.search("name", name)
+    async getThumbnail(name: any, collName: string) {
+        const repository = new Repository(collName)
+        let data = await repository.search("name", name)
         return data.thumbnail
     }
     /*readItem(collName: string) {

@@ -1,6 +1,5 @@
 import { Response } from "./Response";
 import site from "../../public/config.json";
-import { NetworkLocal } from "./network";
 //import { Utility } from "../Utility";
 /**
  *
@@ -15,6 +14,19 @@ export class Resource {
         this.response = new Response(respName);
         this.api.resources.push(this);
     }
+    /*init<T extends Record<string, any>, U, W>(url: string, query: T, params: U, method: MethodType, data?: W) {
+        params
+        method
+        data
+        const queryUrl = this.getBaseParams(this.getRequestParam(query))
+        return {
+            url,
+            queryUrl,
+            params,
+            method,
+            data
+        }
+    }*/
     type;
     request;
     response;
@@ -105,7 +117,7 @@ export class Resource {
                 delete resData[key];
             }
         });
-        NetworkLocal.test("request param: ", resData);
+        //NetworkLocal.test("request param: ", resData)
         return resData;
     }
     /*setResponseData() {
@@ -125,12 +137,12 @@ export class Resource {
         try {
             const apiBaseParams = this.api.getBaseParams().baseParams;
             Object.assign(obj.baseParams, apiBaseParams);
-            NetworkLocal.test("obj.params", this.api.getBaseParams(), this.api.constructor.name);
+            //NetworkLocal.test("obj.params", this.api.getBaseParams(), this.api.constructor.name)
             Object.assign(obj.baseParams, this.getRequestParam(this.request.params));
             const baseURL = await this.getBaseURL() || "";
             obj.baseParams.baseUrl = baseURL;
             obj.header = (await this.api.getBaseParams()).header;
-            NetworkLocal.test("config obj: ", obj);
+            //NetworkLocal.test("config obj: ", obj)
             return obj;
         }
         catch (err) {

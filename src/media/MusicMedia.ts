@@ -1,23 +1,21 @@
-import { IMedia } from "./IMedia.js";
-import { IMediaApi } from "../api/IMediaApi.js";
-import { Media } from "./Media.js";
-import { SoundCloud } from "../api/music/SoundCloud.js";
+import { IMedia } from "./IMedia";
+import { IMediaApi } from "../api/IMediaApi";
+import { SoundCloud } from "../api/music/SoundCloud";
 //import { Axiosi } from "src/api/Axiosi.js";
-import { MediaRes } from "@/Types.js";
 
 export class MusicMedia implements IMedia {
     apis: IMediaApi[] = [];
     //private mediaItems: Record<string, any>[] = [];
-    media: Media;
+    //media: Media;
     soundCloud: IMediaApi;
 
-    constructor(type: MediaRes) {
-        this.soundCloud = new SoundCloud();
-        this.media = new Media(type);
+    constructor(format?: {}) {
+        this.soundCloud = new SoundCloud(format);
+        //this.media = new Media(type);
         this.apis.push(this.soundCloud);
     }
 
-    async getMedia(params?: Record<string, any>) {
+    /*async getMedia(params?: Record<string, any>) {
         //const res = {}
         try {
             await this.media.load('music', this, params);
@@ -33,5 +31,5 @@ export class MusicMedia implements IMedia {
         catch (err) {
             console.log(err)
         }
-    }
+    }*/
 }

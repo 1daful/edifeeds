@@ -1,18 +1,21 @@
 <template>
-    <div :bgImg="bgImg" class="q-pa-md margin" :style="{backgroundImage: `url(${bgImg})`}">
+    <div v-if="signUp" :bgImg="bgImg" class="q-pa-md margin" :style="{backgroundImage: `url(${bgImg})`}">
         <!--<img :src="logo" />-->
         <q-form ref="signUpForm" @submit="onSubmit" class="q-gutter-md margin">
         <!-- Name ---->
-            <q-input v-model="user.metadata.name" type="text" label="Name" lazy-rules :rules="rules.name"/>
+            <q-input rounded outlined bg-color="white" v-model="user.metadata.name" type="text" label="Name" lazy-rules :rules="rules.name"/>
 
           <!--Email---->
-            <q-input v-model="user.cred.email" type="email" label="Email" lazy-rules :rules="rules.email"/>
+            <q-input rounded outlined v-model="user.cred.email" type="email" label="Email" lazy-rules :rules="rules.email"/>
 
             <!--Password-->
-            <q-input v-model="user.cred.password" type="password" label="Password" lazy-rules :rules="rules.password"/>
+            <q-input rounded outlined v-model="user.cred.password" type="password" label="Password" lazy-rules :rules="rules.password"/>
 
             <q-linear-progress :value="passwordStrength.value"  v-if="passwordStrength.show" :buffer="passwordStrength.value"></q-linear-progress>
-            <router-link :to="{name: 'PasswordRecovery'}">Forget password?</router-link>
+            <router-link :to="{
+              name: 'Reset', 
+              params: {param: 'setPassword'}
+              }">Forget password?</router-link>
 
             <!--Newsletter-->
             <div><q-checkbox v-model='user.metadata.newsletter'></q-checkbox> <span>Send updates to my email address.</span></div>
@@ -20,30 +23,42 @@
             <!--TOS-->
             <p>By clicking sign up you have read and agreed to our <a :href="site.tosUrl">term of use</a> and <a :href="site.privacyPolicyUrl">privacy policy</a>.</p>
 
-            <q-btn type="submit" color="primary" @click="onSubmit">Sign Up</q-btn>
+            <q-btn type="submit" color="primary" @click="onSubmit" :loading="loading" :disable="loading">Sign Up
+              <template v-slot:loading>
+                <q-spinner-bars v-if="loading"></q-spinner-bars>
+              </template>
+            </q-btn>
+            <q-item-label>{{errors.signUpErrMsg}}</q-item-label>
 
         </q-form>
 
           <q-btn class="bl" v-for="social in socials" :key="social.id" :icon="social.icon" :label="social.id" color="primary" @click="socialSignIn(social.id)"/>
-        <div id="auth-ui">
-        </div>
     </div>
+    <div v-else-if="verified">
+      A confirmation link is sent to your email address. If you can not see the email please check your spam folder or request a new confirmation link.
+      <q-btn @click="resendLink">Resend link</q-btn>
+    </div>
+    <div v-else-if="confirmationError">{{confirmationError}}</div>
 </template>
 
 <script lang="ts">
 import config from '../../public/config.json';
 import { auth } from "../api/auth/SupabaseAuth";
 //import ProgressBar from "../components/ProgressBar.vue";
-import { MailjetFunc } from "../api/Email/MailjetFunc";
-import { MediaApi } from "../api/MediaApi";
+import { Mailer } from "../api/Email/Mailer";
+//import { MediaApi } from "../api/MediaApi";
 //import { SupabaseRepo } from "../model/SupabaseRepo";
 import { defineComponent, ref } from "vue";
+//import { ListMonk } from '../api/Email/Listmonk';
+import { EmailAddress, EmailType } from '../Types';
 //import zxcvbn from 'zxcvbn';
 //let firebase = new FirebaseSetUp();
 
-let api = new MailjetFunc();
-let mediaApi = new MediaApi(api);
+//const api = new ListMonk()
+//let mediaApi = new MediaApi(api);
 let site = config
+let emailAddress: EmailAddress
+let emailType: EmailType
 //let db = new SupabaseRepo()
 
 export default defineComponent({
@@ -75,6 +90,7 @@ export default defineComponent({
     data() {
       const signUpForm = ref({})
         return {
+          loading: false,
           site,
             auth,
             signUpForm,
@@ -126,7 +142,10 @@ export default defineComponent({
             },
             signUp: true,
             verified: false,
-            validated: false
+            validated: false,
+            confirmationError: "",
+            mailer: new Mailer(),
+            myUrl: "/"
         }
     },
 
@@ -154,21 +173,50 @@ export default defineComponent({
                 return
             }
             if (await this.validate()) {
+              this.loading = true
                 const { user, session, error } = await this.auth.signUp(this.user.cred, this.user.metadata);
                 //console.log(user, session)
                 if (error) {
                 this.errors.signUpErrMsg = error.message;
                 //return
                 }
-                if (user && session) {
+                if (user) {
                 /*this.user.id = this.user.name;
                 db.addItems('users', this.user);*/
                 if (this.user.metadata.newsletter) {
-                    mediaApi.postItem('contacts', {}, this.user);
+                  const data = {
+                    email: this.user.cred.email,
+                    name: this.user.metadata.name,
+                    status:	"enabled",
+                    //lists:	[0],
+                    preconfirm_subscriptions:	true
+                  }
+                    //mediaApi.postItem('contacts');
                 }
-                //this.signUp = false
-                //this.verified = true;
+                if (this.auth.isNewUser(user)) {
+                    emailAddress = {
+                      address: this.user.cred.email,
+                      name: this.user.metadata.name,
+                      contact_number: "",
+                      company: ""
+                    }
+                    emailType = {
+                      subject: "Welcome",
+                      text: "Welome to Edifeeds family",
+                      html: "",
+                      templateKey: "",
+                      cc: [],
+                      bcc: [],
+                      attachments: [],
+                      inline_images: []
+                    }
+                  this.mailer.sendEmail(emailAddress, emailType)
                 }
+                this.signUp = false
+                this.verified = true;
+                //this.$router.push(this.myUrl)
+                }
+                this.loading = false
             }
         },
         socialSignIn(id: string) {
@@ -182,13 +230,23 @@ export default defineComponent({
           }
           return this.validated
         //}
-        for(const error in this.errors) {
+        /*for(const error in this.errors) {
           if (error) {
             this.errorList.push()
           }
         }
-        return this.validated
+        return this.validated*/
       },
+      async resendLink() {
+        const { user, session, error } = await this.auth.signUp(this.user.cred, this.user.metadata);
+        if (error) {
+          this.confirmationError = error.message
+          this.verified = false
+        }
+        else if (user && session) {
+          this.verified = true
+        }
+      }
         /*setPasswordStrength() {
             let result = zxcvbn(this.user.password);
             this.passwordStrength.value = result.score;

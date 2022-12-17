@@ -1,14 +1,19 @@
+import { Repository } from '../model/Repository';
+import { QuoteMedia } from './QuoteMedia';
 import { NetworkLocal } from './../api/network';
 import { MediaApi } from "../api/MediaApi.js";
 //import { IRepository } from "../model/IRepository.js";
 //import { SupabaseRepo } from "../model/SupabaseRepo";
-import { Repository } from "../model/Repository.js";
 import { EdiStorage } from "src/api/storage.js";
 //import { Pexels } from "src/api/pic/Pexels.js";
 //import { IMediaApi } from "src/api/IMediaApi.js";
 import { ApiFormat } from "src/apiReqFormat/ApiFormat.js";
 import { Axiosi } from "../api/Axiosi";
 import { Unsplash } from "../api/pic/ImageGen";
+import { BookMedia } from './BookMedia';
+import { VideoMedia } from './VideoMedia';
+import { MusicMedia } from './MusicMedia';
+import { Metadata } from '../model/metadata';
 //import { Typesense } from "src/typesense.js";
 //import { NetworkLocal } from "@/api/network.js";
 /**
@@ -21,18 +26,55 @@ export class Media {
         this.repository = new Repository(type);
     }
     repository;
+    metadata = new Metadata();
     store = new EdiStorage();
-    imageGen = new Unsplash();
+    imageGen = new Unsplash({ keyword: "christian and gospel", length: "10" });
     //search = new Typesense()
     //genre: string = '';
-    client = new Axiosi(this.imageGen.imageRes);
+    client = new Axiosi();
     /**
      * Used to delegate a media class method to get mediaItems from its registered media APIs, and the save them in the repository for peristence.
      * @param type
      * @param media
      * @param params
      */
-    async load(type, media, params) {
+    async fetch(type, params) {
+        let media;
+        //this.load(new QuoteMedia(params), "quotes")
+        if (type) {
+            switch (type) {
+                case "quotes":
+                    media = new QuoteMedia(params);
+                    return await this.load(media, type);
+                case "books":
+                    media = new BookMedia(params);
+                    return await this.load(media, type);
+                case "videos":
+                    media = new VideoMedia(params);
+                    return await this.load(media, type);
+                case "music":
+                    media = new MusicMedia(params);
+                    return await this.load(media, type);
+                default:
+                    break;
+            }
+        }
+        else {
+            await this.load(new QuoteMedia(params), "quotes");
+            await this.load(new BookMedia(params), "books");
+            /*let mediaList = []
+            mediaList.push(this.load(new QuoteMedia(params), "quotes"))
+            mediaList.push(this.load(new BookMedia(params), "books"))
+            mediaList.push(this.load(new VideoMedia(params), "videos"))
+            mediaList.push(this.load(new MusicMedia(params), "music"))
+            return mediaList*/
+            /*this.load(new QuoteMedia(params), "quotes")
+            this.load(new BookMedia(params), "books")
+            this.load(new VideoMedia(params), "videos")
+            this.load(new MusicMedia(params), "music")*/
+        }
+    }
+    async load(media, type) {
         //const mediaItems: Record<string, any>[] = [];
         //const result: Record<string, any> = {}
         try {
@@ -41,18 +83,19 @@ export class Media {
                 //mediaItems.push(mediaApi.getItems(type, params));
                 //const name = mediaApi.api.constructor.name
                 //NetworkLocal.test(`${name} good!`)
-                const items = await mediaApi.getItems(type, params);
+                const items = await mediaApi.getItems(type);
                 //const images = await this.getImage(mediaApi, "christians")
                 if (items && type == "quotes") {
                     //NetworkLocal.test(`This is item from Media load. ${items}`)
                     //this.repository.changeDB('supabase')
                     const images = await this.getImage();
                     if (Array.isArray(images)) {
-                        for (let index = 0; index < 2; index++) {
+                        for (let index = 0; index < 10; index++) {
                             const item = items[index];
-                            item.thumbnailSmall = images[index]?.thumbnailSmall || "";
-                            item.thumbnailLarge = images[index]?.thumbnailLarge || "";
-                            NetworkLocal.test("item in media", item);
+                            item.thumbnailSmall = images[index]?.thumbnailSmall;
+                            item.thumbnailLarge = images[index]?.thumbnailLarge;
+                            //NetworkLocal.test("item in media", images, "images")
+                            //NetworkLocal.test("item in media", item, "images")
                         }
                     }
                     /*items.forEach(async item => {
@@ -63,10 +106,10 @@ export class Media {
                       item.thumbnailSmall = image.urls.regular
                       item.thumbnailLarge = image.urls.regular
                     });*/
-                    NetworkLocal.test("this is item from Media load: ", items);
                     //this.search.import()
                 }
-                await this.addItems(items);
+                await this.addItems(items, type);
+                await this.metadata.saveGenres(items);
             }
         }
         catch (err) {
@@ -81,8 +124,13 @@ export class Media {
     /*createApi(media: IMedia, ...api: IMediaApi[]) {
         media.apis.push(...api);
     }*/
-    async addItems(items) {
+    async addItems(items, collName) {
         const result = {};
+        if (collName) {
+            const repository = new Repository(collName);
+            await repository.addItems(items);
+            return result;
+        }
         try {
             //NetworkLocal.test("Adding items from Media")
             await this.repository.addItems(items);
@@ -95,6 +143,12 @@ export class Media {
     }
     async readItems(collName, params, op) {
         let results;
+        if (collName) {
+            const repository = new Repository(collName);
+            results = await this.repository.readItems(collName, params, op);
+            NetworkLocal.test("result: ", results);
+            return results;
+        }
         try {
             results = await this.repository.readItems(collName, params, op);
             /*for (const result of results) {
@@ -118,12 +172,13 @@ export class Media {
         //const images = await mediaApi.getItems('images')
         // const pexels = new Pexels({})
         //const images = await pexels.getPhotos('e')
-        const images = await this.client.get();
+        const images = await this.client.get(this.imageGen.imageRes);
         return images;
         //this.store.upload()
     }
-    async getThumbnail(name) {
-        let data = await this.repository.search("name", name);
+    async getThumbnail(name, collName) {
+        const repository = new Repository(collName);
+        let data = await repository.search("name", name);
         return data.thumbnail;
     }
 }

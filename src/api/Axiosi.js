@@ -2,85 +2,121 @@ import axios from 'axios';
 import { NetworkLocal } from "./network";
 //import { networkInterfaces } from "os";
 export class Axiosi {
-    constructor(resource) {
+    /*constructor (resource?: Resource) {
         if (resource) {
             this.resource = resource;
         }
-    }
+    }*/
     message = 'Axios request successful!!!';
-    resource;
     config = {};
-    async get() {
-        if (this.resource) {
-            //try {
-            /*if (params) {
-                this.resource.setRequestParam(params);
-            }*/
-            //const baseUrl = await this.resource.getBaseURL()
-            const baseUrl = this.resource.URL;
-            //console.log('Axios baseUrl:', baseUrl)
-            this.config.headers = (await this.resource.getBaseParam()).header;
-            this.config.params = (await this.resource.getBaseParam()).baseParams;
-            NetworkLocal.test("Calling with Axios config: ", this.config.params);
-            NetworkLocal.test("Config headers: ", this.config.headers);
-            if (baseUrl) {
-                const response = await axios.get(baseUrl, this.config);
-                /*.catch((error) => {
-                    if (error.request) {
+    //resource!: Resource;
+    /* config: AxiosRequestConfig = {
+         adapter: "",
+         auth: "",
+         baseURL: "",
+         beforeRedirect: "",
+         cancelToken: "",
+         data: "",
+         decompress: "",
+         env: "",
+         headers: "",
+         httpsAgent: "",
+         maxBodyLength: "",
+         maxRedirects: "",
+         maxContentLength "",
+         onDownloadProgress: "",
+         onUploadProgress: "",
+         params: "",
+         paramsSerializer: "",
+         proxy: "",
+         responseEncoding: "",
+         responseType: "",
+         signal: "",
+         socketPath "",
+         timeout: "",
+         timeoutErrorMessage: "",
+         transformRequest: "",
+         transformResponse: "",
+         transitional: "",
+         url: "",
+         validateStatus: "",
+         withCredentials: "",
+         xsrfCookieName: "",
+         xsrfHeaderName: ""
+     }*/
+    async get(resource, auth) {
+        //try {
+        /*if (params) {
+            this.resource.setRequestParam(params);
+        }*/
+        //const baseUrl = await this.resource.getBaseURL()
+        const baseUrl = resource.URL;
+        //console.log('Axios baseUrl:', baseUrl)
+        this.config.headers = (await resource.getBaseParam()).header;
+        this.config.params = (await resource.getBaseParam()).baseParams;
+        this.config.auth = auth;
+        //NetworkLocal.test("Calling with Axios config: ", this.config.params)
+        //NetworkLocal.test("Config headers: ", this.config.headers)
+        if (baseUrl) {
+            const response = await axios.get(baseUrl, this.config);
+            /*.catch((error) => {
+                if (error.request) {
 
-                        const data = NetworkLocal.test(this.message)
-                        if (response){
-                            return this.resource.getResponse(response.data);
-                        }
-                        else {
-                            data
-                        }
+                    const data = NetworkLocal.test(this.message)
+                    if (response){
+                        return this.resource.getResponse(response.data);
                     }
-                })*/
-                NetworkLocal.test("response: ", response);
-                const res = this.resource.getResponse(response.data);
-                NetworkLocal.test("axios res: ", res);
-                return res;
+                    else {
+                        data
+                    }
+                }
+            })*/
+            //NetworkLocal.test("response: ", response, "resp")
+            const res = resource.getResponse(response.data);
+            //NetworkLocal.test("axios res: ", res, "res")
+            return res;
+        }
+        //return this.resource.response.dataList;
+        //}
+        /*catch (error) {
+            console.error(error)
+        }*/
+        const nothing = [];
+        return nothing;
+    }
+    async post(resource, auth) {
+        //this.resource.setRequestParam(params);
+        //this.resource.setRequestParam(data);
+        try {
+            const baseUrl = await resource.URL;
+            this.config.params = (await resource.getBaseParam()).baseParams;
+            this.config.auth = auth;
+            if (baseUrl) {
+                const response = await axios.post(baseUrl, resource.request.data, this.config);
+                NetworkLocal.test(this.message);
+                return resource.getResponse(response.data);
             }
             //return this.resource.response.dataList;
-            //}
-            /*catch (error) {
-                console.error(error)
-            }*/
         }
-        else {
-            console.error('resource value not set');
+        catch (err) {
+            console.error(err);
         }
         const nothing = [];
         return nothing;
     }
-    async post(data) {
-        if (this.resource) {
-            //this.resource.setRequestParam(params);
-            //this.resource.setRequestParam(data);
-            try {
-                const baseUrl = await this.resource.getBaseURL();
-                this.config.params = this.resource.getBaseParam();
-                if (baseUrl) {
-                    const response = await axios.post(baseUrl, data, this.config);
-                    NetworkLocal.test(this.message);
-                    return this.resource.getResponse(response.data);
-                }
-                //return this.resource.response.dataList;
-            }
-            catch (err) {
-                console.error(err);
-            }
-        }
-        else {
-            console.error('resource value not set');
-        }
-        const nothing = [];
-        return nothing;
-    }
-    async load(addr) {
+    async load(addr, query) {
         try {
-            const resp = await axios.get(addr);
+            const resp = await axios.get(addr, query);
+            //NetworkLocal.test(filthis.message)
+            return resp;
+        }
+        catch (err) {
+            console.error(err);
+        }
+    }
+    async postTo(addr, data, query) {
+        try {
+            const resp = await axios.post(addr, data, query);
             //NetworkLocal.test(filthis.message)
             return resp;
         }

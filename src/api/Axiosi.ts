@@ -1,33 +1,67 @@
 import { ApiClient } from "../apiClient";
 import { Resource } from "./Resource";
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosBasicCredentials, AxiosRequestConfig } from 'axios';
 import { NetworkLocal } from "./network";
 //import { networkInterfaces } from "os";
 
 export class Axiosi implements ApiClient {
-    constructor (resource?: Resource) {
+    /*constructor (resource?: Resource) {
         if (resource) {
             this.resource = resource;
         }
-    }
+    }*/
 
     message =  'Axios request successful!!!';
-    resource!: Resource;
     config: AxiosRequestConfig = {}
+    //resource!: Resource;
+   /* config: AxiosRequestConfig = {
+        adapter: "",
+        auth: "",
+        baseURL: "",
+        beforeRedirect: "",
+        cancelToken: "",
+        data: "",
+        decompress: "",
+        env: "",
+        headers: "",
+        httpsAgent: "",
+        maxBodyLength: "",
+        maxRedirects: "",
+        maxContentLength "",
+        onDownloadProgress: "",
+        onUploadProgress: "",
+        params: "",
+        paramsSerializer: "",
+        proxy: "",
+        responseEncoding: "",
+        responseType: "",
+        signal: "",
+        socketPath "",
+        timeout: "",
+        timeoutErrorMessage: "",
+        transformRequest: "",
+        transformResponse: "",
+        transitional: "",
+        url: "",
+        validateStatus: "",
+        withCredentials: "",
+        xsrfCookieName: "",
+        xsrfHeaderName: ""
+    }*/
 
-    async get () {
-        if (this.resource) {
+    async get (resource: Resource, auth?: AxiosBasicCredentials) {
             //try {
                 /*if (params) {
                     this.resource.setRequestParam(params);
                 }*/
                 //const baseUrl = await this.resource.getBaseURL()
-                const baseUrl = this.resource.URL
+                const baseUrl = resource.URL
                 //console.log('Axios baseUrl:', baseUrl)
-                this.config.headers = (await this.resource.getBaseParam()).header;
-                this.config.params = (await this.resource.getBaseParam()).baseParams
-                NetworkLocal.test("Calling with Axios config: ", this.config.params)
-                NetworkLocal.test("Config headers: ", this.config.headers)
+                this.config.headers = (await resource.getBaseParam()).header;
+                this.config.params = (await resource.getBaseParam()).baseParams
+                this.config.auth = auth
+                //NetworkLocal.test("Calling with Axios config: ", this.config.params)
+                //NetworkLocal.test("Config headers: ", this.config.headers)
                 if (baseUrl) {
                     const response: any = await axios.get(baseUrl, this.config)
                     /*.catch((error) => {
@@ -42,9 +76,9 @@ export class Axiosi implements ApiClient {
                             }
                         }
                     })*/
-                    NetworkLocal.test("response: ", response)
-                    const res = this.resource.getResponse(response.data)
-                    NetworkLocal.test("axios res: ", res)
+                    //NetworkLocal.test("response: ", response, "resp")
+                    const res = resource.getResponse(response.data)
+                    //NetworkLocal.test("axios res: ", res, "res")
                     return res
                 }
                 //return this.resource.response.dataList;
@@ -52,46 +86,49 @@ export class Axiosi implements ApiClient {
             /*catch (error) {
                 console.error(error)
             }*/
-        }
-        else {
-            console.error('resource value not set')
-        }
         const nothing: Record<string, any>[] = []
         return nothing;
     }
 
-    async post(data?: Record<string, any>) {
-        if (this.resource) {
+    async post(resource: Resource, auth?: AxiosBasicCredentials) {
             //this.resource.setRequestParam(params);
             //this.resource.setRequestParam(data);
 
             try {
-                const baseUrl = await this.resource.getBaseURL()
-                this.config.params = this.resource.getBaseParam();
+                const baseUrl = await resource.URL
+                this.config.params = (await resource.getBaseParam()).baseParams;
+                this.config.auth = auth
                 if (baseUrl) {
-                    const response = await axios.post(baseUrl, data, this.config)
+                    const response = await axios.post(baseUrl, resource.request.data, this.config)
                     NetworkLocal.test(this.message);
-                    return this.resource.getResponse(response.data);
+                    return resource.getResponse(response.data);
                 }
                     //return this.resource.response.dataList;
             }
             catch (err) {
                 console.error(err);
             }
-        }
-        else {
-            console.error('resource value not set')
-        }
+        
         const nothing: Record<string, any>[] = []
         return nothing;
     }
 
-    async load(addr: string) {
-    try {
-      const resp = await axios.get(addr)
-      //NetworkLocal.test(filthis.message)
-      return resp
-    }
+    async load(addr: string, query?: any) {
+        try {
+            const resp = await axios.get(addr, query)
+            //NetworkLocal.test(filthis.message)
+            return resp
+        }
         catch (err) {console.error(err)}
-      }
+    }
+
+    async postTo(addr: string, data?: any, query?: any) {
+        try {
+            const resp = await axios.post(addr, data, query)
+            //NetworkLocal.test(filthis.message)
+            return resp
+        }
+        catch (err) {console.error(err)}
+    }
+      
 }

@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import config from '../../public/config.json';
+import { IEdiStorage } from './IEdiStorage';
 export class SupabaseStore implements IEdiStorage {
   supabase = createClient(config.api.Supabase.url, config.api.Supabase.key)
   async create(path: string) {

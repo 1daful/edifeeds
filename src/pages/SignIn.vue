@@ -4,25 +4,33 @@
         <p class="text-weight-bold text-h5"> Sign in</p>
         <q-form @submit="onSubmit" class="q-gutter-md margin" ref="formRef">
           <!--Email---->
-            <q-input v-model="user.email" type="email" label="Email" lazy-rules :rules="rules.email"/>
+            <q-input rounded outlined v-model="user.email" type="email" label="Email" lazy-rules :rules="rules.email"/>
 
             <!--Password-->
-            <q-input filled color="blue" v-model="user.password" :type="isPwd ? 'password' : 'text'" label="Password" lazy-rules :rules="rules.password">
+            <q-input rounded outlined color="blue" bg-color="white" v-model="user.password" :type="isPwd ? 'password' : 'text'" label="Password" lazy-rules :rules="rules.password">
               <template v-slot:append>
-                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-hand" @click="isPwd = !isPwd" />
+                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
               </template>
             </q-input>
+            <p>Forget password?
+            <router-link :to="{
+              name: 'Reset', 
+              params: {param: 'setPassword'}
+              }">Click to reset
+            </router-link>
+            </p>
 
-            <router-link :to="{name: 'Reset', query:{setPassword: true}}">Forget password?</router-link>
-            <div><q-btn label="Sign in" type="submit" color="primary" class="full-width" @click="onSubmit"></q-btn></div>
+            <q-btn label="Sign in" type="submit" color="primary" class="full-width" @click="onSubmit" :loading="loading" :disable="loading">
+              <template v-slot:loading>
+                <q-spinner-bars v-if="loading"></q-spinner-bars>
+              </template>
+            </q-btn>
         </q-form>
 
         <q-item-label class="margin">OR</q-item-label>
         <!--<q-separator inset="item"/>-->
             <q-btn v-for="social in socials" :key="social.id" class="bl" rounded :icon="social.icon" color="primary" @click="socialSignIn(social.id)">{{social.id}}</q-btn>
 
-        <div id="auth-ui">
-        </div>
         <!--<social-login></social-login>-->
         <p>Don't have an account? <router-link to="/signup">Sign up</router-link></p>
     </div>
@@ -63,6 +71,7 @@ export default defineComponent({
       //const passwordRef = ref(null)
 
         return {
+          loading: false,
           emailRef,
           isPwd: true,
             client,
@@ -145,15 +154,18 @@ export default defineComponent({
           })*/
           //this.emailRef.value.validate()
           if (await this.validate()){
-            const { user, session, error } = await this.auth.login(undefined, this.user)
+            this.loading = true;
+            const { user, session, error } = await this.auth.login(undefined, this.user);
             if (error) {
               this.errors.signUpErrMsg = error.message
               //console.log("sign in error try:", error)
             }
             if (user && session) {
-              this.$refs
-              this.$router.push(this.myUrl)
+              //this.$refs
+              //this.$router.push(this.myUrl)
+              window.location.href = "http://localhost:9000"
             }
+            this.loading = false
           }
           }
             /*if (error) {
@@ -176,7 +188,7 @@ export default defineComponent({
         this.$emit("showHeader", true)
       }
     },
-    mounted() {
+    created() {
         /*this.client.load("../config.json").then(resp => {
             if (resp) {
                 this.socials = resp.data.socials
@@ -206,5 +218,8 @@ export default defineComponent({
     /*margin-right: 15%;*/
     margin-top: 2%;
     margin-bottom: 2%;
+  }
+  a {
+    text-decoration-line: none;
   }
 </style>

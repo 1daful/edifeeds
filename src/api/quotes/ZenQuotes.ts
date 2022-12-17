@@ -7,10 +7,19 @@ import config from "../../../public/config.json"
 export class ZenQuotes implements IMediaApi{
     constructor(format?: {}) {
       const apiFormat = new ApiFormat(format)
-      this.quoteRes = this.getResource(apiFormat)
+      this.quoteRes(apiFormat)
+      this.qod(apiFormat)
     }
-  getResource(format: ApiFormat): Resource {
-    return new Resource(this, 'quotes',
+
+    client = new Axiosi()
+    config!: any
+    BASE_URL = '';
+    BASE_PARAMS: any;
+    resources: Resource[] = [];
+    apiFormat = new ApiFormat()
+
+    quoteRes = (format: ApiFormat) => {
+        new Resource(this, 'quotes',
     {
         name: 'quoteReq',
         baseUrl: '/quotes',
@@ -19,37 +28,31 @@ export class ZenQuotes implements IMediaApi{
             images: '',
             authors: '',
             random: '',
-            tags: '',
+            tags: format.tags,
             quotes: format.keyword
         }
     },
     'quoteResp'
     );
-  }
-    client = new Axiosi()
-    config!: any
-    BASE_URL = '';
-    BASE_PARAMS: any;
-    resources: Resource[] = [];
-    apiFormat = new ApiFormat()
+}
 
-    quoteRes
-
-    qod = new Resource(this, 'quote',
+    qod = (format: ApiFormat) => {
+        new Resource(this, 'quote',
     {
         name: 'qodReq',
         baseUrl: '/random',
-        params: {}
+        params: format
     },
     'qodResp'
     );
+}
 
-    data = {
+    /*data = {
         quote: 'quote',
         author: 'author',
         tags: [],
         image: 'image'
-    }
+    }*/
 
     async getBaseParams() {
         try{
@@ -79,12 +82,13 @@ export class ZenQuotes implements IMediaApi{
         for (const data of resp) {
             mData = {
                 type: "quotes",
-                id: data.id,
+                id: new Date().toJSON(),
+                _id: new Date().toJSON(),
                 status: '',
                 privacy: '',
                 tags: [],
                 description: data.q,
-                genre: "General",
+                genre: "",
                 created: '',
                 license: '',
                 title: '',
@@ -95,10 +99,9 @@ export class ZenQuotes implements IMediaApi{
                 format: "",
                 printType: '',
                 thumbnailSmall: '',
-                authors: [{
-                    name: data.a,
-                    pic: ''
-                }],
+                authors: [
+                    data.a
+                ],
                 thumbnailLarge: '',
                 //authors: data.a,
                 //tags: []

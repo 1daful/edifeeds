@@ -32,11 +32,11 @@ export class Repository implements IRepository {
       return new SupabaseRepo()
     }
 
-    addItem(param: Record<string, any>) {
-      this.db.addItem(param)
+    async addItem(param: Record<string, any>) {
+      await this.db.addItem(param)
     }
-    addItems(param: Record<string, any>[]): void {
-        this.db.addItems(param, this.collName)
+    async addItems(param: Record<string, any>[]) {
+        await this.db.addItems(param, this.collName)
     }
     async readItem(id?: string): Promise<Record<string, any>> {
         return await this.db.readItem(id);

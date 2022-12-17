@@ -66,20 +66,20 @@ export class MediaApi {
         NetworkLocal.test("resource type: ", resource.type);
         return resource;
     }
-    async getItems(type, params) {
+    async getItems(type) {
         //this.api.apiFormat = new ApiFormat(params)
         const resource = this.getResource(type);
         //this.setBaseParam(resource);
-        const client = new Axiosi(resource);
-        const items = await client.get();
+        const client = new Axiosi();
+        const items = await client.get(resource);
         return items;
     }
-    async postItem(type, params, data) {
+    async postItem(type) {
         //this.api.apiFormat = new ApiFormat(params)
         const resource = this.getResource(type);
         //this.setBaseParam(resource);
-        const client = new Axiosi(resource);
-        const response = await client.post(data);
+        const client = new Axiosi();
+        const response = await client.post(resource);
         return response;
     }
 }

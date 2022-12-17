@@ -35,6 +35,11 @@ export type MediaType = {
   description: string
   keywords: []
 }
+export type Publisher = {
+  name: string,
+  desc: string,
+  logo: string
+}
 
 export type AuthorType = {
   name: string
@@ -47,11 +52,7 @@ export type ConfigType = {
   baseParam: any
 }
 
-export type Params = {
-  limit: number
-}
-
-export type Section = "Recommended" | "Popular" | "Latest" | "Related"
+export type Section = "recommended" | "popular" | "latest" | "related" | "top"
 
 export type MediaRes = "quotes" | "videos" | "books" | "music" | "quote" | "video" | "book" | "track" | "collections" | "images"
 
@@ -84,9 +85,12 @@ type Attachment = {
   name: string
 }
 
+export type emailReq = "single" | "single_template" | "batch_template"
+
 export type EmailType = {
   subject: string,
   text: string,
+  templateKey: string,
   html: string,
   cc: EmailAddress[],
   bcc: EmailAddress[],
@@ -95,3 +99,4 @@ export type EmailType = {
 }
 
 export type filterType = "eq" | "gt" | "gte" | "lt" | "lte" | "ne" | "in" | "nin" | "exists" | "all"
+export type MethodType = "post" | "get" | "put" | "delete"

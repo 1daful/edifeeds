@@ -1,23 +1,15 @@
 import { Resource } from "../Resource";
 import { Axiosi } from "../Axiosi";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
+import config from "../../../public/config.json";
 export class SoundCloud {
-    constructor() {
-        this.client.load('../config.json').then(resp => {
-            if (resp) {
-                this.config = resp.data;
-                this.BASE_URL = this.config.api.SoundCloud.baseUrl;
-                this.BASE_PARAMS = {
-                    ID: this.config.api.SoundCloud.id,
-                    KEY: this.config.api.SoundCloud.key
-                };
-            }
-        });
+    constructor(format) {
+        const apiFormat = new ApiFormat(format);
+        this.trackRes(apiFormat);
     }
     client = new Axiosi();
     config;
     resources = [];
-    apiFormat = new ApiFormat();
     /*private _filters = {
          q: '',
          tags: '',
@@ -32,21 +24,23 @@ export class SoundCloud {
     BASE_URL = '';
     BASE_PARAMS;
     resource = [];
-    trackRes = new Resource(this, 'tracks', {
-        name: 'trackReq',
-        baseUrl: '/tracks',
-        params: {
-            q: '',
-            tags: [],
-            filter: {},
-            license: '',
-            bpm: '',
-            duration: '',
-            created_at: '',
-            created: ''
-        }
-    }, 'trackResp');
-    data = {
+    trackRes = (format) => {
+        new Resource(this, 'tracks', {
+            name: 'trackReq',
+            baseUrl: '/tracks',
+            params: {
+                q: format.keyword,
+                tags: format.tags,
+                filter: {},
+                license: '',
+                bpm: '',
+                duration: format.length,
+                created_at: format.date,
+                created: ''
+            }
+        }, 'trackResp');
+    };
+    /*data = {
         id: 'id',
         title: 'title',
         duration: 'duration',
@@ -60,14 +54,14 @@ export class SoundCloud {
         creator: 'user_id',
         timestamp: 'created_at',
         license: 'license',
-    };
+    }*/
     /*setDataSource(data: Record<string, any>) {
         this.trackRes.response.dataSource = data.items;
     }*/
     async getBaseParams() {
         try {
-            const config = await this.client.load('../config.json');
-            const apiBaseParams = config?.data.api.SoundCloud.baseParams;
+            //const config = await this.client.load('../config.json')
+            const apiBaseParams = config.api.SoundCloud.baseParams;
             return apiBaseParams;
         }
         catch (err) {
@@ -76,8 +70,8 @@ export class SoundCloud {
     }
     async getBaseUrl() {
         try {
-            const config = await this.client.load('../config.json');
-            const apiBaseUrl = config?.data.api.SoundCloud.baseUrl;
+            //const config = await this.client.load('../config.json')
+            const apiBaseUrl = config.api.SoundCloud.baseUrl;
             return apiBaseUrl;
         }
         catch (err) {

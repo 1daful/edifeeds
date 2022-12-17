@@ -73,21 +73,21 @@ export class MediaApi {
         return resource;
     }
 
-    public async getItems(type: string, params?: Record<string, any>): Promise<Record<string, any>[]> {
+    public async getItems(type: string): Promise<Record<string, any>[]> {
         //this.api.apiFormat = new ApiFormat(params)
         const resource = this.getResource(type);
         //this.setBaseParam(resource);
-        const client = new Axiosi(resource);
-        const items = await client.get();
+        const client = new Axiosi();
+        const items = await client.get(resource);
         return items;
     }
 
-    public async postItem(type: string, params: Record<string, any>, data: Record<string,any>): Promise<Record<string, any>> {
+    public async postItem(type: string): Promise<Record<string, any>> {
         //this.api.apiFormat = new ApiFormat(params)
         const resource = this.getResource(type);
         //this.setBaseParam(resource);
-        const client = new Axiosi(resource);
-        const response = await client.post(data);
+        const client = new Axiosi();
+        const response = await client.post(resource);
         return response
     }
 }

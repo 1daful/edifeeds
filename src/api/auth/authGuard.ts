@@ -16,3 +16,7 @@ export const authGuard = async (to: any, from: any, next: any) => {
         })
       }
   }
+
+  export const navGuard = async (t: any, from: any, next: any) => {
+    
+  }

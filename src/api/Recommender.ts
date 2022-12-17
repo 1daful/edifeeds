@@ -1,33 +1,36 @@
+import { MediaType } from 'src/Types.js';
+import { MediaRes } from 'src/Types.js';
+import { Search } from './Search/Search';
+//import { Axiosi } from './Axiosi';
 import { Feedback, DateTime } from './../gorsejs/src/interfaces';
 import { NetworkLocal } from './network';
 import { Section } from './../Types';
-import { IMedia } from "../media/IMedia";
-import { BookMedia } from "../media/BookMedia";
-import { QuoteMedia } from "../media/QuoteMedia";
-import { MusicMedia } from "../media/MusicMedia";
-import { VideoMedia } from "../media/VideoMedia";
 import { Media } from "../media/Media";
 import { Gorse } from "../gorsejs/src";
 import config from "../../public/config.json"
+/*import { Repository } from '../model/Repository';
+import { IRepository } from '../model/IRepository';*/
 
 export class Recommender {
-    bookMedia: IMedia = new BookMedia("books");
+    /*bookMedia: IMedia = new BookMedia("books");
     quoteMedia: IMedia = new QuoteMedia("quotes");
     musicMedia: IMedia = new MusicMedia("music");
-    videoMedia: IMedia = new VideoMedia("videos");
-    media: Media = new Media("collections")
+    videoMedia: IMedia = new VideoMedia("videos");*/
+    //media: Media = new Media("collections")
 
-    //repository: IRepository = new Repository();
-    /*constructor() {
-    }*/
+    //client: IRepository = new Repository("Books");
+    
     client = new Gorse({
         endpoint: config.api.Gorse.id,
         secret: config.api.Gorse.key,
       });
-    async readMedia(type: string, op?: Record<string, any>) {
-        let params;
+
+      /*client = new Axiosi()
+      baseUrl = config.api.Regommend.baseUrl*/
+    
+    async readMedia(section: Section, type: MediaRes, category: string, id?: string, op?: Record<string, any>) {
+        //let params;
         //let op;
-        let mediaList
         //let collMedia =[]
 
         /*switch (section) {
@@ -65,7 +68,27 @@ export class Recommender {
                 mediaList = await this.load(type, params, op);
                 return mediaList
             }*/
-            mediaList = await this.load(type, [], op);
+            let mediaList = await this.load(type, [], op);
+            if(mediaList) this.indexItems(mediaList, type)
+                      
+           /* switch (section) {
+                case "recommended":
+                    if (id) mediaItems =  this.getRecommended(id)
+                    break;
+                case "latest":
+                    mediaItems = this.getLatest(category)
+                    break;
+            
+                case "popular":
+                    mediaItems = this.getPopular(category)
+                    break;
+    
+                case "related":
+                    if (id) mediaItems = this.getRelated(id, category)
+                    break;
+                default:
+                    break;
+            }*/
 
 
                 /*break;
@@ -79,22 +102,46 @@ export class Recommender {
             default:
                 break;*/
 
-        NetworkLocal.test('mediaListRecomm: ', mediaList)
+        NetworkLocal.test('mediaListRecomm: ', mediaList, "Recomm")
         return mediaList;
     }
+    async indexItems(mediaList: Record<string, any>[], type: MediaRes) {
+            //mediaList = mediaItems
+            const search = new Search()
+            console.log("mediaList: ", mediaList)
+            let mediaIt: MediaType[] = mediaList
+            /*if(mediaList){
+                    for (let index = 0; index < 10 && index < mediaList.length; index++) {
+                    const media = mediaList[index]?.doc;
+                    media.objectID = media.id
+                    
+                    mediaIt.push(media)
+                }
+            }*/
+            /*mediaList.forEach(media => {
+            });*/
+            //let meiliSearch = new Meilisearch("http://localhost:7700")
 
-    private async load(type: string, params?: string[], op?: Record< string, any>) {
+            if(mediaIt.length > 0) await search.index(type, mediaIt)
+        NetworkLocal.test('Search indexed: ', mediaIt, "Search indexed")
+    }
+
+    private async load(type: MediaRes, params?: string[], op?: Record< string, any>) {
         //for (const item of mediaList) {
         let items
-            switch (type) {
+        let media
+            switch (String(type)) {
                 case 'quotes':
-                    items = await this.quoteMedia.readMedia(params, op);
-                    NetworkLocal.test("mediaItems: ", items)
+                    media = new Media("quotes")
+                    items = await media.readItems("", params, op);
+                    NetworkLocal.test("mediaItems: ", items, "media")
                     return items
                     //break;
 
                 case 'books':
-                    items = await this.bookMedia.readMedia(params, op);
+                    media = new Media("books")
+                    items = await media.readItems("", params, op);
+                    NetworkLocal.test("mediaItems: ", items, "media")
                     return items
                     //break;
 
@@ -111,30 +158,13 @@ export class Recommender {
             return items
     }
 
-    getMedia(section: Section, id: string = "general", category?: string) {
+    async getMedia(type?: any, params= {keyword: "gospel"}) {
         //new VideoMedia().getMedia()
         //new MusicMedia().getMedia()
-        new BookMedia("books").getMedia()
-        new QuoteMedia("quotes").getMedia()
-
-        switch (section) {
-            case "Recommended":
-                this.getRecommended(id)
-                break;
-            case "Latest":
-                this.getLatest(category)
-                break;
-        
-            case "Popular":
-                this.getPopular(category)
-                break;
-
-            case "Related":
-                this.getRelated(id, category)
-                break;
-            default:
-                break;
-        }
+        //new BookMedia("books").getMedia()
+        //new QuoteMedia("quotes").getMedia()
+        const media = new Media("collections")
+        await media.fetch(type, params)
     }
 
     async getRecommended(userId: string, category?: string) {
@@ -143,6 +173,7 @@ export class Recommender {
             category
         }
         return await this.client.getRecommend(params)
+        //return await this.client.load(this.baseUrl + "/recommends", params)
     }
 
     async getPopular(category?: string) {
@@ -150,12 +181,16 @@ export class Recommender {
             category
         }
         return await this.client.getPopular(params)
+        /*this.client = new Repository("Books")
+        const books = this.client.readItems()
+        return this.client.readItems("Quotes")*/
     }
 
     async getLatest(category?: string) {
         const params = {
             category
         }
+        //return await this.load(category)
         return await this.client.getLatest(params)
     }
 
@@ -167,14 +202,35 @@ export class Recommender {
         return await this.client.getItemNeighbors(params)
     }
 
-    async insertFeedback(userId: string, feedbackType: string, itemId: string, timestamp: DateTime) {
+    async insertFeedback(/*itemId: string, category: string, userId: string, score: number*/userId: string, feedbackType: string, itemId: string, timestamp: DateTime) {
+        /*const feedback = {
+            score: score,
+            itemId: itemId,
+            category: category,
+            userId: userId
+        }*/
         const feedback: Feedback<string> = {
             UserId: userId,
+            //UserId: "002",
             FeedbackType: feedbackType,
             ItemId: itemId,
             Timestamp: timestamp
         }
-        const feedbacks: Feedback<string>[] = []
+        const feedbacks: Feedback<string>[] = [feedback]
+        //await this.client.insertUser({UserId: userId})
+        //await this.client.insertUser({UserId: "002"})
         await this.client.insertFeedbacks(feedbacks)
+        //return await this.client.postTo(config.api.Regommend.baseUrl + "/feedback", null, feedback)
+    }
+
+    async insertUser(id: string) {
+        const user = {
+            UserId: id,
+        }
+        await this.client.insertUser(user)
+    }
+
+    async insertItem(itemId: string, category: string) {
+        await this.client.insertItemCategory(itemId, category)
     }
 }

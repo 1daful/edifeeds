@@ -5,7 +5,8 @@ import PouchDB from 'pouchdb';
 //import { FIRepository } from "./FIRepository";
 export class Pouchdb {
     constructor(collName) {
-        this.db = new PouchDB(collName, { skip_setup: true });
+        this.db = new PouchDB(collName /*{skip_setup: true}*/);
+        //this.createIndex(['id'])
         /*const remoteDB = new PouchDB(config.api.PouchDB.url)
         this.db.sync(remoteDB, {
           live: true, retry: true
@@ -51,7 +52,7 @@ export class Pouchdb {
     async addItem(item) {
         let response;
         if (item) {
-            item._id = new Date().toISOString();
+            item._id = new Date().toJSON();
             try {
                 response = await this.db.put(item);
                 console.log("checking response from Repository: ", response);
@@ -65,16 +66,16 @@ export class Pouchdb {
         return response;
     }
     async addItems(items, collName) {
-        //const newItems = []
+        let newItems = [];
         try {
-            /*for (const item of items) {
-                //item._id = new Date().toISOString();
+            for (const item of items) {
+                item._id = new Date().toJSON();
                 //item._id = item.id
-                newItems.push(item)
-            }*/
-            //await this.db.bulkDocs(newItems)
-            await this.db.bulkDocs(items);
-            NetworkLocal.test("Addig items to repository");
+                newItems.push(item);
+            }
+            await this.db.bulkDocs(newItems);
+            //await this.db.bulkDocs(items)
+            NetworkLocal.test("Adding items to repository");
         }
         catch (err) {
             console.log(err);
@@ -136,15 +137,15 @@ export class Pouchdb {
             console.log(err);
         }
     }
-    async createIndex(...fields) {
-        try {
+    async createIndex(fields) {
+        /*try{
             await this.db.createIndex({
-                index: { fields: fields }
-            });
+                index: {fields: fields}
+            })
         }
         catch (err) {
-            console.log(err);
-        }
+            console.log(err)
+        }*/
     }
     /**
      * Each parameter provided are part of the find query object parameter.

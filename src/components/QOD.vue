@@ -1,25 +1,27 @@
 <template>
-    <section v-if="quote" class="row margin"  id="qod">
-        <q-img :src="quote.thumbnailSmall" spinner-color="whitesmoke" class="rounded-borders col-6">
+    <section v-if="quote" class="margin"  id="qod">
+        <div><h4 class="capitalize text-weight-bold">
+            Quote  of the day
+        </h4></div>
+        <q-img :src="quote.thumbnailSmall" spinner-color="whitesmoke" class="rounded-borders q-ma-auto" height="300px">
             <q-item-label class="absolute-full text-subtitle2 flex flex-center">{{quote.description}}</q-item-label>
             <q-icon name="format_quote"></q-icon>
         </q-img>
-        <q-avatar size="200px">
+        <!--<q-avatar size="200px">
             <p v-for="author in quote.authors" :key="author.name">{{author.name}}</p>
             <q-img :src="quote.thumbnailSmall" spinner-color="whitesmoke" class="col-6" />
-        </q-avatar>
+        </q-avatar>-->
     </section>
     <q-skeleton height="200px" square v-show="loading" class="margin" />
 </template>
 
 <script lang="ts">
-import { QuoteMedia } from "../media/QuoteMedia";
-
 import { defineComponent } from 'vue';
 import { MediaType } from "../Types";
+import { Media } from "../media/Media";
 //import { Axiosi } from "../api/Axiosi";
 
-let quoteMedia = new QuoteMedia("quote");
+let media = new Media("quotes");
 let quote: MediaType
 //let thumbnail: string
 //let client = new Axiosi()
@@ -61,11 +63,11 @@ export default defineComponent ({
           }
       },*/
       async created() {
-          await quoteMedia.getMedia()
-          const f = await quoteMedia.readMedia([], {limit: 2})
-          console.log("f: ", f)
+          //await media.fetch("quotes")
+          const f = await media.readItems("", [], {limit: 2})
+          //console.log("f: ", f)
           const q = JSON.parse(JSON.stringify(f))
-          console.log("q: ", q)
+          //console.log("q: ", q)
           let w
           if (q) w = q.rows
           let p
@@ -74,7 +76,7 @@ export default defineComponent ({
           this.quote = p?.doc;
           //this.thumbnail = await quoteMedia.getImage(this.quote.description)
           this.loading = false
-          console.log("In QOD: ", this.quote)
+          //console.log("In QOD: ", this.quote)
           //console.log("In thumbni: ", this.thumbnail)
       },
       /*props: {
@@ -87,6 +89,7 @@ export default defineComponent ({
 </script>
 <style scoped>
 	.margin {
+        margin-top: 1%;
     margin-left: 10%;
     margin-right: 10%
   }

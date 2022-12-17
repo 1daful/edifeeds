@@ -9,30 +9,35 @@ export class GoogleBooks {
     client = new Axiosi();
     config;
     resources = [];
-    BASE_URL;
+    //BASE_URL: any
     BASE_PARAMS;
-    apiFormat = new ApiFormat({ keyword: "rent" });
-    volumeRes = new Resource(this, 'books', {
-        name: 'volumeReq',
-        baseUrl: '/volumes',
-        params: {
-            q: {
-                keyword: this.apiFormat.keyword,
-                intitle: this.apiFormat.title || '',
-                inauthor: this.apiFormat.author || '',
-                inpublisher: this.apiFormat.publisher || '',
-                subject: this.apiFormat.genre || '',
-                isbn: this.apiFormat.isbn || '',
-                lccn: this.apiFormat.lccl || '',
-                oclc: this.apiFormat.oclc || ''
-            },
-            download: this.apiFormat.format || '',
-            filter: '',
-            printType: this.apiFormat.printType || '',
-            projection: '',
-            orderBy: this.apiFormat.orderBy || '',
-        }
-    }, 'volumeResp');
+    constructor(format) {
+        const apiFormat = new ApiFormat(format);
+        this.volumeRes(apiFormat);
+    }
+    volumeRes = (apiFormat) => {
+        new Resource(this, 'books', {
+            name: 'volumeReq',
+            baseUrl: '/volumes',
+            params: {
+                q: {
+                    keyword: apiFormat.keyword,
+                    intitle: apiFormat.title || '',
+                    inauthor: apiFormat.author || '',
+                    inpublisher: apiFormat.publisher || '',
+                    subject: apiFormat.genre || '',
+                    isbn: apiFormat.isbn || '',
+                    lccn: apiFormat.lccl || '',
+                    oclc: apiFormat.oclc || ''
+                },
+                download: apiFormat.format,
+                filter: '',
+                printType: apiFormat.printType || '',
+                projection: '',
+                orderBy: apiFormat.orderBy || '',
+            }
+        }, 'volumeResp');
+    };
     /*setDataSource(data: Record<string, any>) {
         this.volumeRes.response.dataSource = data.items;
     }*/
@@ -74,18 +79,19 @@ export class GoogleBooks {
             mData = {
                 type: "books",
                 id: data.id,
+                _id: new Date().toJSON(),
                 status: '',
                 privacy: '',
-                tags: [],
+                tags: data.volumeInfo.categories,
                 description: data.volumeInfo.description,
-                genre: data.mainCategory,
+                genre: data.volumeInfo.mainCategory,
                 thumbnailSmall: data.volumeInfo.imageLinks.smallThumbnail,
                 thumbnailLarge: data.volumeInfo.imageLinks.thumbnail,
                 created: data.volumeInfo.publishedDate,
                 license: '',
                 title: data.volumeInfo.title,
-                authors: data.authors,
-                printType: data.printType //book or magazine
+                authors: data.volumeInfo.authors,
+                printType: data.volumeInfo.printType //book or magazine
             };
             //this.volumeRes.response.dataList.push(mData);
             respData.push(mData);
