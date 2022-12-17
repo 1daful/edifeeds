@@ -3,19 +3,19 @@
         <!--<img :src="logo" />-->
         <q-form ref="signUpForm" @submit="onSubmit" class="q-gutter-md margin">
         <!-- Name ---->
-            <q-input v-model="user.name" type="text" label="Name" lazy-rules :rules="rules.name"/>
+            <q-input v-model="user.metadata.name" type="text" label="Name" lazy-rules :rules="rules.name"/>
 
           <!--Email---->
-            <q-input v-model="user.email" type="email" label="Email" lazy-rules :rules="rules.email"/>
+            <q-input v-model="user.cred.email" type="email" label="Email" lazy-rules :rules="rules.email"/>
 
             <!--Password-->
-            <q-input v-model="user.password" type="password" label="Password" lazy-rules :rules="rules.password"/>
+            <q-input v-model="user.cred.password" type="password" label="Password" lazy-rules :rules="rules.password"/>
 
             <q-linear-progress :value="passwordStrength.value"  v-if="passwordStrength.show" :buffer="passwordStrength.value"></q-linear-progress>
             <router-link :to="{name: 'PasswordRecovery'}">Forget password?</router-link>
 
             <!--Newsletter-->
-            <div><q-checkbox v-model='user.newsletter'></q-checkbox> <span>Send updates to my email address.</span></div>
+            <div><q-checkbox v-model='user.metadata.newsletter'></q-checkbox> <span>Send updates to my email address.</span></div>
 
             <!--TOS-->
             <p>By clicking sign up you have read and agreed to our <a :href="site.tosUrl">term of use</a> and <a :href="site.privacyPolicyUrl">privacy policy</a>.</p>
@@ -73,10 +73,11 @@ export default defineComponent({
       }
     },*/
     data() {
+      const signUpForm = ref({})
         return {
           site,
             auth,
-            signUpForm: ref({}),
+            signUpForm,
             bgImg: "",
             socials: config.socials,
             rules: {
@@ -106,11 +107,15 @@ export default defineComponent({
             },
             errorList: [],
             user: {
-                name: '',
+              cred:{
                 email: '',
-                password: '',
+                password: ''
+              },
+              metadata: {
+                name: '',
                 newsletter: false,
                 isRobot: false
+              }
             },
             passwordStrength: {
                 show: true,
@@ -145,23 +150,24 @@ export default defineComponent({
                 return;
             }*/
 
-            if (this.passwordStrength.variant ==="danger") {
+            if (this.passwordStrength.variant === "danger") {
                 return
             }
             if (await this.validate()) {
-                const { user, session, error } = await this.auth.signUp(this.user, this.user);
-                console.log(user, session)
+                const { user, session, error } = await this.auth.signUp(this.user.cred, this.user.metadata);
+                //console.log(user, session)
                 if (error) {
                 this.errors.signUpErrMsg = error.message;
+                //return
                 }
-                else {
+                if (user && session) {
                 /*this.user.id = this.user.name;
                 db.addItems('users', this.user);*/
-                if (this.user.newsletter) {
-                    mediaApi.postItem('postContact', {}, this.user);
+                if (this.user.metadata.newsletter) {
+                    mediaApi.postItem('contacts', {}, this.user);
                 }
-                this.signUp = false
-                this.verified = true;
+                //this.signUp = false
+                //this.verified = true;
                 }
             }
         },
@@ -169,7 +175,6 @@ export default defineComponent({
             this.auth.login(id)
         },
       async validate(): Promise<boolean> {
-
         //if (this.signUpForm) {
           const success = await this.$refs.signUpForm.validate()
           if (success) {

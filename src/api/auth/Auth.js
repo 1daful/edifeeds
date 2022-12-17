@@ -1,20 +1,26 @@
 import { auth } from "../auth/SupabaseAuth";
 export class EAuth {
+    updateUser() {
+        throw new Error("Method not implemented.");
+    }
+    async resetPassword(email) {
+        return await this.auth.resetPassword(email);
+    }
     auth = auth;
     async signUp(user, data) {
         return await this.auth.signUp(user, data);
     }
-    login(id, user) {
-        this.auth.login(id, user);
+    async login(id, user) {
+        await this.auth.login(id, user);
     }
-    logout() {
-        throw new Error("Method not implemented.");
+    async logout() {
+        await this.auth.logout();
     }
-    getUser() {
-        throw new Error("Method not implemented.");
+    async getUser() {
+        await this.auth.getUser();
     }
-    isAuthenticated() {
-        return true;
+    async isAuthenticated() {
+        return await this.auth.isAuthenticated();
     }
 }
 //# sourceMappingURL=Auth.js.map

@@ -1,33 +1,34 @@
 <template>
     <div class="q-pa-md margin justify-center item-center" :style="{backgroundImage: `url(${bgImg})`}">
         <!--<img :src="logo" />-->
-        <p class="text-weight-bold text-h5"> Sign In</p>
-        <q-form @submit="onSubmit" class="q-gutter-md margin" ref="signUp">
+        <p class="text-weight-bold text-h5"> Sign in</p>
+        <q-form @submit="onSubmit" class="q-gutter-md margin" ref="formRef">
           <!--Email---->
             <q-input v-model="user.email" type="email" label="Email" lazy-rules :rules="rules.email"/>
 
             <!--Password-->
-            <q-input color="none" v-model="user.password" :type="isPwd ? 'password' : 'text'" label="Password" lazy-rules :rules="rules.password">
+            <q-input filled color="blue" v-model="user.password" :type="isPwd ? 'password' : 'text'" label="Password" lazy-rules :rules="rules.password">
               <template v-slot:append>
-                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" classs="cursor-pointer" @click="isPwd = !isPwd" />
+                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-hand" @click="isPwd = !isPwd" />
               </template>
             </q-input>
 
-            <router-link :to="{name: 'PasswordRecovery'}">Forget password?</router-link>
+            <router-link :to="{name: 'Reset', query:{setPassword: true}}">Forget password?</router-link>
             <div><q-btn label="Sign in" type="submit" color="primary" class="full-width" @click="onSubmit"></q-btn></div>
         </q-form>
 
-        <q-btn> or</q-btn>
-        <q-separator inset="item"/>
+        <q-item-label class="margin">OR</q-item-label>
+        <!--<q-separator inset="item"/>-->
             <q-btn v-for="social in socials" :key="social.id" class="bl" rounded :icon="social.icon" color="primary" @click="socialSignIn(social.id)">{{social.id}}</q-btn>
 
         <div id="auth-ui">
         </div>
-        <social-login></social-login>
+        <!--<social-login></social-login>-->
         <p>Don't have an account? <router-link to="/signup">Sign up</router-link></p>
     </div>
     <div>
       <!--<signup-form tool-id="nkmbbm"/>-->
+      <q-item-label>{{errors.signUpErrMsg}}</q-item-label>
     </div>
 </template>
 
@@ -57,6 +58,7 @@ export default defineComponent({
       })
 
       const emailRef = ref<any>(null)
+      const formRef = ref({})
 
       //const passwordRef = ref(null)
 
@@ -88,14 +90,17 @@ export default defineComponent({
             email: "",
             password: ""
           },
-          errorList: []
+          errorList: [],
+          validated: false,
+          formRef,
+          myUrl: "/"
         }
     },
     props: {
-        myUrl: {
+        /*myUrl: {
             type: String,
             required: true
-        },
+        },*/
         /*logo: {
             type: String,
             required: true
@@ -139,7 +144,18 @@ export default defineComponent({
             }
           })*/
           //this.emailRef.value.validate()
-            await this.auth.login(undefined, this.user)
+          if (await this.validate()){
+            const { user, session, error } = await this.auth.login(undefined, this.user)
+            if (error) {
+              this.errors.signUpErrMsg = error.message
+              //console.log("sign in error try:", error)
+            }
+            if (user && session) {
+              this.$refs
+              this.$router.push(this.myUrl)
+            }
+          }
+          }
             /*if (error) {
               this.errors.signUpErrMsg = error.message;
             console.log('this.errors.signuperror: ', this.errors.signUpErrMsg)
@@ -147,8 +163,14 @@ export default defineComponent({
             }*/
             /*else {
               this.$router.push({path: this.myUrl})
-            }*/
+            }*/,
 
+        async validate() {
+          const success = await this.$refs.formRef.validate()
+          if (success) {
+            this.validated = true
+          }
+          return this.validated
         },
       onload() {
         this.$emit("showHeader", true)
@@ -174,7 +196,7 @@ export default defineComponent({
     /*width: 50%;*/
     margin-left: 15%;
     margin-right: 15%;
-    margin-top: 5%
+    margin-top: 2%
   }
   .bl {
     text-align: center;

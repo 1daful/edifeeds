@@ -1,5 +1,5 @@
 import config from "../../../public/config.json";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, User, UserAttributes } from "@supabase/supabase-js";
 import { IAuth } from "../auth/Auth";
 class SupabaseAuth implements IAuth {
   constructor() {
@@ -34,8 +34,8 @@ class SupabaseAuth implements IAuth {
       return { user, session, error }
     }
 
-    async updateUser(jwt: string, user: Record<string, any>) {
-      const { data, error } = await this.auth.api.updateUser(jwt, user)
+    async updateUser(jwt: string, user: UserAttributes/*Record<string, any>)*/) {
+      const { data, error } = await this.auth.update(user)
       return { data, error }
     }
 
@@ -126,18 +126,28 @@ class SupabaseAuth implements IAuth {
       })
     }
 
-    async updateCred(email : string) {
-        const { user, error } = await this.auth.update({email: email})
-        return { user, error }
+    async updateCred(dat: string) {
+      const { data, user, error } = await this.auth.update({[dat]: dat})
+      return { data, user, error }
     }
 
     async resetPassword(email: string) {
-      const { data, error } = await this.auth.api.resetPasswordForEmail(email)
-      return { data, error }
+      return this.auth.api.resetPasswordForEmail(email)
+
+      //const { user, session, error } = await this.auth.signIn({ email }, {shouldCreateUser: false})
     }
 
     startSession() {
       return this.auth.session()?.user
+    }
+    
+    isNewUser(user: User) {
+      if(user.user_metadata.last_signin === user.user_metadata.created_at) {
+        return true
+      }
+      else {
+        return false
+      }
     }
 
 }

@@ -11,12 +11,18 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       {
-        path: '/password-recovery',
-        name: 'PasswordRecovery',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../pages/PasswordRecovery.vue'),
+        path: '/reset',
+        name: 'Reset',
+        component: () => import(/* webpackChunkName: "about" */ '../pages/Reset.vue'),
+        meta:{
+          navigational: true
+        },
+        props: true
+      },
+      {
+        path: '/verification',
+        name: 'Verification',
+        component: () => import(/* webpackChunkName: "about" */ '../pages/Verification.vue'),
         meta:{
           navigational: true
         },
@@ -89,6 +95,11 @@ const routes: RouteRecordRaw[] = [
         props: (route: { params: { myUrl: any } }) => ({myUrl: route.params.myUrl}),
         path: '/access_token=:myUrl',
         component: () => import(/* webpackChunkName: "about" */ '../pages/Auth.vue'),
+      },
+      {
+        props: (route: { params: { myUrl: any } }) => ({myUrl: route.params.myUrl}),
+        path: '/error=:myUrl',
+        component: () => import(/* webpackChunkName: "about" */ '../pages/Error.vue'),
       },
       {
         path: '/:catchAll(.*)*',

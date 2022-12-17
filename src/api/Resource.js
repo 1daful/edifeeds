@@ -157,5 +157,30 @@ export class Resource {
         //this.setDataSource(data);
         return this.api.getData(data);
     }
+    getData(resData) {
+        let respData = [];
+        let mData;
+        for (const data of resData) {
+            mData = {
+                type: "books",
+                id: data.id,
+                status: '',
+                privacy: '',
+                tags: [],
+                description: data.volumeInfo.description,
+                genre: data.mainCategory,
+                thumbnailSmall: data.volumeInfo.imageLinks.smallThumbnail,
+                thumbnailLarge: data.volumeInfo.imageLinks.thumbnail,
+                created: data.volumeInfo.publishedDate,
+                license: '',
+                title: data.volumeInfo.title,
+                authors: data.authors,
+                printType: data.printType //book or magazine
+            };
+            //this.volumeRes.response.dataList.push(mData);
+            respData.push(mData);
+        }
+        return respData;
+    }
 }
 //# sourceMappingURL=Resource.js.map

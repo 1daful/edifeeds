@@ -74,15 +74,15 @@ export class Pouchdb implements IRepository {
     }
 
     async addItems(items: Record<string, any>[], collName?: string) {
-        //const newItems = []
+        let newItems = []
         try {
-            /*for (const item of items) {
-                //item._id = new Date().toISOString();
+            for (const item of items) {
+                item._id = new Date().toISOString();
                 //item._id = item.id
                 newItems.push(item)
-            }*/
-            //await this.db.bulkDocs(newItems)
-            await this.db.bulkDocs(items)
+            }
+            await this.db.bulkDocs(newItems)
+            //await this.db.bulkDocs(items)
             NetworkLocal.test("Addig items to repository")
         }
         catch(err) {

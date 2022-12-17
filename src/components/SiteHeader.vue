@@ -41,7 +41,7 @@
         </q-avatar>
       
       
-        <q-item-labe>{{user.name}}</q-item-labe>
+        <q-item-label>{{user.name}}</q-item-label>
       <q-btn flat size="lg" @click="signout">Sign out</q-btn>
         
         <!--<q-item-label caption> See profile information </q-item-label>-->
@@ -189,7 +189,7 @@
             return menus
         }
     },
-    setup () {
+    setup() {
       const leftDrawerOpen = ref(false)
       const showSearch = ref(false)
       const search = ref('')
@@ -218,11 +218,11 @@
             path: "/search"
           })
         },
-      signout() {
+      /*signout() {
         this.auth.logout();
         windows.location.reload()
         this.$router.push({ path: "/" });
-      },
+      },*/
   
         toggleLeftDrawer () {
           leftDrawerOpen.value = !leftDrawerOpen.value
@@ -249,12 +249,12 @@
         this.$router.push({
           name: "SignIn"
         });
-      },
+      },*/
       signout() {
         this.auth.logout();
-        windows.location.href = "/"
+        window.location.href = "/"
         this.$router.push({ path: "/" });
-      }*/
+      }
     }
   });
   

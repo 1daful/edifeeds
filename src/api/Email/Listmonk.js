@@ -17,8 +17,30 @@ export class ListMonk {
         const apiBaseParams = config.api.ListMonk.config;
         return apiBaseParams;
     }
-    getData(res) {
-        throw new Error('Method not implemented.');
+    getData(resData) {
+        //let mData: Record<string, any>
+        /*for (const data of resData.items) {
+            mData = {
+                type: "books",
+                id: data.id,
+                status: '',
+                privacy: '',
+                tags: [],
+                description: data.volumeInfo.description,
+                genre: data.mainCategory,
+                thumbnailSmall: data.volumeInfo.imageLinks.smallThumbnail,
+                thumbnailLarge: data.volumeInfo.imageLinks.thumbnail,
+                created: data.volumeInfo.publishedDate,
+                license: '',
+                title: data.volumeInfo.title,
+                authors: data.authors,
+                printType: data.printType //book or magazine
+            }
+            //this.volumeRes.response.dataList.push(mData);
+            //respData.push(mData);
+        }*/
+        let respData = this.subscriber.getData(resData.items);
+        return respData;
     }
 }
 //# sourceMappingURL=Listmonk.js.map

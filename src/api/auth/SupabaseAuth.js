@@ -21,8 +21,8 @@ class SupabaseAuth {
         });
         return { user, session, error };
     }
-    async updateUser(jwt, user) {
-        const { data, error } = await this.auth.api.updateUser(jwt, user);
+    async updateUser(jwt, user /*Record<string, any>)*/) {
+        const { data, error } = await this.auth.update(user);
         return { data, error };
     }
     async login(providerId, userCred) {
@@ -72,16 +72,21 @@ class SupabaseAuth {
         const user = await this.auth.user();
         return user;
     }
-    isAuthenticated() {
-        let sess;
-        this.auth.onAuthStateChange((event, session) => {
-            this.authenticated = true;
-            console.log("event and session");
-            console.log(event, session);
-            sess = session;
-        });
-        console.log("session: ", sess);
-        return this.authenticated;
+    async isAuthenticated() {
+        //let sess
+        /*this.auth.onAuthStateChange((event, session) => {
+          this.authenticated = true
+          console.log("event and session")
+          console.log(event, session)
+          sess = session
+        })
+        console.log("session: ", sess)
+        return this.authenticated*/
+        if (this.startSession()) {
+            return true;
+        }
+        else
+            return false;
     }
     isSignedIn() {
         let signedIn = false;
@@ -105,16 +110,24 @@ class SupabaseAuth {
                 console.log('USER_DELETED', session);
         });
     }
-    async updateCred(email) {
-        const { user, error } = await this.auth.update({ email: email });
-        return { user, error };
+    async updateCred(dat) {
+        const { data, user, error } = await this.auth.update({ [dat]: dat });
+        return { data, user, error };
     }
-    async recoverPassword(email) {
-        const { data, error } = await this.auth.api.resetPasswordForEmail(email);
-        return { data, error };
+    async resetPassword(email) {
+        return this.auth.api.resetPasswordForEmail(email);
+        //const { user, session, error } = await this.auth.signIn({ email }, {shouldCreateUser: false})
     }
     startSession() {
         return this.auth.session()?.user;
+    }
+    isNewUser(user) {
+        if (user.user_metadata.last_signin === user.user_metadata.created_at) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
 export const auth = SupabaseAuth.Instance;

@@ -10,7 +10,6 @@
       </div>
 
       <q-btn
-        class="q-mt-xl"
         color="white"
         text-color="blue"
         unelevated

@@ -34,7 +34,7 @@ export default defineComponent({
           //this.$router.push(this.url?.toString())
         //console.log("sess: ", sess)
         if(sess)
-          this.$router.push(this.url?.toString())
+          this.$router.push(this.url.toString())
         }
     }
 })

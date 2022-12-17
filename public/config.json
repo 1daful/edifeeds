@@ -12,17 +12,17 @@
     "socials": [
         {
             "id": "Google",
-            "icon": "google"
+            "icon": "mdi-google"
         },
 
         {
             "id": "Facebook",
-            "icon": "facebook"
+            "icon": "mdi-facebook"
         },
 
         {
             "id": "Twitter",
-            "icon": "twitter"
+            "icon": "mdi-twitter"
         }
     ],
 

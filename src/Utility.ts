@@ -40,4 +40,15 @@ export class Utility {
         return obj;
     }
 
+    getUrl(url: string) {
+          const ret = url.split("&").reduce(function(res, param) {
+              let [key, val] = param.split("=");
+              res[key] = val;
+              return res
+            }, {})
+            return ret as Record<string, any>
+            //let params = token.searchParams
+        
+      }
+
 }
