@@ -6,8 +6,8 @@ export class Repository implements IRepository {
     collName: string;
     constructor(collName: string) {
       this.collName = collName
-       this.db = new Pouchdb(collName)
-      //this.db = new SupabaseRepo()
+       //this.db = new Pouchdb(collName)
+      this.db = new SupabaseRepo()
     }
   search(field: string, query: string, collName?: string | undefined): Promise<any> {
     return this.db.search(field, query);
