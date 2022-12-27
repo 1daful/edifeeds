@@ -67,29 +67,39 @@ export class ZenQuotes {
         //if (resp.name === 'quoteResp')
         for (const data of resp) {
             mData = {
+                //id: new Date().toJSON(),
                 type: "quotes",
-                id: new Date().toJSON(),
-                _id: new Date().toJSON(),
+                //_id: new Date().toJSON(),
                 status: '',
                 privacy: '',
                 tags: [],
                 description: data.q,
-                genre: "General",
-                created: '',
+                genre: "",
+                inserted_at: new Date().toJSON(),
                 license: '',
+                orderby: "",
+                content: "",
+                topic: "",
+                meta: "",
+                region: "",
+                duration: 0,
+                keywords: [],
                 title: '',
-                publisher_id: "",
+                publisher: {
+                    name: "",
+                    logo: "",
+                    description: ""
+                },
                 isbn: "",
-                lccl: "",
-                oclc: "",
-                format: "",
-                printType: '',
-                thumbnailSmall: '',
+                //lccl: "",
+                //oclc: "",
+                //format: "",
+                //printType: '',
+                thumbnailsmall: '',
                 authors: [
                     data.a
                 ],
-                thumbnailLarge: '',
-                //authors: data.a,
+                thumbnaillarge: '',
                 //tags: []
             };
             respData.push(mData);

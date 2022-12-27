@@ -22,7 +22,7 @@ const routes = [
             },
             {
                 path: '/media/:id',
-                name: 'Media',
+                name: 'SingleMedia',
                 component: () => import('../pages/SingleMediaPage.vue'),
                 //props: (route: {params: {media: any}}) => ({media: route.params})
                 props: (route) => ({ mediaType: route.query.mediaType }),
@@ -50,7 +50,7 @@ const routes = [
                         props: true,
                         children: [
                             {
-                                path: 'media',
+                                path: 'fav/:type',
                                 name: 'Media',
                                 component: () => import('../pages/Media.vue')
                             }

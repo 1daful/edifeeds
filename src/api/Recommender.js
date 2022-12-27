@@ -57,9 +57,6 @@ export class Recommender {
         mediaList = await this.load(type, params, op);
         return mediaList
     }*/
-        let mediaList = await this.load(type, [], op);
-        if (mediaList)
-            this.indexItems(mediaList, type);
         /* switch (section) {
              case "recommended":
                  if (id) mediaItems =  this.getRecommended(id)
@@ -88,6 +85,8 @@ export class Recommender {
         break
     default:
         break;*/
+        let mediaList = await this.load(type, undefined, op);
+        //if(mediaList) this.indexItems(mediaList, type)
         NetworkLocal.test('mediaListRecomm: ', mediaList, "Recomm");
         return mediaList;
     }
@@ -107,7 +106,7 @@ export class Recommender {
         /*mediaList.forEach(media => {
         });*/
         //let meiliSearch = new Meilisearch("http://localhost:7700")
-        if (mediaIt.length > 0)
+        if (mediaIt)
             await search.index(type, mediaIt);
         NetworkLocal.test('Search indexed: ', mediaIt, "Search indexed");
     }
@@ -118,13 +117,13 @@ export class Recommender {
         switch (String(type)) {
             case 'quotes':
                 media = new Media("quotes");
-                items = await media.readItems("", params, op);
+                items = await media.readItems("quotes", params, op);
                 NetworkLocal.test("mediaItems: ", items, "media");
                 return items;
             //break;
             case 'books':
                 media = new Media("books");
-                items = await media.readItems("", params, op);
+                items = await media.readItems("books", params, op);
                 NetworkLocal.test("mediaItems: ", items, "media");
                 return items;
             //break;

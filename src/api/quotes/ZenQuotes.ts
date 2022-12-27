@@ -1,3 +1,4 @@
+import { MediaType } from 'src/Types.js';
 import { IMediaApi } from "../IMediaApi";
 import { Resource} from "../Resource";
 import { Axiosi } from "../Axiosi";
@@ -77,33 +78,43 @@ export class ZenQuotes implements IMediaApi{
 
     getData(resp: any) {
         const respData: Record<string, any>[] = [];
-        let mData: Record<string, any>
+        let mData: MediaType
         //if (resp.name === 'quoteResp')
         for (const data of resp) {
             mData = {
+                //id: new Date().toJSON(),
                 type: "quotes",
-                id: new Date().toJSON(),
-                _id: new Date().toJSON(),
+                //_id: new Date().toJSON(),
                 status: '',
                 privacy: '',
                 tags: [],
                 description: data.q,
                 genre: "",
-                created: '',
+                inserted_at: new Date().toJSON(),
                 license: '',
+                orderby: "",
+                content: "",
+                topic: "",
+                meta: "",
+                region: "",
+                duration: 0,
+                keywords: [],
                 title: '',
-                publisher_id: "",
+                publisher: {
+                    name: "",
+                    logo: "",
+                    description: ""
+                },
                 isbn: "",
-                lccl: "",
-                oclc: "",
-                format: "",
-                printType: '',
-                thumbnailSmall: '',
+                //lccl: "",
+                //oclc: "",
+                //format: "",
+                //printType: '',
+                thumbnailsmall: '',
                 authors: [
                     data.a
                 ],
-                thumbnailLarge: '',
-                //authors: data.a,
+                thumbnaillarge: '',
                 //tags: []
             }
             respData.push(mData);

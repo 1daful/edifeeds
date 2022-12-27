@@ -46,19 +46,19 @@ export default defineComponent({
         ],
         sidebar: [
           {
-            name: 'related',
+            name: 'Related Items',
             mediaList: [{}],
             pos: 'sidebar',
             id: ""
           },
           {
-            name: 'sameAuthor',
+            name: 'Items From Same Author',
             mediaList: [({})],
             pos: 'sidebar',
             id: ""
           },
           {
-            name: 'top',
+            name: 'Collection',
             mediaList: [{}],
             pos: 'sidebar',
             id: ""

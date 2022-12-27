@@ -16,26 +16,47 @@ export class SupabaseRepo {
         detectSessionInUrl: true
     };
     supabase = createClient(config.api.Supabase.url, config.api.Supabase.key, this.options);
-    addItem(_item) {
-        throw new Error("Method not implemented.");
+    async addItem(collName, items) {
+        return await this.supabase
+            .from(collName)
+            .insert(items);
     }
-    async addItems(items, collName) {
-        try {
-            await this.supabase
+    async addItems(collName, items) {
+        return await this.supabase
+            .from(collName)
+            .insert(items);
+    }
+    async readItem(collName, field, value) {
+        const { data, error } = await this.supabase
+            //.from(collName)
+            //.select(*).eq(field, value)
+            .from(collName)
+            .select().eq('id', value);
+        return data;
+    }
+    async readItems(collName, params, param, val, limit = 10) {
+        if (params !== undefined && val) {
+            const { data, error } = await this.supabase
                 .from(collName)
-                .insert(items);
+                .select(`${params.key}, ${params.fColl}(${params.fKey1})`)
+                //.eq(`${params.fColl}.${params.fKey2}`, val)
+                .eq(params.fKey2, val)
+                .limit(limit);
+            return data;
         }
-        catch (error) {
-            error;
+        if (param && val) {
+            const { data, error } = await this.supabase
+                .from(collName)
+                .select(`${param.key}`)
+                //.eq(`${params.fColl}.${params.fKey2}`, val)
+                .eq(param.fKey, val)
+                .limit(limit);
+            return data;
         }
-    }
-    readItem(_collName) {
-        throw new Error("Method not implemented.");
-    }
-    async readItems(collName, _params, _op) {
         const { data, error } = await this.supabase
             .from(collName)
-            .select();
+            .select()
+            .limit(limit);
         return data;
     }
     async updateItem(newItem, oldItem, collName) {

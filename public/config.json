@@ -188,7 +188,7 @@
         },
 
         "Gorse": {
-            "id": "http://localhost:2000",
+            "id": "http://127.0.0.1:8088",
             "key": ""
         },
 
@@ -253,6 +253,13 @@
               "username": "admin",
               "password": "Complexpass#123"
             }
+          }
+        },
+        "Deezer": {
+          "baseUrl": "https://api.deezer.com",
+          "config": {
+            "app_id": "573262",
+            "output": "json"
           }
         }
     },

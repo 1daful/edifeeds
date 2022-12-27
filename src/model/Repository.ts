@@ -32,17 +32,17 @@ export class Repository implements IRepository {
       return new SupabaseRepo()
     }
 
-    async addItem(param: Record<string, any>) {
-      await this.db.addItem(param)
+    async addItem(collName: string, param: Record<string, any>) {
+      return await this.db.addItem(collName, param)
     }
-    async addItems(param: Record<string, any>[]) {
-        await this.db.addItems(param, this.collName)
+    async addItems(collName: string, param: Record<string, any>[]) {
+        return await this.db.addItems(collName, param)
     }
-    async readItem(id?: string): Promise<Record<string, any>> {
-        return await this.db.readItem(id);
+    async readItem(coll: string, field: string, value: string): Promise<Record<string, any>> {
+        return await this.db.readItem(coll, field, value);
     }
-    async readItems(collName?: string, params?: string[], op?: Record<string, any>): Promise<Record<string, any>[]> {
-        return await this.db.readItems(collName, params, op)
+    async readItems(collName?: string, params?: Record<string, any>, param?: Record<string, any>, op?: any, limit?: number): Promise<Record<string, any>[]> {
+        return await this.db.readItems(collName, params, param, op, limit)
     }
     updateItem(docId: any, param: Record<string, any>): void {
         this.db.updateItem(docId, param, this.collName)

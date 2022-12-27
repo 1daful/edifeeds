@@ -2,7 +2,7 @@
     <div class="container">
     <div class="row">
         <div class="col-sm-8" v-if="media">
-            <q-img class="bl" v-if="notPlayable" :src="media.thumbnailSmall"></q-img>
+            <q-img class="bl" v-if="notPlayable" :src="media.thumbnailsmall"></q-img>
             <plyr>
                 <div class="plyr__video-embed">
                     <iframe src="https://www.youtube.com/embed/bTqVqk7FSmY" allowfullscreen allowtransparency allow="autoplay"></iframe>

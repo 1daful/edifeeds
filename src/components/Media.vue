@@ -8,7 +8,7 @@
         <div class="q-pa-md row media item-start q-gutter-md">
 
             <q-card class="col-2 myCard" v-for="mediaItem in media" :key="mediaItem.id">
-                        <q-img :src="mediaItem.doc.thumbnailLarge" spinner-color="white" style="height: 12em;">
+                        <q-img :src="mediaItem.thumbnaillarge" spinner-color="white" style="height: 12em;">
                             <template v-slot:error>
                                 <div class="absolute-full flex flex-center bg-negative text-white">
                                 <q-icon name="error" /> Cannot load image
@@ -22,8 +22,7 @@
                             :name="mediaItem.icon"
                             size="25px">
                         </q-icon>
-                        <q-btn fab-mini color="primary"
-                            v-if="mediaItem.icon==='library_add_checked'" class="absolute innerfloat"></q-btn>
+                        <q-btn fab-mini color="primary" v-if="mediaItem.icon==='library_add_checked'" class="absolute innerfloat"></q-btn>
                         <q-btn
                         v-else
                         fab-mini
@@ -35,12 +34,12 @@
                         @click="addToCollection(mediaItem)"
                         />
 
-                        <router-link :to="{name: 'Media',
+                        <router-link :to="{name: 'SingleMedia',
                         params: {id: mediaItem.id},
                         query: {mediaType: mediaType}
                         }">
-                            <p class="text-weight-bold" style="font-size: 16px">{{mediaItem.doc.title}}</p>
-                            <q-item-label class="caption text-subtitle1 truncate">{{mediaItem.doc.description}} </q-item-label>
+                            <p class="text-weight-bold" style="font-size: 16px">{{mediaItem.title}}</p>
+                            <q-item-label class="caption text-subtitle1 truncate">{{mediaItem.description}} </q-item-label>
                             <!--<span v-if="mediaItem.doc.description?.length > 180">...</span>-->
                                 
                         </router-link>
@@ -58,8 +57,8 @@
                     </q-card-section>
                     <q-card-actions>
 
-                        <q-icon left name="schedule" class="text-weight-bold" size="19px" v-if="mediaItem.doc.created"/> 
-                        <span> {{mediaItem.doc.created}}</span>
+                        <q-icon left name="schedule" class="text-weight-bold" size="19px" v-if="mediaItem.inserted"/> 
+                        <span> {{mediaItem.inserted}}</span>
                     </q-card-actions>
             </q-card>
             </div>
@@ -72,14 +71,12 @@
 import { Recommender } from "../api/Recommender";
 import { defineComponent } from "vue";
 import { Axiosi } from "../api/Axiosi";
-import { NetworkLocal } from "../api/network";
 import { auth } from "../api/auth/SupabaseAuth";
 import { Repository } from "../model/Repository";
-import { MediaType } from "../Types";
-import { Meilisearch } from "../api/meilisearch";
+import { MediaType } from "../Types"
 
 let recommender = new Recommender()
-let media: any
+let media: MediaType[]
 let client = new Axiosi()
 //const repository = new Repository("collections")
 const user = auth.startSession()
@@ -128,15 +125,17 @@ export default defineComponent({
         
           if (this.user) {
             let collectedItem = {
-                user_id: this.user.id,
-                collected: false
+                userId: this.user.id,
+                //collected: false
+                type: item.type,
+                mediaId: item.id
             }
-            Object.assign(collectedItem, item)
+            //Object.assign(collectedItem, item)
             const coll = item.type + "Collection"
               const repository = new Repository(coll)
-              await repository.addItem(collectedItem);
-              item.icon = 'library_add_checked'
-              let re = this.$refs.mediaItems
+              const data = await repository.addItem(coll, collectedItem);
+              if (data) item.icon = 'library_add_checked'
+              //let re = this.$refs.mediaItems
               //this.$refs.mediaItems[0] = 'schedule'
               //re.icon = 'library_add'
               //this.$refs[item.id].icon = 'schedule'
@@ -160,18 +159,17 @@ export default defineComponent({
       }*/
   },
     async mounted() {
-      await recommender.getMedia()
+      //await recommender.getMedia()
       try {
-      const p = await recommender.readMedia("recommended", this.mediaType, "", "", {limit: 10})
-      let meili = new Meilisearch("http://localhost:7700")
+      const p = await recommender.readMedia("recommended", this.mediaType, "", "", 10)
       if (p) {
-          const q = JSON.parse(JSON.stringify(p))
+          /*const q = JSON.parse(JSON.stringify(p))
           const f = q.rows
           NetworkLocal.test("section.mediaList: ", q)
           NetworkLocal.test("this.section: ", f)
-          //Object.assign(this.media, f)
-          this.media = f
-      recommender.indexItems(f, this.mediaType)
+          //Object.assign(this.media, f)*/
+          this.media = p
+      //recommender.indexItems(p, this.mediaType)
       this.media.forEach(async (element: any) => {
         element.icon = "library_add"
         //console.log("media description", element.description)
@@ -194,7 +192,7 @@ export default defineComponent({
 	.myCard {
     width: 100%;
     max-width:250px;
-    min-width: 200px;
+    min-width: 300px;
     max-height: 400px;
     }
     a {

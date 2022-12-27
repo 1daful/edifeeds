@@ -1,3 +1,4 @@
+import { MediaType } from './../../Types';
 import { Resource } from "../Resource";
 import { IMediaApi } from "../IMediaApi";
 import { Axiosi } from "../Axiosi";
@@ -82,24 +83,37 @@ export class GoogleBooks implements IMediaApi{
 
     getData(resData: any) {
         let respData: Record<string, any>[] = [];
-        let mData: Record<string, any>
+        let mData: MediaType
         for (const data of resData.items) {
             mData = {
-                type: "books",
                 id: data.id,
-                _id: new Date().toJSON(),
-                status: '',
-                privacy: '',
-                tags: data.volumeInfo.categories,
-                description: data.volumeInfo.description,
-                genre: data.volumeInfo.mainCategory,
-                thumbnailSmall: data.volumeInfo.imageLinks.smallThumbnail,
-                thumbnailLarge: data.volumeInfo.imageLinks.thumbnail,
-                created: data.volumeInfo.publishedDate,
-                license: '',
                 title: data.volumeInfo.title,
+                type: "books",
                 authors: data.volumeInfo.authors,
-                printType: data.volumeInfo.printType //book or magazine
+                publisher: {
+                    name: "",
+                    logo: "",
+                    description: ""
+                },
+                //_id: new Date().toJSON(),
+                status: '',
+                meta: {},
+                privacy: '',
+                topic: "",
+                isbn: "",
+                license: '',
+                orderby: '',
+                content: "",
+                inserted_at: data.volumeInfo.publishedDate,
+                thumbnailsmall: data.volumeInfo.imageLinks.smallThumbnail,
+                thumbnaillarge: data.volumeInfo.imageLinks.thumbnail,
+                genre: data.volumeInfo.mainCategory,
+                tags: data.volumeInfo.categories,
+                region: "",
+                duration: 0,
+                description: data.volumeInfo.description,
+                keywords: []
+                //printType: data.volumeInfo.printType //book or magazine
             }
             //this.volumeRes.response.dataList.push(mData);
             respData.push(mData);

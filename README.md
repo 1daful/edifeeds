@@ -1,6 +1,6 @@
 # Quasar App (quasar-project)
 
-A Quasar Project
+Edifeeds is here you get Christian gospel cotents that edify you and draws you close to God, to make you a better person.
 
 ## Install the dependencies
 ```bash

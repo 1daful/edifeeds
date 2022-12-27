@@ -101,8 +101,8 @@ export class Media {
                     if(Array.isArray(images)) {
                         for (let index = 0; index < 10; index++) {
                             const item = items[index];
-                          item.thumbnailSmall = images[index]?.thumbnailSmall
-                          item.thumbnailLarge = images[index]?.thumbnailLarge
+                          item.thumbnailsmall = images[index]?.thumbnailSmall
+                          item.thumbnaillarge = images[index]?.thumbnailLarge
                           //NetworkLocal.test("item in media", images, "images")
                           //NetworkLocal.test("item in media", item, "images")
                         }               
@@ -156,11 +156,11 @@ export class Media {
         return result
     }
 
-    async readItems(collName?: string, params?: string[], op?: Record<string, any>) {
+    async readItems(collName?: string, params?: Record<string, any>, op?: any, limit?: number) {
         let results: Record<string, any>[]
         if(collName) {
             const repository = new Repository(collName)
-            results = await this.repository.readItems(collName, params, op)
+            results = await this.repository.readItems(collName, params, op, limit)
             NetworkLocal.test("result: ", results)
             return results
         }

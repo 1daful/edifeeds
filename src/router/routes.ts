@@ -24,7 +24,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: '/media/:id',
-        name: 'Media',
+        name: 'SingleMedia',
         component: () => import('../pages/SingleMediaPage.vue'),
         //props: (route: {params: {media: any}}) => ({media: route.params})
         props: (route: { query: { mediaType: any } }) => ({mediaType: route.query.mediaType}),

@@ -10,10 +10,10 @@ import {
 
 export function upsertItem(axios: AxiosInstance, itemData: Item) {
   return axios
-    .post<Success, AxiosResponse<Success>>("", itemData, {
-      params: {
+    .post<Success, AxiosResponse<Success>>("/item", itemData, {
+      /*params: {
         baseUrl: `http://127.0.0.1:8088/item`,
-      }
+      }*/
     })
     .then(({ data }) => {
       return data.RowAffected;
@@ -26,11 +26,11 @@ export function upsertItem(axios: AxiosInstance, itemData: Item) {
 
 export function getItem(axios: AxiosInstance, itemId: string) {
   return axios
-    .get<Item, AxiosResponse<Item>>(``,
+    .get<Item, AxiosResponse<Item>>(`/item/${itemId}`,
     {
-      params: {
+      /*params: {
         baseUrl: `http://127.0.0.1:8088/item/${itemId}`
-      }
+      }*/
     })
     .then(({ data }) => {
       return data;
@@ -43,11 +43,11 @@ export function getItem(axios: AxiosInstance, itemId: string) {
 
 export function deleteItem(axios: AxiosInstance, itemId: string) {
   return axios
-    .delete<Success, AxiosResponse<Success>>(``,
+    .delete<Success, AxiosResponse<Success>>(`/item/${itemId}`,
     {
-      params: {
+      /*params: {
         baseUrl: `http://127.0.0.1:8088/item/${itemId}`
-      }
+      }*/
     })
     .then(({ data }) => {
       return data.RowAffected;
@@ -64,11 +64,11 @@ export function updateItem(
   itemData: Item
 ) {
   return axios
-    .patch<Success, AxiosResponse<Success>>(``, itemData,
+    .patch<Success, AxiosResponse<Success>>(`/item/${itemId}`, itemData,
     {
-      params: {
+      /*params: {
         baseUrl: `http://127.0.0.1:8088/item/${itemId}`
-      }
+      }*/
     })
     .then(({ data }) => {
       return data.RowAffected;
@@ -86,11 +86,11 @@ export function insertItemCategory(
 ) {
   return axios
     .put<Success, AxiosResponse<Success>>(
-      ``,
+      `/item/${itemId}/category/${category}`,
       {
-        params: {
+        /*params: {
           baseUrl: `http://127.0.0.1:8088/item/${itemId}/category/${category}`
-        }
+        }*/
       }
     )
     .then(({ data }) => {
@@ -109,11 +109,11 @@ export function deleteItemCategory(
 ) {
   return axios
     .delete<Success, AxiosResponse<Success>>(
-      ``,
+      `/item/${itemId}/category/${category}`,
       {
-        params: {
+        /*params: {
           baseUrl: `http://127.0.0.1:8088/item/${itemId}/category/${category}`
-        }
+        }*/
       }
     )
     .then(({ data }) => {
@@ -127,11 +127,11 @@ export function deleteItemCategory(
 
 export function getItems(axios: AxiosInstance, options?: CursorOptions) {
   return axios
-    .get<ItemCursor, AxiosResponse<ItemCursor>>(``, {
-      params: {
+    .get<ItemCursor, AxiosResponse<ItemCursor>>(`/items`, {
+      /*params: {
         baseUrl: `http://127.0.0.1:8088/items`,
         options
-      }
+      }*/
     })
     .then(({ data }) => {
       return data;
@@ -144,11 +144,11 @@ export function getItems(axios: AxiosInstance, options?: CursorOptions) {
 
 export function upsertItems(axios: AxiosInstance, items: Item[]) {
   return axios
-    .post<Success, AxiosResponse<Success>>(``, items,
+    .post<Success, AxiosResponse<Success>>(`/items`, items,
     {
-      params: {
+      /*params: {
         baseUrl: `http://127.0.0.1:8088/items`
-      }
+      }*/
     })
     .then(({ data }) => {
       return data.RowAffected;
@@ -165,12 +165,12 @@ export function getItemNeighbors(
 ) {
   return axios
     .get<string[], AxiosResponse<string[]>>(
-      ``,
+      `/item/${itemId}/neighbors/${category}`,
       {
-        params: {
+        /*params: {
           baseUrl: `http://127.0.0.1:8088/item/${itemId}/neighbors/${category}`,
           cursorOptions
-        }
+        }*/
       }
     )
     .then(({ data }) => {

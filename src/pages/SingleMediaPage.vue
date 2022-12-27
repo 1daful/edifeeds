@@ -1,13 +1,8 @@
 <template>
-    <div class="container">
     <div class="row">
-        <div class="col-sm-8" v-if="media">
-            <q-img class="bl" v-if="notPlayable" :src="media.thumbnailSmall"></q-img>
-            <plyr>
-                <div class="plyr__video-embed">
-                    <iframe src="https://www.youtube.com/embed/bTqVqk7FSmY" allowfullscreen allowtransparency allow="autoplay"></iframe>
-                </div>
-            </plyr>
+        <QOD v-if="mediaType='quotes'"></QOD>
+        <div class="col-sm-8 q-md" v-else>
+            <q-img :src="media.thumbnailsmall"></q-img>
             <q-skeleton v-if="loading" height=200px square/>
             <h4>
                 {{media.title}}
@@ -23,7 +18,7 @@
             </div>
             <span>
                 <q-icon name="watch_later"></q-icon>
-                {{media.created}}
+                {{media.inserted_at}}
             </span>
             <!--<q-btn :disable="isDisabled" @click="addToCollection">
                 <q-icon :name="collIcon">
@@ -41,18 +36,18 @@
 
             <!-- share -->
             <div>
-                <h5>Share</h5>
+                <h5>Share with friends</h5>
                 <Facebook :url="url" :description="media.description"></Facebook>
                 <Twitter :url="url" :description="media.description"></Twitter>
                 <Pinterest :url="url" :description="media.description"></Pinterest>
             </div>
         </div>
-        <!--<div class="col-sm-4">
+        <div class="col-sm-4">
             <div v-if="media">
                 <h4>
                     Tags
                 </h4>
-                <p id="books-tags">
+                <p id="media-tags">
                     <span v-for="tag in media.tags" :key="tag">
                         <q-icon name="label"></q-icon>{{tag}}
                     </span>
@@ -60,9 +55,15 @@
             </div>
             <hr />
             <MediaComponent :pos="pos"></MediaComponent>
-        </div>-->
+            <q-list>
+                <q-item>
+                    <q-item-section>
+                        <p v-for="author in authors" :key="author.name">{{author.name}}</p>
+                    </q-item-section>
+                </q-item>
+            </q-list>
+        </div>
     </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -77,19 +78,22 @@ import Facebook from 'vue-share-buttons/src/components/FacebookButton.vue';
 import Twitter from 'vue-share-buttons/src/components/TwitterButton.vue';
 import Pinterest from 'vue-share-buttons/src/components/PinterestButton.vue';
 import { Recommender } from "../api/Recommender";
-import { MediaType } from "@/Types";
+import { MediaType } from "../Types";
+import QOD from "../components/QOD.vue";
 
 let user = auth.startSession()
 let repository: IRepository
 //let FB: any
 let media: MediaType
+let url: any
+let authors: any
 //let quoteMedia = new QuoteMedia();
 
 export default defineComponent({
     name: 'SingleMediaPage',
     data() {
         return {
-            url: window.Location,
+            url,
             media,
             //auth,
             pos: "sidebar",
@@ -100,8 +104,8 @@ export default defineComponent({
             loading: true,
             user,
             recomm: new Recommender(),
-            notPlayable: true
-            //favIcon: 'hearth',
+            notPlayable: true,
+            authors
             //path: `${this.media.type}/${this.media.id}/comments`
         }
     },
@@ -130,7 +134,8 @@ export default defineComponent({
         MediaComponent,
         Facebook,
         Twitter,
-        Pinterest
+        Pinterest,
+        QOD
     },
     methods: {
         /*facebook() {
@@ -145,7 +150,9 @@ export default defineComponent({
         },*/
         addToCollection() {
             if (this.user) {
-                this.repository.addItems([ this.media ]);
+            const type = this.$route.query.type
+          const coll = type + "Collection"
+                this.repository.addItems(coll, [ this.media ]);
                 this.collIcon = 'library_add_check',
                 this.isDisabled = true
             }
@@ -167,9 +174,12 @@ export default defineComponent({
     },
     async mounted() {
         let type = this.$route.query.mediaType as string
-        this.repository = new Repository(type)
+        this.url = "https://localhost:9000" + this.$route.path
+        console.log("url ", this.url)
+        this.repository = new Repository("quotes")
         const id = this.$route.params.id as string
-        this.media = await this.repository.readItem(id) as MediaType
+        const media = await this.repository.readItem(type, "id", id)
+        this.media = media[0]
         this.loading = false
         console.log('media: ', this.media)
         if(this.media.type==="video" || this.media.type==="music") {
@@ -179,12 +189,13 @@ export default defineComponent({
         //this.recomm.insertUser("002")
         if (this.user) {
             //this.recomm.insertFeedback(this.media.id, type, this.user.id, 4.0)
-            this.recomm.insertUser(this.user.id)
-            this.recomm.insertItem(this.media.id, this.media.genre)
-            this.recomm.insertFeedback(this.user.id, "positive", this.media.id, new Date())
+            //this.recomm.insertUser(this.user.id)
+            //this.recomm.insertItem(this.media.id, this.media.genre)
+            //this.recomm.insertFeedback(this.user.id, "positive", this.media.id, new Date())
             //let rec = await this.recomm.getRecommended(this.user.id, type)
             //console.log("recomm: ", rec)
             console.log("Inserted", this.media.id)
+            this.authors = await this.repository.readItems("favAuthor", undefined, {key: "*", fKey: "userId"}, this.user?.id, 10)
             //this.facebook()
         }
     }

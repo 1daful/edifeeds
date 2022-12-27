@@ -4,8 +4,8 @@ export class Repository {
     collName;
     constructor(collName) {
         this.collName = collName;
-        this.db = new Pouchdb(collName);
-        //this.db = new SupabaseRepo()
+        //this.db = new Pouchdb(collName)
+        this.db = new SupabaseRepo();
     }
     search(field, query, collName) {
         return this.db.search(field, query);
@@ -26,17 +26,17 @@ export class Repository {
         }
         return new SupabaseRepo();
     }
-    async addItem(param) {
-        await this.db.addItem(param);
+    async addItem(collName, param) {
+        return await this.db.addItem(collName, param);
     }
-    async addItems(param) {
-        await this.db.addItems(param, this.collName);
+    async addItems(collName, param) {
+        return await this.db.addItems(collName, param);
     }
-    async readItem(id) {
-        return await this.db.readItem(id);
+    async readItem(coll, field, value) {
+        return await this.db.readItem(coll, field, value);
     }
-    async readItems(collName, params, op) {
-        return await this.db.readItems(collName, params, op);
+    async readItems(collName, params, param, op, limit) {
+        return await this.db.readItems(collName, params, param, op, limit);
     }
     updateItem(docId, param) {
         this.db.updateItem(docId, param, this.collName);

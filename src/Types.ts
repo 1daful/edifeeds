@@ -22,18 +22,18 @@ export type MediaType = {
   //oclc: string
   //format: string
   //printType: string
-  orderBy: string
+  orderby: string
   content: string
-  created: any
-  thumbnailSmall: string
-  thumbnailLarge: string
+  thumbnailsmall: string
+  thumbnaillarge: string
   genre: string
   tags: []
   region: string
-  length: number
+  duration: number
 
   description: string
   keywords: []
+  inserted_at: any
 }
 export type Publisher = {
   name: string,
@@ -52,9 +52,27 @@ export type ConfigType = {
   baseParam: any
 }
 
+export type CollectionType = {
+  userId: string
+  type: MediaRes
+  id: string,
+  mediaId: string,
+  icon: string
+}
+
+export type FavAuthor = {
+  userId: string,
+  id: string,
+  name: string,
+  pic: string,
+  bio: string,
+  media: [],
+  socialHandles: []
+}
+
 export type Section = "recommended" | "popular" | "latest" | "related" | "top"
 
-export type MediaRes = "quotes" | "videos" | "books" | "music" | "quote" | "video" | "book" | "track" | "collections" | "images"
+export type MediaRes = "quotes" | "videos" | "books" | "music" | "quote" | "video" | "book" | "track" | "collections" | "images" | "posts"
 
 export type EmailAddress = {
   address: string,

@@ -20,31 +20,51 @@ export class SupabaseRepo implements IRepository {
 
     supabase = createClient(config.api.Supabase.url, config.api.Supabase.key, this.options);
 
-    addItem(_item: Record<string, any>): Promise<Record<string, any>> {
-        throw new Error("Method not implemented.");
-    }
-
-    async addItems(items: Record<string, any>[], collName: string): Promise<void> {
-        try {
-            await this.supabase
+    async addItem(collName: string, items: Record<string, any>[]): Promise<any> {
+        return await this.supabase
               .from(collName)
               .insert(items)
-        }
-        catch (error) {
-            error
-        }
     }
 
-    readItem(_collName: string): Promise<Record<string, any>> {
-        throw new Error("Method not implemented.");
+    async addItems(collName: string, items: Record<string, any>[]): Promise<any> {
+        return await this.supabase
+            .from(collName)
+            .insert(items)
     }
 
-    async readItems(collName: string, _params?: string[], _op?: Record<string, any>): Promise<Record<string, any>[]> {
+    async readItem(collName: string, field: string, value: string): Promise<Record<string, any>> {
         const { data, error } = await this.supabase
-
+        //.from(collName)
+        //.select(*).eq(field, value)
         .from(collName)
+        .select().eq('id', value)
 
+        return data as unknown as Promise<Record<string, any>[]>
+    }
+
+    async readItems(collName: string, params?: Record<string, any>, param?: Record<string, any>, val?: any, limit = 10): Promise<Record<string, any>[]> {
+        if(params !== undefined && val) {
+            const { data, error } = await this.supabase
+            .from(collName)
+            .select(`${params.key}, ${params.fColl}(${params.fKey1})`)
+            //.eq(`${params.fColl}.${params.fKey2}`, val)
+            .eq(params.fKey2, val)
+            .limit(limit)
+            return data as unknown as Promise<Record<string, any>[]>
+        }
+        if(param && val) {
+            const { data, error } = await this.supabase
+            .from(collName)
+            .select(`${param.key}`)
+            //.eq(`${params.fColl}.${params.fKey2}`, val)
+            .eq(param.fKey, val)
+            .limit(limit)
+            return data as unknown as Promise<Record<string, any>[]>
+        }
+        const { data, error } = await this.supabase
+        .from(collName)
         .select()
+        .limit(limit)
 
         return data as unknown as Promise<Record<string, any>[]>
         }

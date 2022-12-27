@@ -2,13 +2,13 @@ import { GorseException } from "../error";
 // FIXME: is this an upsert endpoint?
 export function insertUser(axios, userData) {
     return axios
-        .post("", userData, {
-        /*headers: {
-          'Content-Type' : 'application/x-www-form-urlencoded'
-        },*/
-        params: {
-            baseUrl: `http://127.0.0.1:8088/api/user`,
-        }
+        .post("/user", userData, {
+    /*headers: {
+      'Content-Type' : 'application/x-www-form-urlencoded'
+    },*/
+    /*params: {
+      baseUrl: `http://127.0.0.1:8088/api/user`,
+    }*/
     })
         .then(({ data }) => {
         return data.RowAffected;
@@ -20,10 +20,10 @@ export function insertUser(axios, userData) {
 }
 export function getUser(axios, userId) {
     return axios
-        .get(``, {
-        params: {
-            baseUrl: `http://127.0.0.1:8088/api/user/${userId}`,
-        }
+        .get(`/user/${userId}`, {
+    /*params: {
+      baseUrl: `http://127.0.0.1:8088/api/user/${userId}`,
+    }*/
     })
         .then(({ data }) => {
         return data;
@@ -35,10 +35,10 @@ export function getUser(axios, userId) {
 }
 export function deleteUser(axios, userId) {
     return axios
-        .delete(``, {
-        params: {
-            baseUrl: `http://127.0.0.1:8088/api/user/${userId}`,
-        }
+        .delete(`/user/${userId}`, {
+    /*params: {
+      baseUrl: `http://127.0.0.1:8088/api/user/${userId}`,
+    }*/
     })
         .then(({ data }) => {
         return data.RowAffected;
@@ -50,10 +50,10 @@ export function deleteUser(axios, userId) {
 }
 export function updateUser(axios, userId, userData) {
     return axios
-        .patch(``, userData, {
-        params: {
-            baseUrl: `http://127.0.0.1:8088/api/user/${userId}`,
-        }
+        .patch(`/user/${userId}`, userData, {
+    /*params: {
+      baseUrl: `http://127.0.0.1:8088/api/user/${userId}`,
+    }*/
     })
         .then(({ data }) => {
         return data.RowAffected;
@@ -65,11 +65,11 @@ export function updateUser(axios, userId, userData) {
 }
 export function getUsers(axios, options) {
     return axios
-        .get(``, {
-        params: {
-            baseUrl: `http://127.0.0.1:8088/api/users`,
-            options,
-        }
+        .get(`/users`, {
+    /*params: {
+      baseUrl: `http://127.0.0.1:8088/api/users`,
+      options,
+    }*/
     })
         .then(({ data }) => {
         return data;
@@ -82,10 +82,10 @@ export function getUsers(axios, options) {
 // FIXME: is this an endpoint?
 export function insertUsers(axios, users) {
     return axios
-        .post(``, users, {
-        params: {
-            baseUrl: `http://127.0.0.1:8088/api/users}`,
-        }
+        .post(`/users`, users, {
+    /*params: {
+      baseUrl: `http://127.0.0.1:8088/api/users`,
+    }*/
     })
         .then(({ data }) => {
         return data.RowAffected;
@@ -97,11 +97,11 @@ export function insertUsers(axios, users) {
 }
 export function getUserNeighbors(axios, { userId, cursorOptions }) {
     return axios
-        .get(``, {
-        params: {
-            baseUrl: `http://127.0.0.1:8088/api/user/${userId}/neighbors}`,
-            cursorOptions,
-        }
+        .get(`/user/${userId}/neighbors}`, {
+    /*params: {
+      baseUrl: `http://127.0.0.1:8088/api/user/${userId}/neighbors}`,
+      cursorOptions,
+    }*/
     })
         .then(({ data }) => {
         return data;

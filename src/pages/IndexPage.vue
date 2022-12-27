@@ -1,7 +1,7 @@
 <template>
     <!--<q-page class="home container">-->
           <SiteHero v-if="site" :site="site"></SiteHero>
-          <Genres></Genres>
+          <!--<Genres></Genres>-->
           <QOD></QOD>
           <MediaComponent v-if="pos" :pos="pos"></MediaComponent>
           <!--<Newsletter v-if="site" :bgImg="site.newsletter.bgImg"></Newsletter>-->
