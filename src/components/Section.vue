@@ -4,7 +4,7 @@
                 <h5 class="capitalize text-weight-bold">
                     {{section.name}}
                 </h5>
-                <Media v-for="mediaType in mediaTypes" :key="mediaType" :mediaType="mediaType"></Media>
+                <Media v-for="mediaType in mediaTypes" :key="mediaType.name" :mediaType="mediaType.name"></Media>
         </div>
     </div>
 </template>
@@ -13,17 +13,13 @@
 //import { Recommender } from '@/api/Recommender';
 import { defineComponent } from 'vue';
 import Media from './Media.vue';
+import { mediaItems } from "../model/Media";
 
 export default defineComponent({
     name: 'Section',
     data() {
       return {
-        mediaTypes:[
-          "quotes",
-          "videos",
-          "music",
-          "books"
-        ],
+        mediaTypes: mediaItems,
         section: this.sect
       }
     },

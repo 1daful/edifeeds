@@ -3,7 +3,6 @@ import { IMediaApi } from "../api/IMediaApi";
 import { Youtube } from "../api/video/Youtube";
 export class VideoMedia implements IMedia {
     apis: IMediaApi[] = [];
-    private mediaItems: Record<string, any>[] = [];
     //media: Media;
     youtube: Youtube;
 

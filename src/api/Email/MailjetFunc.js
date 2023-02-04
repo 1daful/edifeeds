@@ -1,9 +1,6 @@
 import { Resource } from "../Resource";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
 import { Axiosi } from "../Axiosi";
-/**
- * This is our transactional email implementation for Mailjet
- */
 export class MailjetFunc {
     client = new Axiosi();
     apiFormat = new ApiFormat();
@@ -17,7 +14,6 @@ export class MailjetFunc {
         const resi = [];
         resi.push(res);
         return resi;
-        //throw new Error("Method not implemented.");
     }
     resources = [];
     BASE_URL = '/.netlify/functions';

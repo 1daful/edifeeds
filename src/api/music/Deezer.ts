@@ -7,17 +7,22 @@ import { MediaType } from '../../Types';
 import config from "../../../public/config.json";
 
 export class Deezer implements IMediaApi {
+    constructor(format?: {}) {
+        const apiFormat = new ApiFormat(format)
+        this.search(apiFormat)
+    }
     client: ApiClient = new Axiosi();
     resources: Resource[] = [];
     search = (apiFormat: ApiFormat) => {
-        return new Resource(this, "Music", {
+        return new Resource(this, "music", {
             name: "searchRes",
             baseUrl: "/search",
             params: {
                 artist: apiFormat.author,
                 album: apiFormat.parent,
                 track: apiFormat.title,
-                label: apiFormat.meta,
+                q: apiFormat.keyword
+                //label: apiFormat.,
                 //dur_min: apiFormat.length
                 //dur_max	The track's maximum duration in seconds	int	https://api.deezer.com/search?q=dur_max:500
                 //bpm_min	The track's minimum bpm	int	https://api.deezer.com/search?q=bpm_min:120

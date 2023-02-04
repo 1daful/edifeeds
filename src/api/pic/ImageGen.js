@@ -8,7 +8,6 @@ export class Unsplash {
     resources = [];
     BASE_URL;
     BASE_PARAMS;
-    //apiFormat: ApiFormat = new ApiFormat({keyword: "rent"});
     constructor(format) {
         const apiFormat = new ApiFormat(format);
         this.imageRes = this.getResource(apiFormat);
@@ -25,13 +24,11 @@ export class Unsplash {
         }, 'imageResp');
     }
     getBaseParams() {
-        //const config = await this.client.load('../config.json')
         const apiBaseParams = config.api.Unsplash.config;
         return apiBaseParams;
     }
     async getBaseUrl() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseUrl = config?.api.Unsplash.baseUrl;
             return apiBaseUrl;
         }
@@ -42,10 +39,7 @@ export class Unsplash {
     getData(resp) {
         let respData = [];
         let mData;
-        //if (resp.name === 'quoteResp')
-        //let respD: Record<string, any>[] = []
         if (Array.isArray(resp)) {
-            //respData = resp
             for (const data of resp) {
                 mData = {
                     type: "images",
@@ -70,11 +64,8 @@ export class Unsplash {
                             pic: ''
                         }],
                     thumbnailLarge: data.urls?.full,
-                    //authors: data.a,
-                    //tags: []
                 };
                 respData.push(mData);
-                //this.quoteRes.response.dataList.push(mData);
             }
         }
         return respData;

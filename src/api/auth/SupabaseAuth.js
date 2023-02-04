@@ -2,7 +2,6 @@ import config from "../../../public/config.json";
 import { createClient } from "@supabase/supabase-js";
 class SupabaseAuth {
     constructor() {
-        //if(SupabaseAuth._instance)
     }
     static _instance;
     static get Instance() {
@@ -11,7 +10,6 @@ class SupabaseAuth {
     supabase = createClient(config.api.Supabase.url, config.api.Supabase.key, config.api.Supabase.options);
     auth = this.supabase.auth;
     authenticated = false;
-    //jwt?: string
     async signUp(userCred, data) {
         const { user, session, error } = await this.auth.signUp({
             email: userCred.email,
@@ -21,24 +19,20 @@ class SupabaseAuth {
         });
         return { user, session, error };
     }
-    async updateUser(user /*Record<string, any>)*/) {
+    async updateUser(user) {
         const { data, error } = await this.auth.update(user);
         return { data, error };
     }
     async login(providerId, userCred) {
-        //let provider: Provider = providerId
         let scopes;
         switch (providerId) {
             case "google":
-                //provider = 'google'
                 scopes = '';
                 break;
             case "facebook":
-                //provider = 'facebook'
                 scopes = 'public_profile email';
                 break;
             case "twitter":
-                //provider = 'twitter'
                 scopes = '';
                 break;
             default:
@@ -47,7 +41,6 @@ class SupabaseAuth {
                         email: userCred.email,
                         password: userCred.password
                     });
-                    //const jwt = session?.access_token
                     this.authenticated = true;
                     return { user, session, error };
                 }
@@ -58,9 +51,6 @@ class SupabaseAuth {
         }, {
             scopes: scopes
         });
-        /*if (session) {
-          const oAuthToken = session.provider_token // use to access provider API
-        }*/
         this.authenticated = true;
         return { user, session, error };
     }
@@ -73,15 +63,6 @@ class SupabaseAuth {
         return user;
     }
     async isAuthenticated() {
-        //let sess
-        /*this.auth.onAuthStateChange((event, session) => {
-          this.authenticated = true
-          console.log("event and session")
-          console.log(event, session)
-          sess = session
-        })
-        console.log("session: ", sess)
-        return this.authenticated*/
         if (this.startSession()) {
             return true;
         }
@@ -118,7 +99,6 @@ class SupabaseAuth {
         return this.auth.api.resetPasswordForEmail(email, {
             redirectTo: "/profile"
         });
-        //const { user, session, error } = await this.auth.signIn({ email }, {shouldCreateUser: false})
     }
     startSession() {
         return this.auth.session()?.user;

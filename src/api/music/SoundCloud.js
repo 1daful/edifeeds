@@ -10,22 +10,11 @@ export class SoundCloud {
     client = new Axiosi();
     config;
     resources = [];
-    /*private _filters = {
-         q: '',
-         tags: '',
-         filter: '',
-         license: '',
-         bpm: '',
-         duration: '',
-         created_at: '',
-         ids: '',
-         genres: ''
-     };*/
     BASE_URL = '';
     BASE_PARAMS;
     resource = [];
     trackRes = (format) => {
-        new Resource(this, 'tracks', {
+        new Resource(this, 'music', {
             name: 'trackReq',
             baseUrl: '/tracks',
             params: {
@@ -40,27 +29,8 @@ export class SoundCloud {
             }
         }, 'trackResp');
     };
-    /*data = {
-        id: 'id',
-        title: 'title',
-        duration: 'duration',
-        status: 'state',
-        privacy: 'sharing',
-        tags: 'tag_list',
-        url: 'url',
-        description: 'description',
-        genre: 'genre',
-        thumbnail: 'artwork_url',
-        creator: 'user_id',
-        timestamp: 'created_at',
-        license: 'license',
-    }*/
-    /*setDataSource(data: Record<string, any>) {
-        this.trackRes.response.dataSource = data.items;
-    }*/
-    async getBaseParams() {
+    getBaseParams() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseParams = config.api.SoundCloud.baseParams;
             return apiBaseParams;
         }
@@ -68,9 +38,8 @@ export class SoundCloud {
             console.log(err);
         }
     }
-    async getBaseUrl() {
+    getBaseUrl() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseUrl = config.api.SoundCloud.baseUrl;
             return apiBaseUrl;
         }
@@ -97,7 +66,6 @@ export class SoundCloud {
                 authors: data.authors,
                 printType: data.printType
             };
-            //this.trackRes.response.dataList.push(mData);
             respData.push(mData);
         }
         return respData;

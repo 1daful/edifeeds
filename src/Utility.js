@@ -16,11 +16,6 @@ export class Utility {
         }
         return targetObj;
     }
-    /**
-    * pushObject takes two objects and put the first object into the second while removing any key that contains no value
-    * @param bigObj the first object
-    * @param smallObj the second object
-    */
     joinObject(bigObj, smallObj) {
         const obj = {};
         Object.keys(bigObj).forEach(key => {
@@ -42,7 +37,6 @@ export class Utility {
             return res;
         }, {});
         return ret;
-        //let params = token.searchParams
     }
 }
 //# sourceMappingURL=Utility.js.map

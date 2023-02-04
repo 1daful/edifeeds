@@ -1,6 +1,4 @@
 import { authGuard } from '../api/auth/authGuard';
-//import { createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw } from 'vue-router'
-//import Home from '../pages/Home.vue'
 import SignIn from "../pages/SignIn.vue";
 const routes = [
     {
@@ -11,10 +9,7 @@ const routes = [
             {
                 path: '/about',
                 name: 'About',
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: () => import(/* webpackChunkName: "about" */ '../pages/About.vue'),
+                component: () => import('../pages/About.vue'),
                 meta: {
                     navigational: true
                 },
@@ -24,33 +19,26 @@ const routes = [
                 path: '/media/:id',
                 name: 'SingleMedia',
                 component: () => import('../pages/SingleMediaPage.vue'),
-                //props: (route: {params: {media: any}}) => ({media: route.params})
                 props: (route) => ({ mediaType: route.query.mediaType }),
             },
             {
                 path: '/profile',
                 name: 'Profile',
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: () => import(/* webpackChunkName: "about" */ '../pages/Profile.vue'),
-                meta: {
-                    navigational: true
-                },
+                component: () => import('../pages/Profile.vue'),
                 props: true,
                 beforeEnter: authGuard,
                 children: [
                     {
                         path: 'collection',
                         name: 'Collection',
-                        // route level code-splitting
-                        // this generates a separate chunk (about.[hash].js) for this route
-                        // which is lazy-loaded when the route is visited.
-                        component: () => import(/* webpackChunkName: "about" */ '../pages/Collection.vue'),
+                        component: () => import('../pages/Collection.vue'),
                         props: true,
+                        meta: {
+                            navigational: true
+                        },
                         children: [
                             {
-                                path: 'fav/:type',
+                                path: 'media/:type',
                                 name: 'Media',
                                 component: () => import('../pages/Media.vue')
                             }
@@ -59,13 +47,7 @@ const routes = [
                     {
                         path: 'details',
                         name: 'Details',
-                        // route level code-splitting
-                        // this generates a separate chunk (about.[hash].js) for this route
-                        // which is lazy-loaded when the route is visited.
-                        component: () => import(/* webpackChunkName: "about" */ '../pages/UserDetails.vue'),
-                        meta: {
-                            navigational: true
-                        },
+                        component: () => import('../pages/UserDetails.vue'),
                         props: true
                     }
                 ]
@@ -73,30 +55,21 @@ const routes = [
             {
                 path: '/upload',
                 name: 'Upload',
-                // route level code-splitting
-                // this generates a separate chunk (about.[hash].js) for this route
-                // which is lazy-loaded when the route is visited.
-                component: () => import(/* webpackChunkName: "about" */ '../pages/UploadFile.vue'),
-                meta: {
-                    navigational: true
-                },
+                component: () => import('../pages/UploadFile.vue'),
                 props: true
             },
             {
-                //props: (route: { params: { myUrl: any } }) => ({myUrl: route.params.myUrl}),
                 path: '/auth*',
-                component: () => import(/* webpackChunkName: "about" */ '../pages/Authview.vue'),
+                component: () => import('../pages/Authview.vue'),
             },
             {
-                //props: (route: { params: { myUrl: any } }) => ({myUrl: route.params.myUrl}),
                 path: '/access_token=:url',
-                component: () => import(/* webpackChunkName: "about" */ '../pages/Verification.vue'),
-                //component: () => import(/* webpackChunkName: "about" */ '../pages/Auth.vue'),
+                component: () => import('../pages/Verification.vue'),
             },
             {
                 props: (route) => ({ myUrl: route.params.myUrl }),
                 path: '/error=:myUrl',
-                component: () => import(/* webpackChunkName: "about" */ '../pages/Error.vue'),
+                component: () => import('../pages/Error.vue'),
             },
             {
                 path: '/:catchAll(.*)*',
@@ -107,37 +80,28 @@ const routes = [
     {
         path: '/verification',
         name: 'Verification',
-        component: () => import(/* webpackChunkName: "about" */ '../pages/Verification.vue'),
-        meta: {
-            navigational: true
-        },
+        component: () => import('../pages/Verification.vue'),
         props: true
     },
     {
         path: '/search',
         name: 'Search',
         component: () => import('../pages/SERP.vue'),
-        //props: (route: {params: {media: any}}) => ({media: route.params})
-        //props: (route: { query: { mediaType: any } }) => ({mediaType: route.query.mediaType}),
+        children: [
+            {
+                path: '/:type',
+                name: 'SERPView',
+                component: () => import('../pages/SERPView.vue'),
+                props: true
+            },
+        ],
     },
     {
         path: '/reset/:param',
         name: 'Reset',
-        component: () => import(/* webpackChunkName: "about" */ '../pages/Reset.vue'),
-        meta: {
-            navigational: true
-        },
+        component: () => import('../pages/Reset.vue'),
         props: true
     },
-    /*{
-    path: '/',
-    name: 'Home',
-    component: Home,
-    meta: {
-      navigational: true,
-    },
-    props: true
-  },*/
     {
         path: '/signin',
         name: 'SignIn',
@@ -150,26 +114,12 @@ const routes = [
     {
         path: '/signup',
         name: 'SignUp',
-        component: () => import(/* webpackChunkName: "about" */ '../pages/SignUp.vue'),
+        component: () => import('../pages/SignUp.vue'),
         props: (route) => ({ myUrl: route.query.myUrl }),
         meta: {
             noHeader: true
         }
     }
-    /*{
-      path: '/',
-      component: () => import('layouts/MainLayout.vue'),
-      children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
-    },
-    
-    
-      {
-        path: '/',
-        component: () => import('layouts/MainLayout.vue'),
-        children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
-      },*/
-    // Always leave this as last one,
-    // but you can also remove it
 ];
 export default routes;
 //# sourceMappingURL=routes.js.map

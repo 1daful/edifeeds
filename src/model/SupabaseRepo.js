@@ -28,8 +28,6 @@ export class SupabaseRepo {
     }
     async readItem(collName, field, value) {
         const { data, error } = await this.supabase
-            //.from(collName)
-            //.select(*).eq(field, value)
             .from(collName)
             .select().eq('id', value);
         return data;
@@ -39,7 +37,6 @@ export class SupabaseRepo {
             const { data, error } = await this.supabase
                 .from(collName)
                 .select(`${params.key}, ${params.fColl}(${params.fKey1})`)
-                //.eq(`${params.fColl}.${params.fKey2}`, val)
                 .eq(params.fKey2, val)
                 .limit(limit);
             return data;
@@ -48,7 +45,6 @@ export class SupabaseRepo {
             const { data, error } = await this.supabase
                 .from(collName)
                 .select(`${param.key}`)
-                //.eq(`${params.fColl}.${params.fKey2}`, val)
                 .eq(param.fKey, val)
                 .limit(limit);
             return data;

@@ -20,8 +20,7 @@ export class SupabaseStore {
         return { data, error };
     }
     async getThumbnail(bucket, name) {
-        //const url = 'public/' + name + 'jpg'
-        return await this.supabase.storage.from(bucket).getPublicUrl(name).publicURL; // path to the image in the bucket 
+        return await this.supabase.storage.from(bucket).getPublicUrl(name).publicURL;
     }
     async getFile(url) {
         let response = await fetch(url);

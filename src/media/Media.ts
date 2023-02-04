@@ -68,6 +68,8 @@ export class Media {
         else {
             await this.load(new QuoteMedia(params), "quotes")
             await this.load(new BookMedia(params), "books")
+            await this.load(new MusicMedia(params), "music")
+            await this.load(new VideoMedia(params), "videos")
             /*let mediaList = []
             mediaList.push(this.load(new QuoteMedia(params), "quotes"))
             mediaList.push(this.load(new BookMedia(params), "books")) 
@@ -119,8 +121,10 @@ export class Media {
                     //this.search.import()
                 }
 
-                await this.addItems(items, type);
-                await this.metadata.saveGenres(items)
+                if (items) {
+                    await this.addItems(items, type);
+                    await this.metadata.saveGenres(items)
+                }
             }
 
         }
@@ -140,14 +144,13 @@ export class Media {
 
     private async addItems(items: Record<string, any>[], collName?: string): Promise<Record<string, any>> {
         const result = {}
-        if(collName) {
-            const repository = new Repository(collName)
-            await repository.addItems(items);
-            return result
-        }
         try {
             //NetworkLocal.test("Adding items from Media")
-            await this.repository.addItems(items);
+        if(collName) {
+            const repository = new Repository(collName)
+            await repository.addItems(collName, items);
+            return result
+        }
         }
         catch (err) {
             console.log(err)

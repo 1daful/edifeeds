@@ -28,10 +28,9 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { Repository} from "../model/Repository";
-import { Media } from "../model/Media";
+import { mediaItems } from "../model/Media";
 
 let repository = new Repository("collections");
-let mediaItems: Array<any> = Media
 
 export default defineComponent({
     name: 'Collection',

@@ -12,7 +12,6 @@ export class Pexels {
     client = new Axiosi();
     cl;
     resources = [];
-    //apiFormat: ApiFormat
     getResource(format) {
         let imageRes = new Resource(this, 'images', {
             name: "imageReq",
@@ -75,7 +74,6 @@ export class Pexels {
                     height: data.height,
                 }
             };
-            //this.volumeRes.response.dataList.push(mData);
             respData.push(mData);
         }
         return respData;

@@ -1,3 +1,4 @@
+import { Ghost } from './posts/Ghost';
 import { MediaType } from 'src/Types.js';
 import { MediaRes } from 'src/Types.js';
 import { Search } from './Search/Search';
@@ -109,7 +110,7 @@ export class Recommender {
             //mediaList = mediaItems
             const search = new Search()
             console.log("mediaList: ", mediaList)
-            let mediaIt: MediaType[] = mediaList
+            let mediaIt: MediaType[] = mediaList as unknown as MediaType[]
             /*if(mediaList){
                     for (let index = 0; index < 10 && index < mediaList.length; index++) {
                     const media = mediaList[index]?.doc;
@@ -144,14 +145,23 @@ export class Recommender {
                     NetworkLocal.test("mediaItems: ", items, "media")
                     return items
                     //break;
+                case 'posts':
+                    const blog = new Ghost()
+                    items = await blog.getPosts();
+                    NetworkLocal.test("mediaItems: ", items, "posts")
+                    return items
 
-                /*case 'music':
-                    item.mediaItems = this.musicMedia.readMedia(params, op);
-                    break;
+                case 'music':
+                    media = new Media(type)
+                    items = await media.readItems(type, params, op);
+                    NetworkLocal.test("mediaItems: ", items, "posts")
+                    return items
 
                 case 'video':
-                    item.mediaItems = this.videoMedia.readMedia(params, op);
-                    break;*/
+                    media = new Media(type)
+                    items = await media.readItems(type, params, op);
+                    NetworkLocal.test("mediaItems: ", items, "posts")
+                    return items
                 default:
                     break;
             }

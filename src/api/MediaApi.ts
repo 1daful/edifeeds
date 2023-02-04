@@ -69,7 +69,6 @@ export class MediaApi {
                 resource = iterator;
             }
         }
-        NetworkLocal.test("resource type: ", resource.type)
         return resource;
     }
 

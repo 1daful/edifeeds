@@ -1,9 +1,6 @@
 import { Resource } from "../Resource";
 import { Axiosi } from "../Axiosi";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
-/*import { ApiClient } from "../../apiClient";
-import { QuoteMedia } from "../../media/QuoteMedia";
-import { IMedia } from "../../media/IMedia";*/
 export class TheySaidSo {
     constructor() {
         this.client.load('../config.json').then(resp => {
@@ -34,22 +31,9 @@ export class TheySaidSo {
             author: '',
             categories: '',
             images: '',
-            //authors: this.apiFormat.author,
             random: ''
         }
     }, 'quoteRes');
-    /**
-     * Returns quotes specified by quoteType.
-     * @param quoteType The type of quotes whose BASE_URL to be returned.
-     */
-    /*getQuotesURL(quoteType){
-        let Q_URL = this.BASE_URL + quoteType.url;
-        if(quoteType === 'quote'){
-            Q_URL = Q_URL + quoteType.sub_url.random;
-            return Q_URL;
-        }
-        return Q_URL;
-    }*/
     attribution = `<span style="z-index: 50; font-size: 0.9em;">
     <img src="https://theysaidso.com/branding/theysaidso.png"
     height="20" width="20" alt="theusaidso.com" />
@@ -85,10 +69,8 @@ export class TheySaidSo {
                 status: '',
                 privacy: '',
                 tags: data.tags,
-                //description: data.description,
                 genre: data.category,
                 thumbnailSmall: data.background,
-                //created: data.volumeInfo.publishedDate,
                 license: '',
                 title: data.title,
                 author: data.author,
@@ -97,7 +79,6 @@ export class TheySaidSo {
                 date: data.date
             };
             respData.push(mData);
-            //this.quoteRes.response.dataList.push(mData);
         }
         return respData;
     }

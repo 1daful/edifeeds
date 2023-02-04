@@ -1,4 +1,3 @@
-//import { ApiClient } from "../../apiClient";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
 import { Axiosi } from "../Axiosi";
 import { Resource } from "../Resource";
@@ -19,21 +18,9 @@ export class ZerpSerp {
         catch (err) {
             console.log(err);
         }
-        /*.then(resp => {
-            if (resp) {
-                this.config = resp.data;
-                console.log('axios load working', this.config.api.GoogleBooks.baseUrl)
-                this.BASE_URL = this.config.api.GoogleBooks.baseUrl;
-                this.BASE_PARAMS =  {
-                    ID: this.config.api.GoogleBooks.id,
-                    KEY: this.config.api.GoogleBooks.key
-                }
-            }
-        })*/
     }
     async getBaseParams() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseParams = config?.api.zenserp.config.baseParams;
             return apiBaseParams;
         }
@@ -59,9 +46,8 @@ export class ZerpSerp {
                 license: '',
                 title: data.title,
                 authors: data.source,
-                printType: "" //book or magazine
+                printType: ""
             };
-            //this.volumeRes.response.dataList.push(mData);
             respData.push(mData);
         }
         return respData;

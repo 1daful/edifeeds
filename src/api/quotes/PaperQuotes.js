@@ -1,5 +1,4 @@
 import { Resource } from "../Resource";
-//import { Response } from "../Response";
 import { Axiosi } from "../Axiosi";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
 export class PaperQuotes {
@@ -33,7 +32,6 @@ export class PaperQuotes {
         }
     }, 'quoteResp');
     data = {
-        //quote: 'quote',
         author: 'author',
         tags: 'tags',
         image: 'image'
@@ -78,7 +76,6 @@ export class PaperQuotes {
                 printType: data.printType
             };
             respData.push(mData);
-            //this.quoteRes.response.dataList.push(mData);
         }
         return respData;
     }

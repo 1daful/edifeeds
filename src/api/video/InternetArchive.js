@@ -1,9 +1,6 @@
 import { Resource } from "../Resource";
 import { Axiosi } from "../Axiosi.js";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
-/**
- * This is a concrete InternetArchive class implementation of IMedia
- */
 export class InternetArchive {
     constructor() {
         this.client.load('../config.json').then(resp => {
@@ -73,7 +70,6 @@ export class InternetArchive {
                 format: videoData.mediatype
             };
             respData.push(video);
-            //this.videoRes.response.dataList.push(videoData);
         }
         return respData;
     }

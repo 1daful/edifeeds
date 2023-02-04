@@ -36,9 +36,6 @@ const routes: RouteRecordRaw[] = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../pages/Profile.vue'),
-        meta: {
-          navigational: true
-        },
         props: true,
         beforeEnter: authGuard,
         children: [
@@ -50,9 +47,12 @@ const routes: RouteRecordRaw[] = [
               // which is lazy-loaded when the route is visited.
               component: () => import(/* webpackChunkName: "about" */ '../pages/Collection.vue'),
               props: true,
+              meta: {
+                navigational: true
+              },
               children: [
                 {
-                  path: 'media',
+                  path: 'media/:type',
                   name: 'Media',
                   component: () => import('../pages/Media.vue')
                 }
@@ -65,9 +65,6 @@ const routes: RouteRecordRaw[] = [
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: () => import(/* webpackChunkName: "about" */ '../pages/UserDetails.vue'),
-            meta: {
-              navigational: true
-            },
             props: true
           }
         ]
@@ -80,9 +77,6 @@ const routes: RouteRecordRaw[] = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../pages/UploadFile.vue'),
-        meta: {
-          navigational: true
-        },
         props: true
       },
       {
@@ -111,15 +105,20 @@ const routes: RouteRecordRaw[] = [
     path: '/verification',
     name: 'Verification',
     component: () => import(/* webpackChunkName: "about" */ '../pages/Verification.vue'),
-    meta:{
-      navigational: true
-    },
     props: true
   },
   {
     path: '/search',
     name: 'Search',
     component: () => import('../pages/SERP.vue'),
+    children: [
+      {
+        path: '/:type',
+        name: 'SERPView',
+        component: () => import(/* webpackChunkName: "about" */ '../pages/SERPView.vue'),
+        props: true
+      },
+    ],
     //props: (route: {params: {media: any}}) => ({media: route.params})
     //props: (route: { query: { mediaType: any } }) => ({mediaType: route.query.mediaType}),
   },
@@ -127,9 +126,6 @@ const routes: RouteRecordRaw[] = [
     path: '/reset/:param',
     name: 'Reset',
     component: () => import(/* webpackChunkName: "about" */ '../pages/Reset.vue'),
-    meta:{
-      navigational: true
-    },
     props: true
   },
   /*{

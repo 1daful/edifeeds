@@ -3,7 +3,6 @@ import { Resource } from "../Resource";
 import { Axiosi } from "../Axiosi";
 import { ApiFormat } from "../../apiReqFormat/ApiFormat";
 import config from "../../../public/config.json";
-import { ApiClient } from "src/apiClient";
 
 export class SoundCloud implements IMediaApi{
     constructor(format?: {}) {
@@ -29,7 +28,7 @@ export class SoundCloud implements IMediaApi{
     BASE_PARAMS: any
     resource: Resource[] = [];
     trackRes =  (format: ApiFormat) => {
-        new Resource(this, 'tracks',
+        new Resource(this, 'music',
         {
             name: 'trackReq',
             baseUrl: '/tracks',
@@ -67,7 +66,7 @@ export class SoundCloud implements IMediaApi{
         this.trackRes.response.dataSource = data.items;
     }*/
 
-    async getBaseParams() {
+    getBaseParams() {
         try{
             //const config = await this.client.load('../config.json')
             const apiBaseParams = config.api.SoundCloud.baseParams
@@ -77,7 +76,7 @@ export class SoundCloud implements IMediaApi{
             console.log(err)
         }
     }
-    async getBaseUrl() {
+    getBaseUrl() {
         try{
             //const config = await this.client.load('../config.json')
             const apiBaseUrl = config.api.SoundCloud.baseUrl

@@ -20,7 +20,6 @@ export class ImageMedia {
         }
     }
     async getMedia(params) {
-        //const res = {}
         if (!this.zerpSerp) {
             if (params)
                 this.zerpSerp = new ZerpSerp(params);

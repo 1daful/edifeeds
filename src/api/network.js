@@ -1,17 +1,11 @@
-/**
- * Class utility to check for local developer or network developer IDE.
- */
 import { isLoopbackAddr } from "is-loopback-addr";
 export class NetworkLocal {
-    //os = require('os')
     static isLoopback = isLoopbackAddr(window.location.origin);
     static onLine = window.navigator.onLine;
     static test(message, msg, name) {
         if (name) {
             console.log(name);
             console.log(message, msg);
-            //console.log("Network offline:")
-            //console.log(this.dummyData)
             return this.dummyData;
         }
     }
@@ -34,14 +28,8 @@ export class NetworkLocal {
                 pic: "awonder1",
                 bio: "Quality-oriented"
             },
-            printType: "papaerback" //book or magazine
+            printType: "papaerback"
         }
     };
 }
-/*if(!isArray(response.data)) {
-    res = this.resource.getResponse([response.data])
-}
-else {
-    res = this.resource.getResponse(response.data)
-}*/ 
 //# sourceMappingURL=network.js.map

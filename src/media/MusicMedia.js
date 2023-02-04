@@ -1,14 +1,14 @@
 import { SoundCloud } from "../api/music/SoundCloud";
-//import { Axiosi } from "src/api/Axiosi.js";
+import { Deezer } from "../api/music/Deezer";
 export class MusicMedia {
     apis = [];
-    //private mediaItems: Record<string, any>[] = [];
-    //media: Media;
     soundCloud;
+    deezer;
     constructor(format) {
         this.soundCloud = new SoundCloud(format);
-        //this.media = new Media(type);
+        this.deezer = new Deezer(format);
         this.apis.push(this.soundCloud);
+        this.apis.push(this.deezer);
     }
 }
 //# sourceMappingURL=MusicMedia.js.map

@@ -9,7 +9,6 @@ export class Algolia {
         index.setSettings({
             searchableAttributes: Object.keys(it)
         }).then(() => {
-            // done
         });
         const indexes = {
             [String(type)]: index.saveObjects(items, {

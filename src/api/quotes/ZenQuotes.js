@@ -35,15 +35,8 @@ export class ZenQuotes {
             params: format
         }, 'qodResp');
     };
-    /*data = {
-        quote: 'quote',
-        author: 'author',
-        tags: [],
-        image: 'image'
-    }*/
     async getBaseParams() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseParams = config?.api.ZenQuotes.baseParams;
             return apiBaseParams;
         }
@@ -53,7 +46,6 @@ export class ZenQuotes {
     }
     async getBaseUrl() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseUrl = config?.api.ZenQuotes.baseUrl;
             return apiBaseUrl;
         }
@@ -64,12 +56,9 @@ export class ZenQuotes {
     getData(resp) {
         const respData = [];
         let mData;
-        //if (resp.name === 'quoteResp')
         for (const data of resp) {
             mData = {
-                //id: new Date().toJSON(),
                 type: "quotes",
-                //_id: new Date().toJSON(),
                 status: '',
                 privacy: '',
                 tags: [],
@@ -91,19 +80,13 @@ export class ZenQuotes {
                     description: ""
                 },
                 isbn: "",
-                //lccl: "",
-                //oclc: "",
-                //format: "",
-                //printType: '',
                 thumbnailsmall: '',
                 authors: [
                     data.a
                 ],
                 thumbnaillarge: '',
-                //tags: []
             };
             respData.push(mData);
-            //this.quoteRes.response.dataList.push(mData);
         }
         return respData;
     }

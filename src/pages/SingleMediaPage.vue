@@ -1,7 +1,18 @@
 <template>
     <div class="row">
         <QOD v-if="mediaType='quotes'"></QOD>
-        <div class="col-sm-8 q-md" v-else>
+        <div v-else>
+            <q-card v-if="media">
+                <h4>
+                    {{media.title}}
+                </h4>
+                <q-img :src="media.thumbnaillarge"></q-img>
+                <q-card-section>
+                    {{media.content}}
+                </q-card-section>
+            </q-card>
+        </div>
+        <div class="col-sm-8 q-md" v-if="media">
             <q-img :src="media.thumbnailsmall"></q-img>
             <q-skeleton v-if="loading" height=200px square/>
             <h4>
@@ -20,11 +31,11 @@
                 <q-icon name="watch_later"></q-icon>
                 {{media.inserted_at}}
             </span>
-            <!--<q-btn :disable="isDisabled" @click="addToCollection">
-                <q-icon :name="collIcon">
+            <q-btn :disable="isDisabled" @click="addToCollection">
+                <q-icon name="library_add">
                 </q-icon>
             </q-btn>
-            <b-button @click="addToFavourites">
+            <!--<b-button @click="addToFavourites">
                 <b-icon :icon="favIcon">
                 </b-icon>
                 <b-badge>{{media.count}} </b-badge>
@@ -67,6 +78,7 @@
 </template>
 
 <script lang="ts">
+import { useHead } from 'unhead';
 import { auth } from "../api/auth/SupabaseAuth";
 //import { QuoteMedia } from "../media/QuoteMedia";
 import { Repository } from "../model/Repository";
@@ -80,6 +92,7 @@ import Pinterest from 'vue-share-buttons/src/components/PinterestButton.vue';
 import { Recommender } from "../api/Recommender";
 import { MediaType } from "../Types";
 import QOD from "../components/QOD.vue";
+import { Ghost } from "../api/posts/Ghost";
 
 let user = auth.startSession()
 let repository: IRepository
@@ -98,7 +111,7 @@ export default defineComponent({
             //auth,
             pos: "sidebar",
             repository,
-            collIcon: 'library_add',
+            //collIcon: 'library_add',
             isDisabled: false,
             //FB,
             loading: true,
@@ -153,7 +166,7 @@ export default defineComponent({
             const type = this.$route.query.type
           const coll = type + "Collection"
                 this.repository.addItems(coll, [ this.media ]);
-                this.collIcon = 'library_add_check',
+                //this.collIcon = 'library_add_check',
                 this.isDisabled = true
             }
             else {
@@ -174,19 +187,48 @@ export default defineComponent({
     },
     async mounted() {
         let type = this.$route.query.mediaType as string
-        this.url = "https://localhost:9000" + this.$route.path
+        this.url = "https://edifeeds.com" + this.$route.path
         console.log("url ", this.url)
         this.repository = new Repository("quotes")
         const id = this.$route.params.id as string
-        const media = await this.repository.readItem(type, "id", id)
+        let media
+        if (type ==="posts") {
+            const api = new Ghost()
+            media = await api.getPost(id)
+        this.media = media
+        }
+        else{
+            media = await this.repository.readItem(type, "id", id)
         this.media = media[0]
+        }
         this.loading = false
         console.log('media: ', this.media)
-        if(this.media.type==="video" || this.media.type==="music") {
-            this.notPlayable = false
-        }
         //this.recomm.insertFeedback("002", "positive", this.media.id)
         //this.recomm.insertUser("002")
+        useHead(
+            {
+            meta:[
+                {
+                    name: "og:url", 
+                    content: this.url},
+                {
+                    name: "og:type", 
+                    content: "article"
+                },
+                {
+                    name:"og:title", 
+                    content: this.media.title
+                },
+                {
+                    name: "og:description",
+                    content: this.media.description
+                },
+                {
+                    name: "og:image",
+                    content: this.media.thumbnailsmall
+                }
+            ]
+        })
         if (this.user) {
             //this.recomm.insertFeedback(this.media.id, type, this.user.id, 4.0)
             //this.recomm.insertUser(this.user.id)

@@ -14,8 +14,8 @@ export class ListMonk {
                 subscriber_id: format.userId,
                 template_id: format.templateId,
                 data: format.data,
-                headers: format.headers /*[]*/,
-                content_type: format.contentType /*"html" | "markdown" | "plain"*/
+                headers: format.headers,
+                content_type: format.contentType
             }
         }, "emailResp");
     };
@@ -100,28 +100,6 @@ export class ListMonk {
         return apiBaseParams;
     }
     getData(resData) {
-        //let mData: Record<string, any>
-        /*for (const data of resData.items) {
-            mData = {
-                type: "books",
-                id: data.id,
-                status: '',
-                privacy: '',
-                tags: [],
-                description: data.volumeInfo.description,
-                genre: data.mainCategory,
-                thumbnailSmall: data.volumeInfo.imageLinks.smallThumbnail,
-                thumbnailLarge: data.volumeInfo.imageLinks.thumbnail,
-                created: data.volumeInfo.publishedDate,
-                license: '',
-                title: data.volumeInfo.title,
-                authors: data.authors,
-                printType: data.printType //book or magazine
-            }
-            //this.volumeRes.response.dataList.push(mData);
-            //respData.push(mData);
-        }*/
-        //let respData: Record<string, any>[] = this.subscriber.getData(resData.items);
         return resData;
     }
 }

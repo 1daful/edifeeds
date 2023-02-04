@@ -2,17 +2,9 @@ import { Resource } from './../Resource';
 import { Axiosi } from './../Axiosi';
 import config from "../../../public/config.json";
 export class Zeptomail {
-    /*constructor() {
-        this.user = user,
-        this.email = email
-    }*/
-    //user
-    //email
     resources = [];
-    //"client_id" "h2QN0xKvn2yEbGzLAzt__xrgVQI_AVu2Gwn3WdZn0gE"
     getBaseUrl() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseUrl = config.api.Zeptomail.baseUrl;
             return apiBaseUrl;
         }
@@ -53,8 +45,6 @@ export class Zeptomail {
                         bcc: email.bcc,
                         track_clicks: true,
                         track_opens: true,
-                        //"client_reference": "<client reference>", 
-                        //mime_headers: { X-Zylker-User: "test-xxxx" }, 
                         attachments: email.attachments,
                         inline_images: email.inline_images
                     }
@@ -75,14 +65,6 @@ export class Zeptomail {
                         reply_to: this.admin,
                         cc: email.cc,
                         bcc: email.bcc,
-                        /*merge_info: {
-                            contact_number: user.contact_number,
-                            company: user.company
-                        },*/
-                        /*"client_reference": "<client reference>",
-                        "mime_headers": {
-                            "X-Test": "test"
-                        }*/
                     }
                 }, "templateResp");
             case "batch_template":
@@ -99,10 +81,6 @@ export class Zeptomail {
                         },
                         to: user,
                         reply_to: this.admin,
-                        /*"client_reference": "<client reference>",
-                        "mime_headers": {
-                            "X-Test": "test"
-                        }*/
                     }
                 }, "tempBatchResp");
             default:
@@ -113,8 +91,6 @@ export class Zeptomail {
                 }, "");
         }
     }
-    //token = config.api.Zeptomail.token;
-    //url =   config.api.Zeptomail.url
     client = new Axiosi();
 }
 //# sourceMappingURL=Zeptomail.js.map

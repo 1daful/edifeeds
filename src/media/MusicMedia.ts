@@ -1,6 +1,7 @@
 import { IMedia } from "./IMedia";
 import { IMediaApi } from "../api/IMediaApi";
 import { SoundCloud } from "../api/music/SoundCloud";
+import { Deezer } from "../api/music/Deezer";
 //import { Axiosi } from "src/api/Axiosi.js";
 
 export class MusicMedia implements IMedia {
@@ -8,11 +9,14 @@ export class MusicMedia implements IMedia {
     //private mediaItems: Record<string, any>[] = [];
     //media: Media;
     soundCloud: IMediaApi;
+    deezer: IMediaApi
 
     constructor(format?: {}) {
         this.soundCloud = new SoundCloud(format);
+        this.deezer = new Deezer(format)
         //this.media = new Media(type);
         this.apis.push(this.soundCloud);
+        this.apis.push(this.deezer)
     }
 
     /*async getMedia(params?: Record<string, any>) {

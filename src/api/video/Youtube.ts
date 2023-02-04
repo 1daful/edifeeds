@@ -20,18 +20,18 @@ export class Youtube implements IMediaApi{
     searchData: Record<string, any> = {};
 
     videoRes = (format: ApiFormat) => {
-        new Resource(this, 'video',
+        new Resource(this, 'videos',
         {
             name: 'videos',
-            baseUrl: '/videoRes',
+            baseUrl: '/videos',
             params: {
                 q: format.keyword,
                 part: {
                     snippet: 'data'
                 },
                 filters: {
-                    chart: 'chart', //required, mostPopular
-                    region: 'regionCode',
+                    chart: '', //required, mostPopular
+                    region: '',
                     ids: ''
                 },
             }
@@ -39,32 +39,32 @@ export class Youtube implements IMediaApi{
     }
 
     searchRes = (format: ApiFormat) => {
-        new Resource(this, 'video', {
+        new Resource(this, 'videos', {
             name: 'searchReq',
             baseUrl: '/search',
             params: {
-                related: 'relatedToId',
+                related: '',
                 author: format.author,
-                televised: 'channelType', //any, show
-                broadcast: 'eventType', //completed, live, upcoming
+                televised: '', //any, show
+                broadcast: '', //completed, live, upcoming
                 sort: 'order', //date, rating, relevance, title, videoCount, viewCount
                 q: format.keyword,
                 category: format.genre,
-                region: 'regionCode',
+                region: '',
             }
         }, 'searchResp')
     }
-    async getBaseParams() {
+    getBaseParams() {
         try{
             //const config = await this.client.load('../config.json')
-            const apiBaseParams = config.api.Youtube.config.baseParams
+            const apiBaseParams = config.api.Youtube.config
             return apiBaseParams
         }
         catch (err) {
             console.log(err)
         }
     }
-    async getBaseUrl() {
+    getBaseUrl() {
         try{
             //const config = await this.client.load('../config.json')
             const apiBaseUrl = config.api.Youtube.baseUrl

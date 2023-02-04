@@ -30,13 +30,12 @@ export class zincSearch {
                 },
                 from: 0,
                 max_results: maxResult,
-                _source: [] // Leave this as empty array to return all fields.
+                _source: []
             }
         }, "searchResp");
     };
     getBaseUrl() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseUrl = config?.api.ZincSearch.baseUrl;
             return apiBaseUrl;
         }
@@ -46,7 +45,6 @@ export class zincSearch {
     }
     getBaseParams() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseParams = config?.api.ZincSearch.config;
             return apiBaseParams;
         }

@@ -17,51 +17,49 @@ export class Youtube {
     videoData = {};
     searchData = {};
     videoRes = (format) => {
-        new Resource(this, 'video', {
+        new Resource(this, 'videos', {
             name: 'videos',
-            baseUrl: '/videoRes',
+            baseUrl: '/videos',
             params: {
                 q: format.keyword,
                 part: {
                     snippet: 'data'
                 },
                 filters: {
-                    chart: 'chart',
-                    region: 'regionCode',
+                    chart: '',
+                    region: '',
                     ids: ''
                 },
             }
         }, 'videoResp');
     };
     searchRes = (format) => {
-        new Resource(this, 'video', {
+        new Resource(this, 'videos', {
             name: 'searchReq',
             baseUrl: '/search',
             params: {
-                related: 'relatedToId',
+                related: '',
                 author: format.author,
-                televised: 'channelType',
-                broadcast: 'eventType',
+                televised: '',
+                broadcast: '',
                 sort: 'order',
                 q: format.keyword,
                 category: format.genre,
-                region: 'regionCode',
+                region: '',
             }
         }, 'searchResp');
     };
-    async getBaseParams() {
+    getBaseParams() {
         try {
-            //const config = await this.client.load('../config.json')
-            const apiBaseParams = config.api.Youtube.config.baseParams;
+            const apiBaseParams = config.api.Youtube.config;
             return apiBaseParams;
         }
         catch (err) {
             console.log(err);
         }
     }
-    async getBaseUrl() {
+    getBaseUrl() {
         try {
-            //const config = await this.client.load('../config.json')
             const apiBaseUrl = config.api.Youtube.baseUrl;
             return apiBaseUrl;
         }
@@ -92,7 +90,6 @@ export class Youtube {
                     source: 'youtube'
                 };
                 respData.push(video);
-                //this.videoRes.response.dataList.push(video);
             }
         }
         else if (resp.name === 'searchResp') {
@@ -100,20 +97,13 @@ export class Youtube {
                 video = {
                     id: videoData.id.videoId,
                     title: videoData.snippet.title,
-                    //duration: videoData.contentDetails.duration,
                     status: videoData.snippet.liveBroadcastContent,
-                    //privacy: videoData.status.privacyStatus,
-                    //tags: videoData.snippet.tags,
-                    //description: videoData.snippet.description,
-                    //genre: videoData.snippet.categoryId,
                     thumbnailSmall: videoData.snippet.thumbnails.default.url,
                     thumbnailLarge: videoData.snippet.thumbnails.high.url,
                     creator: videoData.snippet.channelId,
                     created: videoData.snippet.publishedAt,
-                    //license: videoData.status.license,
                     source: 'youtube'
                 };
-                //this.searchRes.response.dataList.push(video);
                 respData.push(video);
             }
         }

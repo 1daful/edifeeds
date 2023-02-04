@@ -22,7 +22,6 @@ class Gorse {
             this.axiosClient.interceptors.response.use(responseLogger, errorLogger);
         }
     }
-    // Core functions
     getPopular(options) {
         return getPopular(this.axiosClient, options);
     }
@@ -32,7 +31,6 @@ class Gorse {
     getRecommend(options) {
         return getRecommend(this.axiosClient, options);
     }
-    // Feedback
     getFeedback(filter, options) {
         return getFeedback(this.axiosClient, { ...filter, cursorOptions: options });
     }
@@ -56,7 +54,6 @@ class Gorse {
     upsertFeedbacks(feedbacksList) {
         return upsertFeedbacks(this.axiosClient, feedbacksList);
     }
-    // Item
     upsertItem(data) {
         return upsertItem(this.axiosClient, data);
     }
@@ -84,7 +81,6 @@ class Gorse {
     getItemNeighbors(options) {
         return getItemNeighbors(this.axiosClient, options);
     }
-    // User
     insertUser(userData) {
         return insertUser(this.axiosClient, userData);
     }

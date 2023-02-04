@@ -4,7 +4,6 @@ export class Repository {
     collName;
     constructor(collName) {
         this.collName = collName;
-        //this.db = new Pouchdb(collName)
         this.db = new SupabaseRepo();
     }
     search(field, query, collName) {

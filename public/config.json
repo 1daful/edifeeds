@@ -172,11 +172,12 @@
           },
 
         "Youtube": {
-          "baseUrl": "https://googleapis.com/youtube/v3",
+          "baseUrl": "https://www.googleapis.com/youtube/v3",
           "config": {
             "baseParams": {
-              "id": "",
-              "key": ""}
+              "id": "6919446903-o4a9a4a40fi1mtfish4dl61tvu26uvfj.apps.googleusercontent.com",
+              "key": "AIzaSyBj4r66t2hD0q9xI6GytrTS0UBg5RZgIrA"
+            }
           }
         },
 

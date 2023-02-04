@@ -94,4 +94,3 @@ export class SupabaseRepo implements IRepository {
         
     }
 }
-

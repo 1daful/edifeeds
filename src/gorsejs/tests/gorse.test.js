@@ -17,14 +17,12 @@ afterAll(async () => {
     await redisClient.disconnect();
 });
 test("test users", async () => {
-    // insert a user
     let rowAffected = await client.insertUser({
         UserId: "100",
         Labels: ["a", "b", "c"],
         Comment: "comment",
     });
     expect(rowAffected).toBe(1);
-    // get this user
     const user = await client.getUser("100");
     expect(user).toStrictEqual({
         UserId: "100",
@@ -32,14 +30,12 @@ test("test users", async () => {
         Subscribe: null,
         Comment: "comment",
     });
-    // delete a user
     rowAffected = await client.deleteUser("100");
     expect(rowAffected).toBe(1);
     await expect(client.getUser("100")).rejects.toThrow(GorseException);
 });
 test("test items", async () => {
     const timestamp = "2022-08-07T00:26:46Z";
-    // insert an item
     let rowAffected = await client.upsertItem({
         ItemId: "100",
         IsHidden: true,
@@ -49,7 +45,6 @@ test("test items", async () => {
         Comment: "comment",
     });
     expect(rowAffected).toBe(1);
-    // get this item
     const item = await client.getItem("100");
     expect(item).toStrictEqual({
         ItemId: "100",
@@ -59,14 +54,12 @@ test("test items", async () => {
         Timestamp: timestamp,
         Comment: "comment",
     });
-    // delete this item
     rowAffected = await client.deleteItem("100");
     expect(rowAffected).toBe(1);
     await expect(client.getItem("100")).rejects.toThrow(GorseException);
 });
 test("test feedback", async () => {
     const timestamp = "2022-08-07T00:26:46Z";
-    // insert feedbacks
     const rowAffected = await client.insertFeedbacks([
         {
             FeedbackType: "like",
@@ -90,7 +83,6 @@ test("test feedback", async () => {
     expect(rowAffected).toBe(3);
 });
 test("test recommend", async () => {
-    // offline recommend
     await redisClient.zAdd("offline_recommend/100", { score: 1, value: "1" });
     await redisClient.zAdd("offline_recommend/100", { score: 2, value: "2" });
     await redisClient.zAdd("offline_recommend/100", { score: 3, value: "3" });

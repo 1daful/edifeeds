@@ -1,4 +1,4 @@
-export const Media = [{
+export const mediaItems = [{
         name: 'quotes',
         icon: "format_quote",
         items: []
@@ -10,7 +10,7 @@ export const Media = [{
     }, {
         name: 'music',
         icon: "music_note",
-        items: []
+        items: [{}]
     }, {
         name: 'videos',
         icon: "movie",
